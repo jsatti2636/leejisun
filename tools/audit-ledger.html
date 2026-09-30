@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>웨이메이커360 점검대비 장부</title>
+<style>
+:root{--navy:#14243f;--teal:#0f766e;--teal-soft:#e6f4f2;--ink:#1e293b;--muted:#64748b;--line:#dbe3ee;--bg:#f4f6fa;--ok:#15803d;--warn:#b45309;--warn-soft:#fff7e6;--bad:#b91c1c;--bad-soft:#fef2f2}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{background:var(--navy);color:#fff;padding:24px 16px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand b{font-size:20px;display:block}
+.brand small{color:#a9b8d0}
+.nav{display:grid;gap:4px;margin-top:22px}
+.nav button{border:0;background:none;color:#c8d4e6;text-align:left;padding:11px 12px;border-radius:9px}
+.nav button.active,.nav button:hover{background:#ffffff18;color:#fff}
+.nav .badge{float:right;background:var(--bad);color:#fff;border-radius:10px;padding:0 7px;font-size:12px}
+main{padding:28px 32px 60px;min-width:0}
+.page{display:none}.page.active{display:block}
+h2{margin:0 0 4px;font-size:25px}
+.sub{margin:0 0 20px;color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h3{margin:0 0 12px;font-size:17px}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.metric small{color:var(--muted)}.metric strong{display:block;font-size:24px;margin-top:6px}
+.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.field{display:grid;gap:5px}
+.field label{font-size:13px;color:#475569}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;background:#fff}
+.wide{grid-column:span 2}.full{grid-column:1/-1}
+.actions{grid-column:1/-1;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 13px;color:var(--ink)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.small{padding:4px 8px;font-size:12px}
+.btn.danger{color:var(--bad)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:12px;background:#fff}
+table{border-collapse:collapse;width:100%}
+th,td{padding:9px 11px;border-bottom:1px solid #edf1f6;text-align:left;white-space:nowrap;font-size:14px}
+th{background:#f1f5f9;color:#475569;font-size:13px}
+td.num,th.num{text-align:right}
+.pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:var(--teal-soft);color:var(--teal)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.gray{background:#eef2f7;color:#64748b}
+tr.bad td{background:var(--bad-soft)}tr.warn td{background:var(--warn-soft)}
+.notice{background:var(--warn-soft);border:1px solid #f3d9a4;border-radius:10px;padding:12px 14px;color:#7c4a03;margin-bottom:14px;line-height:1.6}
+.info{background:var(--teal-soft);border:1px solid #b9e0da;border-radius:10px;padding:12px 14px;color:#134e4a;margin-bottom:14px;line-height:1.6}
+.issue{display:grid;grid-template-columns:70px 1fr auto;gap:10px;align-items:start;padding:11px 0;border-bottom:1px solid #edf1f6}
+.issue:last-child{border-bottom:0}
+.issue .law{color:var(--muted);font-size:12px}
+.empty{text-align:center;color:var(--muted);padding:30px;border:1px dashed var(--line);border-radius:10px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #edf1f6}
+.check input{margin-top:4px;width:17px;height:17px}
+.check small{display:block;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.result{margin-top:14px;padding:14px;border-radius:10px;background:#f8fafc;border:1px solid var(--line);line-height:1.7}
+.result b.big{font-size:22px;color:var(--teal)}
+pre.code{white-space:pre-wrap;word-break:break-all;background:#0f172a;color:#e2e8f0;padding:14px;border-radius:10px;max-height:320px;overflow:auto;font-size:12px}
+#printArea{display:none}
+.doc{background:#fff;color:#111;padding:10mm}
+.doc h1{text-align:center;letter-spacing:6px;font-size:22pt;margin:0 0 6mm}
+.doc .legal{font-size:9pt;margin-bottom:4mm}
+.doc table{border:1px solid #333}
+.doc th,.doc td{border:1px solid #555;white-space:normal;color:#111;background:#fff;font-size:10.5pt;padding:6px}
+.doc th{background:#f0f0f0}
+.doc .sign{text-align:right;margin-top:10mm;line-height:1.9}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .app{display:none!important}
+  #printArea{display:block}
+  .doc{padding:0;break-after:page}
+  .doc:last-child{break-after:auto}
+  .doc tr{break-inside:avoid}
+}
+@media(max-width:900px){.app{display:block}.side{position:static;height:auto}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}main{padding:20px 16px}.cards{grid-template-columns:1fr 1fr}.form{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){.cards,.form{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><b>웨이메이커360</b><small>교육청 점검대비 장부</small></div>
+    <nav class="nav" id="nav">
+      <button data-page="home" class="active">오늘의 점검 <span class="badge" id="navIssues" hidden></span></button>
+      <button data-page="setup">학원·교습비 등록</button>
+      <button data-page="teachers">강사 명부</button>
+      <button data-page="students">수강생 관리</button>
+      <button data-page="payments">교습비 수납</button>
+      <button data-page="refund">반환 계산기</button>
+      <button data-page="cash">금전출납부</button>
+      <button data-page="docs">장부 출력</button>
+      <button data-page="checklist">점검 체크리스트</button>
+      <button data-page="publish">홈페이지 게시</button>
+      <button data-page="backup">백업·복원</button>
+    </nav>
+  </aside>
+
+  <main>
+    <!-- 오늘의 점검 -->
+    <section class="page active" id="home">
+      <h2>오늘의 점검</h2>
+      <p class="sub">입력된 장부를 학원법 기준으로 자동 점검합니다. 빨간 항목부터 처리하세요.</p>
+      <div class="cards">
+        <div class="card metric"><small>재원생</small><strong id="mStudents">0명</strong></div>
+        <div class="card metric"><small>이번 달 순수납</small><strong id="mIncome">0원</strong></div>
+        <div class="card metric"><small>이번 달 지출</small><strong id="mExpense">0원</strong></div>
+        <div class="card metric"><small>점검 지적 예상</small><strong id="mIssues">0건</strong></div>
+      </div>
+      <div class="card"><h3>자동 점검 결과</h3><div id="issueList"></div></div>
+    </section>
+
+    <!-- 학원·교습비 등록 -->
+    <section class="page" id="setup">
+      <h2>학원·교습비 등록</h2>
+      <p class="sub">교육청에 등록한 교습비를 <b>적용 시작월</b>과 함께 기록합니다. 교습비를 바꾸면 행을 수정하지 말고 새 적용월로 추가하세요.</p>
+      <div class="card">
+        <h3>학원 정보</h3>
+        <form id="academyForm" class="form">
+          <div class="field wide"><label>학원명</label><input name="name" required></div>
+          <div class="field"><label>대표자(설립·운영자)</label><input name="owner"></div>
+          <div class="field"><label>교육청 등록번호</label><input name="regNo" placeholder="제 0000 호"></div>
+          <div class="field"><label>사업자등록번호</label><input name="bizNo" placeholder="000-00-00000"></div>
+          <div class="field"><label>연락처</label><input name="phone"></div>
+          <div class="field wide"><label>주소</label><input name="address"></div>
+          <div class="actions"><button class="btn primary">학원 정보 저장</button></div>
+        </form>
+      </div>
+      <div class="card">
+        <h3>교습비 등록 (교육청 신고금액)</h3>
+        <div class="info">2026년 서울 학원 점검에서 가장 많이 나온 위반은 <b>교습비 변경 미등록</b>이었습니다. 교습비를 올리거나 반을 새로 만들면 먼저 교육지원청에 변경 등록하고, 그 날짜를 여기에 적어 두세요.</div>
+        <form id="feeForm" class="form">
+          <div class="field"><label>반명(교습과정)</label><input name="className" required placeholder="예: 중등 내신 A"></div>
+          <div class="field"><label>교습과목</label><input name="subject" value="영어"></div>
+          <div class="field"><label>월 교습비(원)</label><input name="amount" type="number" min="0" required></div>
+          <div class="field"><label>월 수업 횟수</label><input name="sessions" type="number" min="1" value="12" required></div>
+          <div class="field"><label>1회 수업시간(분)</label><input name="minutes" type="number" min="1" value="90"></div>
+          <div class="field"><label>적용 시작월</label><input name="effectiveFrom" type="month" required></div>
+          <div class="field"><label>교육청 등록(변경)일</label><input name="registeredOn" type="date"></div>
+          <div class="field"><label>기타경비(교재비 등, 실비)</label><input name="extra" type="number" min="0" value="0"></div>
+          <div class="actions"><button type="button" class="btn" onclick="resetForm(feeForm)">취소</button><button class="btn primary">교습비 저장</button></div>
+        </form>
+        <div class="tablewrap"><table><thead><tr><th>반명</th><th>과목</th><th class="num">월 교습비</th><th>월 횟수</th><th>분/회</th><th class="num">분당 단가</th><th>적용 시작</th><th>교육청 등록일</th><th></th></tr></thead><tbody id="feeRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- 강사 명부 -->
+    <section class="page" id="teachers">
+      <h2>강사 명부</h2>
+      <p class="sub">강사를 채용하면 성범죄·아동학대 전력 조회를 하고, 교육지원청에 강사 채용 사실을 알려야 합니다. 조회일과 통보일을 기록해 두세요.</p>
+      <div class="card">
+        <form id="teacherForm" class="form">
+          <div class="field"><label>성명</label><input name="name" required></div>
+          <div class="field"><label>담당과목</label><input name="subject" value="영어"></div>
+          <div class="field"><label>최종학력·자격</label><input name="degree" placeholder="예: ○○대 영문과 졸"></div>
+          <div class="field"><label>채용일</label><input name="hiredOn" type="date" required></div>
+          <div class="field"><label>성범죄 경력 조회일</label><input name="crimeCheckOn" type="date"></div>
+          <div class="field"><label>아동학대 전력 조회일</label><input name="abuseCheckOn" type="date"></div>
+          <div class="field"><label>교육청 채용 통보일</label><input name="notifiedOn" type="date"></div>
+          <div class="field"><label>해임(퇴직)일</label><input name="leftOn" type="date"></div>
+          <div class="actions"><button type="button" class="btn" onclick="resetForm(teacherForm)">취소</button><button class="btn primary">강사 저장</button></div>
+        </form>
+        <div class="tablewrap"><table><thead><tr><th>성명</th><th>과목</th><th>학력·자격</th><th>채용일</th><th>성범죄 조회</th><th>아동학대 조회</th><th>교육청 통보</th><th>상태</th><th></th></tr></thead><tbody id="teacherRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- 수강생 관리 -->
+    <section class="page" id="students">
+      <h2>수강생 관리</h2>
+      <p class="sub">수강생대장의 법정 항목(성명·주소·전화번호·입원일·퇴원일)이 빠지지 않도록 입력하세요.</p>
+      <div class="card">
+        <form id="studentForm" class="form">
+          <div class="field"><label>성명</label><input name="name" required></div>
+          <div class="field"><label>학교·학년</label><input name="school"></div>
+          <div class="field"><label>수강 반</label><input name="className" list="classList" required></div>
+          <div class="field"><label>보호자 연락처</label><input name="phone" inputmode="tel"></div>
+          <div class="field wide"><label>주소</label><input name="address"></div>
+          <div class="field"><label>입원일</label><input name="start" type="date" required></div>
+          <div class="field"><label>퇴원일</label><input name="end" type="date"></div>
+          <div class="field full"><label>비고</label><input name="note"></div>
+          <div class="actions"><button type="button" class="btn" onclick="resetForm(studentForm)">취소</button><button class="btn primary">수강생 저장</button></div>
+        </form>
+        <datalist id="classList"></datalist>
+        <div class="tablewrap"><table><thead><tr><th>번호</th><th>성명</th><th>학교·학년</th><th>반</th><th>연락처</th><th>입원일</th><th>퇴원일</th><th>상태</th><th></th></tr></thead><tbody id="studentRows"></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- 교습비 수납 -->
+    <section class="page" id="payments">
+      <h2>교습비 수납</h2>
+      <p class="sub">수납하면 영수증 원부와 금전출납부에 자동으로 들어갑니다. 등록 교습비보다 많이 받으면 바로 경고합니다.</p>
+      <div class="card">
+        <form id="paymentForm" class="form">
+          <div class="field"><label>수강생</label><select name="studentId" required></select></div>
+          <div class="field"><label>교습 대상월</label><input name="targetMonth" type="month" required></div>
+          <div class="field"><label>수납일</label><input name="date" type="date" required></div>
+          <div class="field"><label>구분</label><select name="type"><option>정상</option><option>할인·감액</option><option>일할계산</option><option>환불</option></select></div>
+          <div class="field"><label>금액(환불도 양수로)</label><input name="amount" type="number" min="0" required></div>
+          <div class="field"><label>결제수단</label><select name="method"><option>카드</option><option>계좌이체</option><option>현금</option><option>기타</option></select></div>
+          <div class="field" id="sessionsField" hidden><label>이번 달 수업할 횟수</label><input name="sessions" type="number" min="1"></div>
+          <div class="field wide"><label>사유 (정상 외에는 필수 · 점검 시 소명 근거)</label><input name="note"></div>
+          <div class="field full" id="feeHint" style="color:var(--muted);font-size:13px"></div>
+          <div class="actions"><button type="button" class="btn" onclick="resetForm(paymentForm)">취소</button><button class="btn primary">수납 저장</button></div>
+        </form>
+      </div>
+      <div class="tools"><input id="payMonth" type="month" class="btn"><input id="paySearch" placeholder="이름 검색" class="btn"></div>
+      <div class="tablewrap"><table><thead><tr><th>수납일</th><th>대상월</th><th>수강생</th><th>반</th><th>구분</th><th class="num">금액</th><th>수단</th><th>점검</th><th>사유</th><th></th></tr></thead><tbody id="paymentRows"></tbody></table></div>
+    </section>
+
+    <!-- 반환 계산기 -->
+    <section class="page" id="refund">
+      <h2>교습비 반환 계산기</h2>
+      <p class="sub">학원법 시행령 제18조 [별표 4] 반환기준에 따른 <b>최소 반환액</b>을 계산합니다. 이보다 적게 돌려주면 위반입니다.</p>
+      <div class="grid2">
+        <div class="card">
+          <form id="refundForm" class="form" style="grid-template-columns:1fr 1fr">
+            <div class="field full"><label>반환 사유</label><select name="reason"><option value="student">학습자 본인 의사로 수강 포기</option><option value="academy">학원 사정으로 교습 불가 (휴·폐원, 이전 등)</option></select></div>
+            <div class="field"><label>이번 달 납부한 교습비</label><input name="paid" type="number" min="0" required></div>
+            <div class="field"><label>이번 달 총 수업 횟수</label><input name="total" type="number" min="1" required></div>
+            <div class="field"><label>이미 진행한 수업 횟수</label><input name="done" type="number" min="0" value="0" required></div>
+            <div class="field"><label>남은 개월의 교습비 (여러 달 선납 시)</label><input name="future" type="number" min="0" value="0"></div>
+            <div class="actions"><button class="btn teal">반환액 계산</button></div>
+          </form>
+          <div id="refundResult"></div>
+        </div>
+        <div class="card">
+          <h3>반환기준 요약 (교습기간 1개월 이내)</h3>
+          <div class="tablewrap"><table>
+            <tr><th>반환 시점</th><th>최소 반환액</th></tr>
+            <tr><td>교습 시작 전</td><td>납부액 전액</td></tr>
+            <tr><td>총 교습시간의 1/3 경과 전</td><td>납부액의 2/3</td></tr>
+            <tr><td>총 교습시간의 1/2 경과 전</td><td>납부액의 1/2</td></tr>
+            <tr><td>총 교습시간의 1/2 경과 후</td><td>반환하지 않음</td></tr>
+          </table></div>
+          <p style="color:var(--muted);line-height:1.7;margin-top:12px">여러 달치를 한 번에 받았다면, 반환 사유가 생긴 달은 위 기준을 적용하고 남은 달은 전액 돌려줍니다. 학원 사정으로 교습할 수 없게 되면 그날부터 일할 계산해 돌려줍니다. 반환 사유가 생긴 날부터 5일 안에 돌려줘야 합니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 금전출납부 -->
+    <section class="page" id="cash">
+      <h2>금전출납부</h2>
+      <p class="sub">교습비 수입과 환불은 자동으로 들어가고, 지출만 추가하면 됩니다.</p>
+      <div class="card">
+        <form id="expenseForm" class="form">
+          <div class="field"><label>지출일</label><input name="date" type="date" required></div>
+          <div class="field"><label>항목</label><input name="category" required placeholder="임차료, 강사료, 교재비"></div>
+          <div class="field"><label>금액</label><input name="amount" type="number" min="0" required></div>
+          <div class="field"><label>지급처·수단</label><input name="vendor"></div>
+          <div class="field full"><label>비고</label><input name="note"></div>
+          <div class="actions"><button class="btn primary">지출 추가</button></div>
+        </form>
+      </div>
+      <div class="tools"><input id="cashMonth" type="month" class="btn"></div>
+      <div class="tablewrap"><table><thead><tr><th>일자</th><th>구분</th><th>적요</th><th class="num">수입</th><th class="num">지출</th><th class="num">잔액</th><th>수단</th><th></th></tr></thead><tbody id="cashRows"></tbody><tfoot id="cashFoot"></tfoot></table></div>
+    </section>
+
+    <!-- 장부 출력 -->
+    <section class="page" id="docs">
+      <h2>장부 출력</h2>
+      <p class="sub">점검 때 보여줄 장부를 A4로 출력하거나 PDF로 저장합니다(인쇄 창에서 'PDF로 저장').</p>
+      <div class="card">
+        <div class="tools"><label>기준월 <input id="docMonth" type="month" class="btn"></label></div>
+        <div class="tools" style="margin-top:14px">
+          <button class="btn primary" onclick="printDoc('roster')">수강생 대장</button>
+          <button class="btn primary" onclick="printDoc('receipts')">교습비등 영수증 원부 (해당 월)</button>
+          <button class="btn primary" onclick="printDoc('cash')">금전출납부 (해당 월)</button>
+          <button class="btn primary" onclick="printDoc('teachers')">강사(직원) 명부</button>
+          <button class="btn primary" onclick="printDoc('fees')">교습비 게시표</button>
+          <button class="btn teal" onclick="printDoc('all')">점검용 전체 묶음</button>
+        </div>
+        <p style="color:var(--muted);margin-top:14px">개별 영수증은 '교습비 수납' 목록의 [영수증] 버튼으로 출력합니다.</p>
+      </div>
+    </section>
+
+    <!-- 점검 체크리스트 -->
+    <section class="page" id="checklist">
+      <h2>점검 체크리스트</h2>
+      <p class="sub">장부 밖에서 확인해야 할 항목입니다. 시·도 교육규칙마다 세부 기준이 다르니 관할 교육지원청 안내를 함께 확인하세요.</p>
+      <div class="card" id="checkItems"></div>
+    </section>
+
+    <!-- 홈페이지 게시 -->
+    <section class="page" id="publish">
+      <h2>홈페이지 교습비 게시</h2>
+      <p class="sub">인터넷으로 학생을 모집·광고하면 교습비와 반환에 관한 사항을 함께 표시해야 합니다(학원법 제15조). 등록된 교습비로 게시용 코드를 만듭니다.</p>
+      <div class="card">
+        <div class="notice">이 코드에는 <b>반명과 교습비만</b> 들어갑니다. 학생·결제 정보는 절대 포함되지 않습니다. 교습비가 바뀌면 코드를 다시 만들어 홈페이지에 붙여 넣으세요.</div>
+        <div class="tools"><label>게시 기준월 <input id="publishMonth" type="month" class="btn"></label><button class="btn teal" onclick="buildPublish()">게시용 코드 만들기</button><button class="btn" onclick="copyPublish()">코드 복사</button></div>
+        <div id="publishPreview" style="margin-top:16px"></div>
+        <pre class="code" id="publishCode" hidden></pre>
+      </div>
+    </section>
+
+    <!-- 백업 -->
+    <section class="page" id="backup">
+      <h2>백업·복원</h2>
+      <p class="sub">자료는 이 컴퓨터의 브라우저에만 저장됩니다. 브라우저 기록을 지우면 사라지니 매주 백업 파일을 받아 두세요.</p>
+      <div class="card">
+        <div class="tools">
+          <button class="btn primary" onclick="backup()">전체 백업 받기 (.json)</button>
+          <label class="btn">백업 파일로 복원<input type="file" id="restoreFile" accept="application/json" hidden></label>
+          <button class="btn" onclick="exportCsv()">수납내역 CSV (엑셀용)</button>
+          <button class="btn danger" onclick="wipe()">모든 자료 지우기</button>
+        </div>
+        <p id="lastBackup" style="color:var(--muted);margin-top:14px"></p>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="printArea"></div>
+
+<script>
+const KEY='waymaker360AuditLedger_v1';
+// 로컬(한국) 날짜 기준. toISOString()은 UTC라 오전 9시 전엔 전날이 된다.
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const thisMonth=()=>today().slice(0,7);
+const won=n=>(Math.round(Number(n)||0)).toLocaleString('ko-KR')+'원';
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const norm=v=>String(v||'').replace(/\s+/g,'').toLowerCase();
+
+const blank=()=>({academy:{name:'',owner:'',regNo:'',bizNo:'',phone:'',address:''},fees:[],teachers:[],students:[],payments:[],expenses:[],checks:{},lastBackup:''});
+let state=load();
+function load(){try{return Object.assign(blank(),JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch{return blank()}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{alert('저장 공간에 저장하지 못했습니다. 백업 파일을 받아 두세요.')}render()}
+
+// 대상월에 적용되는 교습비: 같은 반 중 적용 시작월이 대상월 이전인 가장 최근 행
+function feeFor(className,month){
+  return state.fees.filter(f=>norm(f.className)===norm(className)&&f.effectiveFrom<=month)
+    .sort((a,b)=>b.effectiveFrom.localeCompare(a.effectiveFrom))[0];
+}
+const student=id=>state.students.find(s=>s.id===id);
+const signed=p=>p.type==='환불'?-Number(p.amount):Number(p.amount);
+const periodOf=m=>{const last=new Date(+m.slice(0,4),+m.slice(5,7),0).getDate();return `${m}-01 ~ ${m}-${String(last).padStart(2,'0')}`};
+
+// ───────── 네비게이션 ─────────
+document.querySelectorAll('#nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function go(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+  window.scrollTo(0,0);render();
+}
+
+// ───────── 공통 폼 처리 ─────────
+function resetForm(form){form.reset();delete form.dataset.editId;form.querySelector('button.primary').textContent=form.dataset.label||'저장';if(form===paymentForm)preparePayment()}
+function bindForm(form,listName,prepare,validate){
+  form.dataset.label=form.querySelector('button.primary').textContent;
+  form.onsubmit=e=>{
+    e.preventDefault();
+    const x=prepare(Object.fromEntries(new FormData(form)));
+    const err=validate&&validate(x);
+    if(err)return alert(err);
+    const id=form.dataset.editId,list=state[listName];
+    if(id)Object.assign(list.find(v=>v.id===id),x);else list.push({...x,id:uid()});
+    resetForm(form);save();
+  };
+}
+function editRow(form,listName,id,page){
+  const x=state[listName].find(v=>v.id===id);if(!x)return;
+  go(page);
+  [...form.elements].forEach(el=>{if(el.name&&el.name in x)el.value=x[el.name]??''});
+  form.dataset.editId=id;form.querySelector('button.primary').textContent='수정 저장';
+  if(form===paymentForm)toggleSessions();
+  form.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function removeRow(listName,id){
+  if(listName==='students'&&state.payments.some(p=>p.studentId===id))return alert('수납 기록이 있는 수강생은 삭제할 수 없습니다. 수강생대장은 보존 의무가 있으니 퇴원일을 입력하세요.');
+  if(!confirm('삭제할까요? 점검 대상 장부는 보존 의무가 있으니 신중히 삭제하세요.'))return;
+  state[listName]=state[listName].filter(v=>v.id!==id);save();
+}
+
+academyForm.onsubmit=e=>{e.preventDefault();state.academy=Object.fromEntries(new FormData(academyForm));save();alert('학원 정보를 저장했습니다.')};
+bindForm(feeForm,'fees',x=>({...x,amount:+x.amount,sessions:+x.sessions,minutes:+x.minutes||0,extra:+x.extra||0}),
+  x=>state.fees.some(f=>f.id!==feeForm.dataset.editId&&norm(f.className)===norm(x.className)&&f.effectiveFrom===x.effectiveFrom)?'같은 반·같은 적용월의 교습비가 이미 있습니다. 기존 행을 수정하세요.':'');
+bindForm(teacherForm,'teachers',x=>x);
+bindForm(studentForm,'students',x=>x,x=>x.end&&x.end<x.start?'퇴원일이 입원일보다 빠릅니다.':'');
+bindForm(paymentForm,'payments',x=>({...x,amount:Math.abs(+x.amount),sessions:+x.sessions||''}),x=>{
+  if(x.type!=='정상'&&!x.note.trim())return `${x.type}은(는) 사유를 꼭 적어야 합니다. 점검 때 소명 근거가 됩니다.`;
+  const s=student(x.studentId),f=s&&feeFor(s.className,x.targetMonth);
+  if(f&&x.type!=='환불'&&x.amount>f.amount)return confirm(`등록 교습비(${won(f.amount)})보다 ${won(x.amount-f.amount)} 많습니다. 초과징수는 과태료·교습정지 대상입니다.\n그래도 저장할까요?`)?'':'저장을 취소했습니다.';
+  return '';
+});
+expenseForm.onsubmit=e=>{e.preventDefault();const x=Object.fromEntries(new FormData(expenseForm));state.expenses.push({...x,amount:Math.abs(+x.amount),id:uid()});expenseForm.reset();expenseForm.date.value=today();save()};
+
+// 수납 폼: 반 교습비 자동 입력, 일할계산은 반의 실제 월 수업 횟수로
+function preparePayment(){paymentForm.date.value=today();paymentForm.targetMonth.value=thisMonth();toggleSessions();fillFee()}
+function toggleSessions(){sessionsField.hidden=paymentForm.type.value!=='일할계산'}
+function fillFee(){
+  const s=student(paymentForm.studentId.value),f=s&&feeFor(s.className,paymentForm.targetMonth.value);
+  feeHint.textContent=!s?'':f?`${s.className} 등록 교습비: ${won(f.amount)} (월 ${f.sessions}회, ${f.effectiveFrom}부터 적용)`:`⚠ ${s.className} 반의 ${paymentForm.targetMonth.value} 교습비가 등록되어 있지 않습니다.`;
+  if(!f||paymentForm.dataset.editId)return;
+  const t=paymentForm.type.value;
+  if(t==='정상')paymentForm.amount.value=f.amount;
+  if(t==='일할계산'){
+    const n=+paymentForm.sessions.value;
+    if(n){const amt=Math.round(f.amount/f.sessions*n/10)*10;paymentForm.amount.value=amt;paymentForm.note.value=`일할계산: ${won(f.amount)} ÷ ${f.sessions}회 × ${n}회`}
+  }
+}
+['studentId','targetMonth','sessions'].forEach(n=>paymentForm[n].addEventListener('input',fillFee));
+paymentForm.type.onchange=()=>{toggleSessions();fillFee()};
+
+// ───────── 반환 계산기 ─────────
+refundForm.onsubmit=e=>{
+  e.preventDefault();
+  const x=Object.fromEntries(new FormData(refundForm)),paid=+x.paid,total=+x.total,done=+x.done,future=+x.future||0;
+  if(done>total)return alert('진행한 횟수가 총 횟수보다 많습니다.');
+  let amt,rule;
+  if(x.reason==='academy'){amt=paid*(total-done)/total;rule=`학원 사정 → 남은 ${total-done}회분 일할 반환`}
+  else if(done===0){amt=paid;rule='교습 시작 전 → 전액'}
+  else if(done/total<1/3){amt=paid*2/3;rule=`${done}/${total}회 진행 (1/3 경과 전) → 2/3 반환`}
+  else if(done/total<1/2){amt=paid/2;rule=`${done}/${total}회 진행 (1/2 경과 전) → 1/2 반환`}
+  else{amt=0;rule=`${done}/${total}회 진행 (1/2 경과 후) → 이번 달분 반환 없음`}
+  const sum=Math.ceil((amt+future)/10)*10;
+  refundResult.innerHTML=`<div class="result">${rule}${future?`<br>+ 남은 개월분 전액 ${won(future)}`:''}<br>최소 반환액 <b class="big">${won(sum)}</b><br><small style="color:var(--muted)">반환 사유가 생긴 날부터 5일 안에 돌려주세요. 수납 화면에서 '환불'로 등록하면 영수증 원부와 출납부에 반영됩니다.</small></div>`;
+};
+
+// ───────── 자동 점검 ─────────
+function audit(){
+  const out=[],a=state.academy,add=(level,text,law,page)=>out.push({level,text,law,page});
+  if(!a.name||!a.regNo||!a.owner)add('warn','학원명·대표자·교육청 등록번호가 비어 있습니다. 영수증과 장부에 들어가야 합니다.','영수증 서식','setup');
+  if(!state.fees.length)add('bad','등록된 교습비가 없습니다. 교육청에 등록한 금액을 입력하세요.','학원법 제15조','setup');
+  state.fees.forEach(f=>{if(!f.registeredOn)add('warn',`${f.className} (${f.effectiveFrom}~) 교습비의 교육청 등록일이 없습니다. 변경 등록을 했는지 확인하세요.`,'점검 최다 위반: 교습비 변경 미등록','setup')});
+  state.teachers.filter(t=>!t.leftOn).forEach(t=>{
+    if(!t.crimeCheckOn)add('bad',`${t.name} 강사의 성범죄 경력 조회 기록이 없습니다.`,'아동·청소년의 성보호에 관한 법률','teachers');
+    else if(t.crimeCheckOn>t.hiredOn)add('warn',`${t.name} 강사: 성범죄 경력 조회일이 채용일보다 늦습니다. 채용 전 조회가 원칙입니다.`,'아동·청소년의 성보호에 관한 법률','teachers');
+    if(!t.abuseCheckOn)add('bad',`${t.name} 강사의 아동학대 전력 조회 기록이 없습니다.`,'아동복지법','teachers');
+    if(!t.notifiedOn)add('warn',`${t.name} 강사 채용 사실을 교육지원청에 알렸는지 기록이 없습니다.`,'학원법 제13조','teachers');
+  });
+  state.students.filter(s=>!s.end).forEach(s=>{
+    if(!s.address||!s.phone)add('warn',`${s.name}: 수강생대장 필수 항목(주소·전화번호)이 비어 있습니다.`,'수강생대장 서식','students');
+  });
+  state.payments.forEach(p=>{
+    const s=student(p.studentId),name=s?.name||'삭제된 수강생',f=s&&feeFor(s.className,p.targetMonth);
+    if(!f){add('bad',`${name} ${p.targetMonth}: 적용할 등록 교습비가 없습니다 (${s?.className||'-'}).`,'학원법 제15조','setup');return}
+    if(p.type!=='환불'&&p.amount>f.amount)add('bad',`${name} ${p.targetMonth}: 등록 교습비 ${won(f.amount)}보다 ${won(p.amount-f.amount)} 초과징수.`,'학원법 제15조 · 과태료 300만원 이하','payments');
+    if(p.type==='정상'&&p.amount<f.amount)add('warn',`${name} ${p.targetMonth}: 등록 교습비보다 적게 받았는데 구분이 '정상'입니다. 할인·일할 사유를 남기세요.`,'소명 근거','payments');
+    if(p.type!=='정상'&&!String(p.note||'').trim())add('warn',`${name} ${p.targetMonth} ${p.type}: 사유가 비어 있습니다.`,'소명 근거','payments');
+  });
+  const dup={};state.payments.filter(p=>p.type==='정상').forEach(p=>{const k=p.studentId+p.targetMonth;dup[k]=(dup[k]||0)+1;if(dup[k]===2)add('warn',`${student(p.studentId)?.name} ${p.targetMonth}: 같은 달 정상 수납이 2건 이상입니다. 중복 수납인지 확인하세요.`,'이중징수 방지','payments')});
+  const days=state.lastBackup?Math.floor((Date.now()-new Date(state.lastBackup))/864e5):null;
+  if(state.payments.length&&(days===null||days>7))add('warn',days===null?'아직 백업한 적이 없습니다.':`마지막 백업이 ${days}일 전입니다.`,'장부 보존','backup');
+  return out.sort((x,y)=>(x.level==='bad'?0:1)-(y.level==='bad'?0:1));
+}
+
+// ───────── 체크리스트 (장부 밖 항목) ─────────
+const CHECKS=[
+  ['교습비 게시','학원 내 보기 쉬운 곳에 교습비·반환기준 게시 (교육규칙에 따라 출입구 게시 등)'],
+  ['광고 표시','홈페이지·블로그·전단 등 모집 광고에 교습비와 반환 사항 표시'],
+  ['교습비 외 징수 금지','등록하지 않은 모의고사비·특강비·교재비 징수 여부 확인'],
+  ['영수증 발급','교습비를 받을 때마다 영수증 발급(카드 전표만으로 대체 불가 여부 교육청 확인)'],
+  ['등록증 게시','학원 설립·운영 등록증을 보기 쉬운 곳에 게시'],
+  ['강사 채용 절차','채용 전 성범죄·아동학대 조회 동의서 받고 조회, 교육지원청 통보'],
+  ['교습시간 준수','시·도 조례의 교습시간 제한(예: 서울 22시) 준수, 시간표 보관'],
+  ['선행학습 광고 금지','선행학습 유발 광고(예: “중1이 고1 과정 완성”) 없는지 확인'],
+  ['배상책임보험','학원 배상책임보험(또는 공제) 가입 및 증서 보관'],
+  ['시설·안전','소방·안전 점검, 교습 외 용도 변경 여부, 정원 초과 여부'],
+  ['아동학대·성범죄 신고의무 교육','종사자 신고의무 교육 이수 기록 보관'],
+  ['장부 보존','금전출납부·영수증 원부·수강생대장 등 보존기간(시·도 교육규칙) 확인 후 보관'],
+];
+
+// ───────── 렌더링 ─────────
+function render(){
+  const a=state.academy,m=thisMonth();
+  ['name','owner','regNo','bizNo','phone','address'].forEach(k=>academyForm.elements[k].value=a[k]||'');
+  classList.innerHTML=[...new Set(state.fees.map(f=>f.className))].map(c=>`<option value="${esc(c)}">`).join('');
+
+  const fees=[...state.fees].sort((x,y)=>x.className.localeCompare(y.className,'ko')||y.effectiveFrom.localeCompare(x.effectiveFrom));
+  feeRows.innerHTML=fees.map(f=>`<tr><td><b>${esc(f.className)}</b></td><td>${esc(f.subject)}</td><td class="num">${won(f.amount)}</td><td>${f.sessions}회</td><td>${f.minutes||'-'}</td><td class="num">${f.minutes?won(f.amount/(f.sessions*f.minutes)):'-'}</td><td>${f.effectiveFrom}</td><td>${f.registeredOn||'<span class="pill warn">미기록</span>'}</td><td><button class="btn small" onclick="editRow(feeForm,'fees','${f.id}','setup')">수정</button> <button class="btn small danger" onclick="removeRow('fees','${f.id}')">삭제</button></td></tr>`).join('')||'<tr><td colspan="9" class="empty">등록된 교습비가 없습니다.</td></tr>';
+
+  teacherRows.innerHTML=state.teachers.map(t=>`<tr><td><b>${esc(t.name)}</b></td><td>${esc(t.subject)}</td><td>${esc(t.degree)}</td><td>${t.hiredOn}</td><td>${t.crimeCheckOn||'<span class="pill bad">없음</span>'}</td><td>${t.abuseCheckOn||'<span class="pill bad">없음</span>'}</td><td>${t.notifiedOn||'<span class="pill warn">없음</span>'}</td><td>${t.leftOn?'<span class="pill gray">퇴직</span>':'<span class="pill">재직</span>'}</td><td><button class="btn small" onclick="editRow(teacherForm,'teachers','${t.id}','teachers')">수정</button> <button class="btn small danger" onclick="removeRow('teachers','${t.id}')">삭제</button></td></tr>`).join('')||'<tr><td colspan="9" class="empty">등록된 강사가 없습니다.</td></tr>';
+
+  const roster=rosterOrder();
+  studentRows.innerHTML=roster.map((s,i)=>`<tr><td>${i+1}</td><td><b>${esc(s.name)}</b></td><td>${esc(s.school)}</td><td>${esc(s.className)}</td><td>${esc(s.phone)||'<span class="pill warn">없음</span>'}</td><td>${s.start}</td><td>${s.end||'-'}</td><td>${s.end?'<span class="pill gray">퇴원</span>':'<span class="pill">재원</span>'}</td><td><button class="btn small" onclick="editRow(studentForm,'students','${s.id}','students')">수정</button> <button class="btn small danger" onclick="removeRow('students','${s.id}')">삭제</button></td></tr>`).join('')||'<tr><td colspan="9" class="empty">등록된 수강생이 없습니다.</td></tr>';
+
+  const sel=paymentForm.studentId.value;
+  paymentForm.studentId.innerHTML='<option value="">수강생 선택</option>'+roster.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.className)}${s.end?' (퇴원)':''}</option>`).join('');
+  paymentForm.studentId.value=sel;
+
+  const q=paySearch.value.trim(),pm=payMonth.value;
+  paymentRows.innerHTML=state.payments.filter(p=>(!pm||p.targetMonth===pm)&&(!q||(student(p.studentId)?.name||'').includes(q))).sort((x,y)=>y.date.localeCompare(x.date)).map(p=>{
+    const s=student(p.studentId),f=s&&feeFor(s.className,p.targetMonth);
+    let cls='',tag='<span class="pill">정상</span>';
+    if(!f){cls='bad';tag='<span class="pill bad">교습비 미등록</span>'}
+    else if(p.type!=='환불'&&p.amount>f.amount){cls='bad';tag='<span class="pill bad">초과징수</span>'}
+    else if(p.type!=='정상'&&!p.note){cls='warn';tag='<span class="pill warn">사유 없음</span>'}
+    else if(p.type==='정상'&&p.amount<f.amount){cls='warn';tag='<span class="pill warn">차액 확인</span>'}
+    return `<tr class="${cls}"><td>${p.date}</td><td><b>${p.targetMonth}</b></td><td>${esc(s?.name||'삭제된 수강생')}</td><td>${esc(s?.className||'-')}</td><td>${p.type}</td><td class="num"><b>${won(signed(p))}</b></td><td>${esc(p.method)}</td><td>${tag}</td><td>${esc(p.note||'-')}</td><td><button class="btn small" onclick="printReceipt('${p.id}')">영수증</button> <button class="btn small" onclick="editRow(paymentForm,'payments','${p.id}','payments')">수정</button> <button class="btn small danger" onclick="removeRow('payments','${p.id}')">삭제</button></td></tr>`;
+  }).join('')||'<tr><td colspan="10" class="empty">수납 내역이 없습니다.</td></tr>';
+
+  const cm=cashMonth.value,{rows,carry}=cashBook(cm);
+  let bal=carry;
+  cashRows.innerHTML=(cm?`<tr><td colspan="5"><b>전월 이월</b></td><td class="num"><b>${won(carry)}</b></td><td colspan="2"></td></tr>`:'')+rows.map(r=>{bal+=r.income-r.expense;return `<tr><td>${r.date}</td><td>${r.kind}</td><td>${esc(r.label)}</td><td class="num" style="color:var(--ok)">${r.income?won(r.income):'-'}</td><td class="num" style="color:var(--bad)">${r.expense?won(r.expense):'-'}</td><td class="num"><b>${won(bal)}</b></td><td>${esc(r.method)}</td><td>${r.expenseId?`<button class="btn small danger" onclick="removeRow('expenses','${r.expenseId}')">삭제</button>`:''}</td></tr>`}).join('');
+  const ti=rows.reduce((s,r)=>s+r.income,0),te=rows.reduce((s,r)=>s+r.expense,0);
+  cashFoot.innerHTML=`<tr><th colspan="3">합계</th><th class="num">${won(ti)}</th><th class="num">${won(te)}</th><th class="num">${won(bal)}</th><th colspan="2"></th></tr>`;
+
+  const issues=audit();
+  mStudents.textContent=state.students.filter(s=>!s.end).length+'명';
+  mIncome.textContent=won(state.payments.filter(p=>p.targetMonth===m).reduce((s,p)=>s+signed(p),0));
+  mExpense.textContent=won(state.expenses.filter(x=>x.date.startsWith(m)).reduce((s,x)=>s+x.amount,0));
+  mIssues.textContent=issues.length+'건';
+  navIssues.hidden=!issues.length;navIssues.textContent=issues.length;
+  issueList.innerHTML=issues.length?issues.map(i=>`<div class="issue"><span class="pill ${i.level}">${i.level==='bad'?'위반 우려':'확인 필요'}</span><div>${esc(i.text)}<div class="law">${esc(i.law)}</div></div><button class="btn small" onclick="go('${i.page}')">처리</button></div>`).join(''):'<div class="empty">지금 입력된 장부 기준으로는 지적될 항목이 없습니다. 체크리스트의 장부 밖 항목도 확인하세요.</div>';
+
+  checkItems.innerHTML=CHECKS.map(([t,d],i)=>`<label class="check"><input type="checkbox" ${state.checks[i]?'checked':''} onchange="state.checks[${i}]=this.checked?today():'';save()"><span><b>${t}</b><small>${d}${state.checks[i]?` · 확인 ${state.checks[i]}`:''}</small></span></label>`).join('');
+  lastBackup.textContent=state.lastBackup?`마지막 백업: ${state.lastBackup.slice(0,10)}`:'아직 백업한 적이 없습니다.';
+}
+function rosterOrder(){return [...state.students].sort((x,y)=>(x.start||'').localeCompare(y.start||'')||x.name.localeCompare(y.name,'ko'))}
+function cashBook(month){
+  const all=[
+    ...state.payments.map(p=>({date:p.date,kind:p.type==='환불'?'환불':'수입',label:`${student(p.studentId)?.name||'수강생'} ${p.targetMonth} 교습비${p.type==='환불'?' 반환':''}`,income:p.type==='환불'?0:p.amount,expense:p.type==='환불'?p.amount:0,method:p.method})),
+    ...state.expenses.map(x=>({date:x.date,kind:'지출',label:x.category+(x.note?` (${x.note})`:''),income:0,expense:x.amount,method:x.vendor||'',expenseId:x.id}))
+  ].sort((x,y)=>x.date.localeCompare(y.date));
+  if(!month)return{rows:all,carry:0};
+  const carry=all.filter(r=>r.date<month).reduce((s,r)=>s+r.income-r.expense,0);
+  return{rows:all.filter(r=>r.date.startsWith(month)),carry};
+}
+
+// ───────── 출력 ─────────
+function academyLine(){const a=state.academy;return `${esc(a.name||'학원명')} · 등록번호 ${esc(a.regNo||'-')} · 대표자 ${esc(a.owner||'-')}`}
+function receiptDoc(p){
+  const a=state.academy,s=student(p.studentId),f=s&&feeFor(s.className,p.targetMonth);
+  return `<article class="doc"><h1>교습비등 영수증</h1><table>
+    <tr><th>학습자 성명</th><td>${esc(s?.name)}</td><th>교습과정(반)</th><td>${esc(s?.className)}</td></tr>
+    <tr><th>교습과목</th><td>${esc(f?.subject||'-')}</td><th>교습기간</th><td>${periodOf(p.targetMonth)}</td></tr>
+    <tr><th>교습비</th><td>${won(signed(p))}</td><th>기타경비</th><td>${f?.extra?won(f.extra)+' (별도 수납 시 기재)':'-'}</td></tr>
+    <tr><th>수납일</th><td>${p.date}</td><th>결제수단</th><td>${esc(p.method)}</td></tr>
+    <tr><th>구분</th><td>${p.type}</td><th>등록 교습비</th><td>${f?won(f.amount):'-'}</td></tr>
+    <tr><th>비고(사유)</th><td colspan="3">${esc(p.note||'-')}</td></tr></table>
+    <p style="text-align:center;margin-top:10mm">위 금액을 ${p.type==='환불'?'반환하였음을':'영수하였음을'} 확인합니다.</p>
+    <p style="text-align:center">${p.date}</p>
+    <div class="sign"><b>${esc(a.name||'학원명')}</b><br>교육청 등록번호 ${esc(a.regNo||'-')} · 사업자번호 ${esc(a.bizNo||'-')}<br>${esc(a.address||'')}<br>설립·운영자 <b>${esc(a.owner||'')}</b> (인)</div></article>`;
+}
+function docHTML(kind,month){
+  const title=(t,sub='')=>`<div class="legal">${academyLine()}${sub?` · ${sub}`:''}</div><h1>${t}</h1>`;
+  if(kind==='roster'){
+    const rows=rosterOrder().map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.name)}</td><td>${esc(s.address)}</td><td>${esc(s.phone)}</td><td>${s.start||''}</td><td>${s.end||''}</td></tr>`).join('');
+    return `<article class="doc">${title('수 강 생 대 장')}<table><thead><tr><th>등록번호</th><th>성명</th><th>주소</th><th>전화번호</th><th>입원 연월일</th><th>퇴원 연월일</th></tr></thead><tbody>${rows||'<tr><td colspan="6">기록 없음</td></tr>'}</tbody></table></article>`;
+  }
+  if(kind==='receipts'){
+    const ps=state.payments.filter(p=>p.targetMonth===month).sort((x,y)=>x.date.localeCompare(y.date));
+    const rows=ps.map((p,i)=>{const s=student(p.studentId);return `<tr><td>${i+1}</td><td>${p.date}</td><td>${esc(s?.name)}</td><td>${esc(s?.className)}</td><td>${periodOf(p.targetMonth)}</td><td>${p.type}</td><td style="text-align:right">${won(signed(p))}</td><td>${esc(p.method)}</td><td>${esc(p.note||'')}</td></tr>`}).join('');
+    return `<article class="doc">${title('교습비등 영수증 원부',month)}<table><thead><tr><th>번호</th><th>수납일</th><th>성명</th><th>반</th><th>교습기간</th><th>구분</th><th>금액</th><th>수단</th><th>비고</th></tr></thead><tbody>${rows||'<tr><td colspan="9">기록 없음</td></tr>'}</tbody><tfoot><tr><th colspan="6">합계</th><th style="text-align:right">${won(ps.reduce((s,p)=>s+signed(p),0))}</th><th colspan="2"></th></tr></tfoot></table></article>`;
+  }
+  if(kind==='cash'){
+    const {rows,carry}=cashBook(month);let bal=carry;
+    const body=rows.map(r=>{bal+=r.income-r.expense;return `<tr><td>${r.date}</td><td>${r.kind}</td><td>${esc(r.label)}</td><td style="text-align:right">${r.income?won(r.income):''}</td><td style="text-align:right">${r.expense?won(r.expense):''}</td><td style="text-align:right">${won(bal)}</td></tr>`}).join('');
+    return `<article class="doc">${title('금 전 출 납 부',month)}<table><thead><tr><th>일자</th><th>구분</th><th>적요</th><th>수입</th><th>지출</th><th>잔액</th></tr></thead><tbody><tr><td colspan="5">전월 이월</td><td style="text-align:right">${won(carry)}</td></tr>${body}</tbody><tfoot><tr><th colspan="3">합계</th><th style="text-align:right">${won(rows.reduce((s,r)=>s+r.income,0))}</th><th style="text-align:right">${won(rows.reduce((s,r)=>s+r.expense,0))}</th><th style="text-align:right">${won(bal)}</th></tr></tfoot></table></article>`;
+  }
+  if(kind==='teachers'){
+    const rows=state.teachers.map((t,i)=>`<tr><td>${i+1}</td><td>${esc(t.name)}</td><td>${esc(t.subject)}</td><td>${esc(t.degree)}</td><td>${t.hiredOn||''}</td><td>${t.leftOn||''}</td><td>${t.crimeCheckOn||''}</td><td>${t.abuseCheckOn||''}</td></tr>`).join('');
+    return `<article class="doc">${title('강사(직원) 명부')}<table><thead><tr><th>번호</th><th>성명</th><th>담당과목</th><th>학력·자격</th><th>채용일</th><th>해임일</th><th>성범죄 조회일</th><th>아동학대 조회일</th></tr></thead><tbody>${rows||'<tr><td colspan="8">기록 없음</td></tr>'}</tbody></table></article>`;
+  }
+  if(kind==='fees')return `<article class="doc">${title('교습비 게시표',month+' 기준')}${feeTableHTML(month)}${REFUND_TEXT}</article>`;
+}
+function printDoc(kind){
+  const month=docMonth.value||thisMonth();
+  printArea.innerHTML=kind==='all'?['roster','teachers','fees','receipts','cash'].map(k=>docHTML(k,month)).join(''):docHTML(kind,month);
+  window.print();
+}
+function printReceipt(id){const p=state.payments.find(v=>v.id===id);if(!p)return;printArea.innerHTML=receiptDoc(p);window.print()}
+
+// ───────── 홈페이지 게시용 ─────────
+const REFUND_TEXT=`<h3 style="margin:18px 0 8px">교습비 반환 기준</h3><table><tr><th>반환 사유 발생 시점</th><th>반환 금액</th></tr><tr><td>교습 시작 전</td><td>이미 낸 교습비 전액</td></tr><tr><td>총 교습시간의 1/3 경과 전</td><td>이미 낸 교습비의 2/3</td></tr><tr><td>총 교습시간의 1/2 경과 전</td><td>이미 낸 교습비의 1/2</td></tr><tr><td>총 교습시간의 1/2 경과 후</td><td>반환하지 않음</td></tr></table><p style="font-size:13px;line-height:1.6">교습기간이 1개월을 넘으면 반환 사유가 생긴 달은 위 기준을, 남은 달은 전액을 반환합니다. 학원 사정으로 교습할 수 없게 되면 그날부터 일할 계산해 반환합니다. (학원의 설립·운영 및 과외교습에 관한 법률 시행령 제18조 [별표 4])</p>`;
+function currentFees(month){
+  const names=[...new Set(state.fees.map(f=>f.className))];
+  return names.map(n=>feeFor(n,month)).filter(Boolean).sort((x,y)=>x.className.localeCompare(y.className,'ko'));
+}
+function feeTableHTML(month){
+  const rows=currentFees(month).map(f=>`<tr><td>${esc(f.className)}</td><td>${esc(f.subject)}</td><td>주 ${Math.round(f.sessions/4*10)/10}회 · ${f.minutes||'-'}분</td><td style="text-align:right">${won(f.amount)}</td><td style="text-align:right">${f.extra?won(f.extra):'없음'}</td></tr>`).join('');
+  return `<table><thead><tr><th>교습과정</th><th>과목</th><th>수업</th><th>월 교습비</th><th>기타경비(실비)</th></tr></thead><tbody>${rows||'<tr><td colspan="5">등록된 교습비 없음</td></tr>'}</tbody></table>`;
+}
+function buildPublish(){
+  const month=publishMonth.value||thisMonth(),a=state.academy;
+  const html=`<!-- ${esc(a.name||'웨이메이커360')} 교습비 게시 (${month} 기준, 자동 생성) -->
+<section class="wm-tuition" style="font-family:inherit;max-width:880px;margin:0 auto;padding:16px">
+<style>.wm-tuition table{width:100%;border-collapse:collapse;margin:8px 0}.wm-tuition th,.wm-tuition td{border:1px solid #d6dde8;padding:8px 10px;font-size:14px;text-align:left}.wm-tuition th{background:#f3f6fa}.wm-tuition td:nth-child(n+4){text-align:right}.wm-tuition h2{font-size:22px;margin:0 0 4px}.wm-tuition small{color:#667085}</style>
+<h2>교습비 안내</h2><small>${esc(a.name||'')} · 교육청 등록번호 ${esc(a.regNo||'')} · ${month} 기준 · 교육청에 등록한 금액입니다.</small>
+${feeTableHTML(month)}
+${REFUND_TEXT}
+</section>`;
+  publishCode.textContent=html;publishCode.hidden=false;publishPreview.innerHTML=html;
+}
+function copyPublish(){if(publishCode.hidden)buildPublish();navigator.clipboard?.writeText(publishCode.textContent).then(()=>alert('코드를 복사했습니다. 홈페이지 편집기의 HTML 블록에 붙여 넣으세요.'),()=>alert('복사하지 못했습니다. 코드를 직접 선택해 복사하세요.'))}
+
+// ───────── 백업 ─────────
+function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function backup(){state.lastBackup=new Date().toISOString();download(`웨이메이커360_장부백업_${today()}.json`,JSON.stringify(state,null,2),'application/json');save()}
+restoreFile.onchange=e=>{const f=e.target.files[0];if(!f)return;f.text().then(t=>{const d=JSON.parse(t);if(!Array.isArray(d.payments)||!Array.isArray(d.students))throw 0;if(!confirm('현재 자료를 백업 파일 내용으로 바꿀까요?'))return;state=Object.assign(blank(),d);save();alert('복원했습니다.')}).catch(()=>alert('백업 파일 형식이 올바르지 않습니다.'));e.target.value=''};
+function exportCsv(){
+  const cell=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const rows=[['수납일','대상월','성명','반','구분','금액','결제수단','사유'],...state.payments.map(p=>{const s=student(p.studentId);return [p.date,p.targetMonth,s?.name,s?.className,p.type,signed(p),p.method,p.note]})];
+  download(`수납내역_${today()}.csv`,'﻿'+rows.map(r=>r.map(cell).join(',')).join('\r\n'),'text/csv');
+}
+function wipe(){if(confirm('모든 장부를 지웁니다. 먼저 백업하셨나요?')&&confirm('정말 지울까요? 되돌릴 수 없습니다.')){state=blank();save()}}
+
+// ───────── 시작 ─────────
+payMonth.value=cashMonth.value=docMonth.value=publishMonth.value=thisMonth();
+payMonth.onchange=paySearch.oninput=cashMonth.onchange=render;
+expenseForm.date.value=today();
+feeForm.effectiveFrom.value=thisMonth();
+preparePayment();
+render();
+</script>
+</body>
+</html>
