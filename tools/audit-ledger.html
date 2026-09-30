@@ -91,6 +91,7 @@ pre.code{white-space:pre-wrap;word-break:break-all;background:#0f172a;color:#e2e
       <button data-page="teachers">강사 명부</button>
       <button data-page="students">수강생 관리</button>
       <button data-page="payments">교습비 수납</button>
+      <button data-page="import">엑셀 일괄등록</button>
       <button data-page="refund">반환 계산기</button>
       <button data-page="cash">금전출납부</button>
       <button data-page="docs">장부 출력</button>
@@ -209,6 +210,23 @@ pre.code{white-space:pre-wrap;word-break:break-all;background:#0f172a;color:#e2e
       </div>
       <div class="tools"><input id="payMonth" type="month" class="btn"><input id="paySearch" placeholder="이름 검색" class="btn"></div>
       <div class="tablewrap"><table><thead><tr><th>수납일</th><th>대상월</th><th>수강생</th><th>반</th><th>구분</th><th class="num">금액</th><th>수단</th><th>점검</th><th>사유</th><th></th></tr></thead><tbody id="paymentRows"></tbody></table></div>
+    </section>
+
+    <!-- 엑셀 일괄등록 -->
+    <section class="page" id="import">
+      <h2>엑셀 일괄등록</h2>
+      <p class="sub">교습비·강사·수강생·수납 내역을 엑셀 한 파일로 한꺼번에 올립니다. 먼저 전체를 검사하고, 오류가 하나라도 있으면 아무것도 반영하지 않습니다.</p>
+      <div class="card">
+        <h3>1. 양식 받기</h3>
+        <p style="color:var(--muted);line-height:1.7;margin:0 0 12px">시트 4개(교습비, 강사, 수강생, 수납)와 '작성법' 시트가 들어 있습니다. 필요한 시트만 채우고 나머지는 비워 두면 됩니다. 수납 시트의 수강생은 기존 장부나 같은 파일의 수강생 시트에 있어야 합니다.</p>
+        <div class="tools"><button class="btn primary" onclick="downloadTemplate()">빈 엑셀 양식 받기</button><button class="btn" onclick="exportXlsx()">현재 장부를 엑셀로 내보내기</button></div>
+      </div>
+      <div class="card">
+        <h3>2. 작성한 엑셀 올리기</h3>
+        <div class="tools"><label class="btn teal">엑셀 파일 선택 (.xlsx, .xls, .csv)<input type="file" id="importFile" accept=".xlsx,.xls,.csv" hidden></label></div>
+        <div id="importResult" style="margin-top:14px"></div>
+      </div>
+      <p style="color:var(--muted);font-size:13px">엑셀 기능은 처음 쓸 때 인터넷에서 SheetJS 라이브러리를 불러옵니다. 올린 파일은 이 컴퓨터 안에서만 읽고, 어디로도 전송하지 않습니다.</p>
     </section>
 
     <!-- 반환 계산기 -->
@@ -587,6 +605,186 @@ ${REFUND_TEXT}
   publishCode.textContent=html;publishCode.hidden=false;publishPreview.innerHTML=html;
 }
 function copyPublish(){if(publishCode.hidden)buildPublish();navigator.clipboard?.writeText(publishCode.textContent).then(()=>alert('코드를 복사했습니다. 홈페이지 편집기의 HTML 블록에 붙여 넣으세요.'),()=>alert('복사하지 못했습니다. 코드를 직접 선택해 복사하세요.'))}
+
+// ───────── 엑셀 일괄등록 ─────────
+// 시트 종류별 열 정의: [열 이름, 저장 키, 필수 여부, 값 종류]
+const SHEETS={
+  교습비:{list:'fees',cols:[['반명','className',1,'text'],['과목','subject',0,'text'],['월 교습비','amount',1,'money'],['월 수업 횟수','sessions',0,'int'],['1회 수업시간(분)','minutes',0,'int'],['적용 시작월','effectiveFrom',1,'month'],['교육청 등록일','registeredOn',0,'date'],['기타경비','extra',0,'money']]},
+  강사:{list:'teachers',cols:[['성명','name',1,'text'],['담당과목','subject',0,'text'],['학력·자격','degree',0,'text'],['채용일','hiredOn',1,'date'],['성범죄 조회일','crimeCheckOn',0,'date'],['아동학대 조회일','abuseCheckOn',0,'date'],['교육청 통보일','notifiedOn',0,'date'],['퇴직일','leftOn',0,'date']]},
+  수강생:{list:'students',cols:[['성명','name',1,'text'],['학교·학년','school',0,'text'],['반','className',1,'text'],['연락처','phone',0,'phone'],['주소','address',0,'text'],['입원일','start',1,'date'],['퇴원일','end',0,'date'],['비고','note',0,'text']]},
+  수납:{list:'payments',cols:[['성명','name',1,'text'],['반','className',1,'text'],['대상월','targetMonth',1,'month'],['수납일','date',1,'date'],['구분','type',0,'text'],['금액','amount',1,'money'],['결제수단','method',0,'text'],['사유','note',0,'text'],['수업 횟수','sessions',0,'int']]},
+};
+const TYPES=['정상','할인·감액','일할계산','환불'];
+const XLSX_URLS=['https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js','https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'];
+let xlsxLoading=null;
+function loadXlsx(){
+  if(window.XLSX)return Promise.resolve(window.XLSX);
+  return xlsxLoading??=XLSX_URLS.reduce((p,url)=>p.catch(()=>new Promise((ok,fail)=>{
+    const s=document.createElement('script');s.src=url;s.onload=()=>window.XLSX?ok(window.XLSX):fail();s.onerror=()=>{s.remove();fail()};document.head.appendChild(s);
+  })),Promise.reject()).catch(()=>{xlsxLoading=null;throw new Error('엑셀 기능을 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.')});
+}
+const headKey=v=>String(v??'').replace(/[\s·.()\/]/g,'');
+const pad=n=>String(n).padStart(2,'0');
+function toDate(v){
+  if(v===''||v==null)return '';
+  if(typeof v==='number'&&v>19000000)v=String(v); // 20260302처럼 숫자로 적은 날짜
+  if(typeof v==='number'){const d=XLSX.SSF.parse_date_code(v);return d?`${d.y}-${pad(d.m)}-${pad(d.d)}`:null}
+  const s=String(v).trim(),m=s.match(/^(\d{4})\D+(\d{1,2})\D+(\d{1,2})\D*$/)||s.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if(!m)return null;
+  const [y,mo,d]=[+m[1],+m[2],+m[3]],t=new Date(y,mo-1,d);
+  return t.getMonth()===mo-1&&t.getDate()===d?`${y}-${pad(mo)}-${pad(d)}`:null;
+}
+function toMonth(v){
+  if(v===''||v==null)return '';
+  if(typeof v==='number'){if(v>190000&&v<300000)v=String(v);else{const d=XLSX.SSF.parse_date_code(v);return d?`${d.y}-${pad(d.m)}`:null}}
+  const m=String(v).trim().match(/^(\d{4})\D*(\d{1,2})/);
+  return m&&+m[2]>=1&&+m[2]<=12?`${m[1]}-${pad(+m[2])}`:null;
+}
+function convert(v,kind){
+  if(kind==='text')return String(v??'').trim();
+  // 엑셀이 숫자로 바꿔 앞자리 0이 사라진 휴대폰 번호(1012345678) 복원
+  if(kind==='phone')return typeof v==='number'&&/^1\d{8,9}$/.test(String(v))?'0'+v:String(v??'').trim();
+  if(kind==='date')return toDate(v);
+  if(kind==='month')return toMonth(v);
+  if(v===''||v==null)return '';
+  const n=Number(String(v).replace(/[원,\s]/g,''));
+  return Number.isFinite(n)&&n>=0&&(kind!=='int'||Number.isInteger(n))?n:null;
+}
+const KIND_HINT={date:'날짜(예: 2026-03-02)',month:'월(예: 2026-03)',money:'0 이상의 숫자',int:'정수'};
+
+function readSheet(ws,kindName){
+  const rows=XLSX.utils.sheet_to_json(ws,{header:1,raw:true,defval:''});
+  const head=(rows[0]||[]).map(headKey),cols=SHEETS[kindName].cols,errors=[],items=[];
+  const idx=cols.map(([label])=>head.indexOf(headKey(label)));
+  cols.forEach(([label,,req],i)=>{if(req&&idx[i]<0)errors.push(`[${kindName}] '${label}' 열이 없습니다.`)});
+  if(errors.length)return{errors,items};
+  rows.slice(1).forEach((r,n)=>{
+    if(r.every(c=>String(c).trim()===''))return;
+    const row=n+2,x={};
+    cols.forEach(([label,key,req,kind],i)=>{
+      const raw=idx[i]<0?'':r[idx[i]],v=convert(raw,kind);
+      if(v===null)errors.push(`[${kindName}] ${row}행 '${label}': ${KIND_HINT[kind]} 형식이 아닙니다 (${raw}).`);
+      else if(req&&v==='')errors.push(`[${kindName}] ${row}행 '${label}'이(가) 비어 있습니다.`);
+      x[key]=v??'';
+    });
+    x._row=row;items.push(x);
+  });
+  return{errors,items};
+}
+// 시트 이름이 맞으면 그대로, 아니면 머리행으로 종류를 추정 (CSV 등)
+function sheetKind(name,ws){
+  const n=headKey(name).replace(/내역|기준|명부|관리/g,'');
+  if(SHEETS[n])return n;
+  const head=((XLSX.utils.sheet_to_json(ws,{header:1,defval:''})[0])||[]).map(headKey);
+  return Object.keys(SHEETS).find(k=>SHEETS[k].cols.filter(c=>c[2]).every(([l])=>head.includes(headKey(l))))||null;
+}
+
+function planImport(wb){
+  const parsed={},errors=[];
+  wb.SheetNames.forEach(name=>{
+    const kind=sheetKind(name,wb.Sheets[name]);if(!kind||parsed[kind])return;
+    const r=readSheet(wb.Sheets[name],kind);parsed[kind]=r.items;errors.push(...r.errors);
+  });
+  if(!Object.values(parsed).some(v=>v.length))errors.push('가져올 내용이 없습니다. 양식의 열 이름을 그대로 두고 내용을 채워 주세요.');
+  const plan={fees:[],teachers:[],students:[],payments:[],updates:0,skipped:0};
+  // 기존 행과 비교해 실제로 바뀌는 칸이 있을 때만 '갱신'으로 센다
+  const changes=(old,x)=>old&&Object.entries(x).some(([k,v])=>k!=='_row'&&v!==''&&String(old[k]??'')!==String(v));
+  (parsed.교습비||[]).forEach(x=>{
+    x.subject||='영어';x.sessions||=12;x.extra||=0;
+    const old=state.fees.find(f=>norm(f.className)===norm(x.className)&&f.effectiveFrom===x.effectiveFrom);
+    plan.fees.push({x,old});if(changes(old,x))plan.updates++;
+  });
+  (parsed.강사||[]).forEach(x=>{
+    const old=state.teachers.find(t=>t.name===x.name&&t.hiredOn===x.hiredOn);
+    plan.teachers.push({x,old});if(changes(old,x))plan.updates++;
+  });
+  const newStudents=[];
+  (parsed.수강생||[]).forEach(x=>{
+    if(x.end&&x.end<x.start)errors.push(`[수강생] ${x._row}행: 퇴원일이 입원일보다 빠릅니다.`);
+    const old=state.students.find(s=>s.name===x.name&&norm(s.className)===norm(x.className));
+    if(!old&&newStudents.some(s=>s.name===x.name&&norm(s.className)===norm(x.className)))return errors.push(`[수강생] ${x._row}행: ${x.name}(${x.className})이(가) 파일 안에 두 번 있습니다.`);
+    if(!old)newStudents.push(x);
+    plan.students.push({x,old});if(changes(old,x))plan.updates++;
+  });
+  const seen=new Set();
+  (parsed.수납||[]).forEach(x=>{
+    x.type||='정상';x.method||='카드';
+    if(!TYPES.includes(x.type))return errors.push(`[수납] ${x._row}행 '구분'은 ${TYPES.join(' / ')} 중 하나여야 합니다.`);
+    if(x.type!=='정상'&&!x.note)return errors.push(`[수납] ${x._row}행: ${x.type}은(는) 사유를 꼭 적어야 합니다.`);
+    const known=state.students.find(s=>s.name===x.name&&norm(s.className)===norm(x.className))||newStudents.find(s=>s.name===x.name&&norm(s.className)===norm(x.className));
+    if(!known)return errors.push(`[수납] ${x._row}행: ${x.name}(${x.className}) 수강생이 없습니다. 수강생 시트에 먼저 넣어 주세요.`);
+    const key=[x.name,norm(x.className),x.targetMonth,x.date,x.amount,x.type].join('|');
+    const dupExisting=state.payments.some(p=>{const s=student(p.studentId);return s&&[s.name,norm(s.className),p.targetMonth,p.date,p.amount,p.type].join('|')===key});
+    if(dupExisting||seen.has(key)){plan.skipped++;return}
+    seen.add(key);plan.payments.push({x});
+  });
+  return{plan,errors};
+}
+function applyImport(plan){
+  const strip=({_row,...x})=>x;
+  // 기존 행 갱신 시 빈 칸은 기존 값을 지우지 않는다
+  const merge=(old,x)=>Object.entries(strip(x)).forEach(([k,v])=>{if(v!=='')old[k]=v});
+  plan.fees.forEach(({x,old})=>old?merge(old,x):state.fees.push({...strip(x),id:uid()}));
+  plan.teachers.forEach(({x,old})=>old?merge(old,x):state.teachers.push({...strip(x),id:uid()}));
+  plan.students.forEach(({x,old})=>old?merge(old,x):state.students.push({...strip(x),id:uid()}));
+  plan.payments.forEach(({x})=>{
+    const s=state.students.find(v=>v.name===x.name&&norm(v.className)===norm(x.className));
+    const {name,className,...p}=strip(x);
+    state.payments.push({...p,studentId:s.id,id:uid()});
+  });
+  save();
+}
+importFile.onchange=async e=>{
+  const file=e.target.files[0];e.target.value='';if(!file)return;
+  importResult.innerHTML='<div class="result">파일을 검사하고 있습니다…</div>';
+  try{
+    await loadXlsx();
+    const wb=XLSX.read(await file.arrayBuffer(),{type:'array',raw:false});
+    const {plan,errors}=planImport(wb);
+    if(errors.length){importResult.innerHTML=`<div class="notice"><b>오류 ${errors.length}건이 있어 아무것도 반영하지 않았습니다.</b> 고친 뒤 다시 올려 주세요.<ul style="margin:8px 0 0">${errors.slice(0,15).map(x=>`<li>${esc(x)}</li>`).join('')}${errors.length>15?`<li>외 ${errors.length-15}건</li>`:''}</ul></div>`;return}
+    const added=k=>plan[k].filter(v=>!v.old).length;
+    const summary=`교습비 ${added('fees')}건, 강사 ${added('teachers')}명, 수강생 ${added('students')}명, 수납 ${plan.payments.length}건 추가${plan.updates?` · 기존 ${plan.updates}건 갱신`:''}${plan.skipped?` · 이미 있는 수납 ${plan.skipped}건 건너뜀`:''}`;
+    if(!confirm(`${summary}\n\n반영할까요?`)){importResult.innerHTML='<div class="result">반영을 취소했습니다.</div>';return}
+    applyImport(plan);
+    const issues=audit().length;
+    importResult.innerHTML=`<div class="info"><b>반영 완료:</b> ${esc(summary)}${issues?`<br>자동 점검에서 확인할 항목이 ${issues}건 있습니다. <button class="btn small" onclick="go('home')">점검 결과 보기</button>`:''}</div>`;
+  }catch(err){importResult.innerHTML=`<div class="notice">${esc(err.message||'파일을 읽지 못했습니다. 엑셀 파일이 맞는지 확인해 주세요.')}</div>`}
+};
+function sheetFrom(kind,rows){
+  const cols=SHEETS[kind].cols,ws=XLSX.utils.aoa_to_sheet([cols.map(c=>c[0]),...rows.map(r=>cols.map(([,k])=>r[k]??''))]);
+  ws['!cols']=cols.map(([l])=>({wch:Math.max(12,l.length*2+4)}));return ws;
+}
+async function downloadTemplate(){
+  try{await loadXlsx()}catch(err){return alert(err.message)}
+  const wb=XLSX.utils.book_new();
+  Object.keys(SHEETS).forEach(k=>XLSX.utils.book_append_sheet(wb,sheetFrom(k,[]),k));
+  const guide=XLSX.utils.aoa_to_sheet([
+    ['웨이메이커360 점검대비 장부 · 엑셀 작성법'],[],
+    ['· 각 시트 1행의 열 이름은 바꾸지 마세요. 필요 없는 시트는 비워 두면 됩니다.'],
+    ['· 날짜는 2026-03-02, 월은 2026-03 형식으로 적습니다.'],
+    ['· 교습비를 바꾼 적이 있으면 같은 반을 적용 시작월만 다르게 여러 줄로 적습니다.'],
+    ['· 수납의 성명·반은 수강생 시트(또는 이미 등록된 수강생)와 똑같아야 합니다.'],
+    ['· 수납 구분은 정상 / 할인·감액 / 일할계산 / 환불 중 하나이고, 정상이 아니면 사유가 필수입니다. 환불도 금액은 양수로 적습니다.'],
+    ['· 이미 들어간 수납(성명·반·대상월·수납일·금액·구분이 같음)은 다시 올려도 중복으로 들어가지 않습니다.'],[],
+    ['[예시] 시트','예시 행'],
+    ['교습비','중등 내신 A | 영어 | 300000 | 12 | 90 | 2026-03 | 2026-02-20 | 0'],
+    ['강사','홍길동 | 영어 | ○○대 영문과 | 2026-03-01 | 2026-02-25 | 2026-02-25 | 2026-03-05 |'],
+    ['수강생','김하늘 | ○○중 2 | 중등 내신 A | 010-0000-0000 | 서울시 ○○구 | 2026-03-02 | | '],
+    ['수납','김하늘 | 중등 내신 A | 2026-03 | 2026-03-02 | 정상 | 300000 | 카드 | |'],
+  ]);
+  guide['!cols']=[{wch:14},{wch:90}];
+  XLSX.utils.book_append_sheet(wb,guide,'작성법');
+  XLSX.writeFile(wb,'웨이메이커360_장부_일괄등록양식.xlsx');
+}
+async function exportXlsx(){
+  try{await loadXlsx()}catch(err){return alert(err.message)}
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,sheetFrom('교습비',state.fees),'교습비');
+  XLSX.utils.book_append_sheet(wb,sheetFrom('강사',state.teachers),'강사');
+  XLSX.utils.book_append_sheet(wb,sheetFrom('수강생',rosterOrder()),'수강생');
+  XLSX.utils.book_append_sheet(wb,sheetFrom('수납',state.payments.map(p=>({...p,name:student(p.studentId)?.name,className:student(p.studentId)?.className}))),'수납');
+  XLSX.writeFile(wb,`웨이메이커360_장부_${today()}.xlsx`);
+}
 
 // ───────── 백업 ─────────
 function download(name,text,type){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
