@@ -7,4 +7,4 @@
 
 # 히스토리시 (Histolish) — Cowork에서 이어받은 작업
 
-- `histolish/모두의 창업/Histolish_지역예선대응_커리큘럼재정비안_v2.html`: 모두의 창업 지역 예선 대응 커리큘럼 재정비안 (결정 반영본). v1은 같은 폴더에 비교용으로 둡니다.
+- `histolish/모두의 창업/Histolish_지역예선대응_커리큘럼재정비안_v1.html`: Cowork 대화 기록에서 복원한 v1. 정본 v2(확정안)는 구글 드라이브 `Histolish/모두의 창업/`에 있습니다.
