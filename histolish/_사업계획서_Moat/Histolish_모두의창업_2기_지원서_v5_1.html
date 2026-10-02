@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Histolish · 모두의 창업 2기 도전신청서 v5.1 (지역 예선 대응)</title>
+<style>
+:root {
+  --navy: #1A2E4A; --gold: #C9A961; --red: #B94A48;
+  --green: #3D7A4F; --gray: #555555;
+  --bg-blue: #DCE6F1; --bg-green: #DCE8DC; --bg-red: #F4D6D4;
+  --bg-gold: #F2E8D3; --border: #D0D0D0;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "맑은 고딕", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  font-size: 16px; line-height: 1.75; color: #222;
+  background: linear-gradient(180deg, #F8F6F2 0%, #FFFFFF 200px);
+}
+.wrap {
+  max-width: 940px; margin: 32px auto;
+  padding: 60px 56px 80px; background: #FFFFFF;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06); border-radius: 4px;
+}
+@media (max-width: 720px) { .wrap { padding: 32px 20px; margin: 0; border-radius: 0; } }
+.cover { text-align: center; padding: 12px 0 36px; border-bottom: 3px double var(--gold); margin-bottom: 32px; }
+.cover .topline { color: var(--gray); font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.cover .brand { font-size: 44px; font-weight: 800; color: var(--navy); letter-spacing: -1px; margin: 12px 0 6px; }
+.cover .tagline { font-style: italic; color: var(--gold); font-size: 17px; margin-bottom: 18px; }
+.cover .hero {
+  font-size: 19px; font-weight: 700; color: var(--navy);
+  line-height: 1.5; padding: 14px 24px; margin: 12px 0;
+  border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+}
+.cover .meta { color: var(--gray); font-size: 13px; margin-top: 14px; }
+h1 { font-size: 25px; color: var(--navy); border-bottom: 3px solid var(--gold); padding-bottom: 8px; margin-top: 50px; margin-bottom: 18px; font-weight: 800; }
+h1:first-of-type { margin-top: 0; }
+h2 { font-size: 20px; color: var(--navy); margin-top: 30px; margin-bottom: 12px; font-weight: 700; }
+h3 { font-size: 16px; color: var(--gray); margin-top: 20px; margin-bottom: 8px; font-weight: 700; }
+p { margin: 0 0 10px; }
+strong { color: var(--navy); }
+em { color: var(--gray); }
+ul, ol { padding-left: 22px; margin: 6px 0 14px; }
+li { margin-bottom: 5px; }
+li::marker { color: var(--gold); }
+table { border-collapse: collapse; width: 100%; margin: 14px 0 22px; font-size: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); border-radius: 6px; overflow: hidden; }
+thead { background: var(--navy); }
+th { color: #FFFFFF; font-weight: 700; padding: 9px 11px; text-align: center; border: 1px solid #2A3E5A; }
+td { padding: 9px 11px; border: 1px solid var(--border); vertical-align: top; background: #FFFFFF; }
+tbody tr:nth-child(even) td { background: #FAFAF8; }
+.callout { border: 1px solid var(--border); padding: 14px 18px; margin: 14px 0; border-radius: 6px; }
+.callout.gold { background: var(--bg-gold); border-color: var(--gold); }
+.callout.green { background: var(--bg-green); border-color: var(--green); }
+.callout.red { background: var(--bg-red); border-color: var(--red); }
+.callout.blue { background: var(--bg-blue); border-color: var(--navy); }
+.callout .title { font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+.headline-table { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 18px 0 12px; }
+.headline-cell { text-align: center; padding: 16px 8px; background: var(--bg-gold); border-radius: 6px; border: 1px solid var(--gold); }
+.headline-cell .label { font-size: 12px; color: var(--gray); font-weight: 700; margin-bottom: 4px; }
+.headline-cell .value { font-size: 20px; color: var(--navy); font-weight: 800; }
+.headline-cell.green .value { color: var(--green); }
+.tag { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; margin-right: 6px; }
+.tag.new { background: var(--green); color: #FFF; }
+.tag.fix { background: var(--gold); color: #FFF; }
+.tag.score { background: var(--red); color: #FFF; }
+.topbar { position: sticky; top: 0; background: var(--navy); color: #FFF; padding: 10px 24px; font-size: 13px; display: flex; justify-content: space-between; z-index: 100; }
+.topbar .actions a { color: #FFF; text-decoration: none; padding: 4px 12px; border: 1px solid rgba(255,255,255,0.4); border-radius: 3px; font-size: 12px; }
+.quote-card { border: 1px solid var(--border); border-left: 5px solid var(--navy); border-radius: 0 6px 6px 0; padding: 14px 18px; margin: 12px 0; background: #FAFAF8; }
+.quote-card p { font-style: italic; margin: 0; }
+.quote-card .who { font-weight: 700; color: var(--navy); font-size: 13px; margin-top: 8px; }
+.quote-card.placeholder { border-left-color: var(--gold); background: #FFFCF3; }
+.quote-card.placeholder .who { color: var(--red); }
+.persona-card { border: 2px solid var(--navy); border-radius: 6px; padding: 16px 20px; margin: 14px 0; background: #FAFCFE; }
+.persona-note { color: var(--gray); font-size: 13px; }
+.evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+.evidence-frame { border: 2px dashed #B9B9B9; border-radius: 6px; background: #FAFAF8; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 14px; }
+.evidence-frame .icon { font-size: 26px; color: #B9B9B9; margin-bottom: 6px; }
+.evidence-frame .label { font-weight: 700; color: var(--navy); font-size: 13px; }
+.evidence-frame .hint { color: var(--red); font-size: 11.5px; margin-top: 4px; }
+.score-strip { display: grid; grid-template-columns: 4fr 3fr 3fr; gap: 8px; margin: 14px 0 6px; }
+.score-cell { text-align: center; padding: 12px 8px; border-radius: 6px; border: 2px solid var(--navy); background: #FAFCFE; }
+.score-cell .pct { font-size: 24px; font-weight: 800; color: var(--navy); }
+.score-cell .name { font-size: 13px; font-weight: 700; color: var(--gray); }
+.deadline-box { background: var(--navy); color: #FFF; border-radius: 6px; padding: 16px 22px; margin: 16px 0; }
+.deadline-box strong { color: #FFD166; }
+@media print { body { background: #FFFFFF; } .wrap { box-shadow: none; margin: 0; padding: 0; max-width: none; } h1 { page-break-before: always; } h1:first-of-type { page-break-before: avoid; } table, .callout, .quote-card, .persona-card, .evidence-frame { page-break-inside: avoid; } .no-print { display: none; } }
+mark.v51 { background: #FFF1A8; color: inherit; padding: 0 2px; border-radius: 2px; }
+@media print { mark.v51 { background: none; padding: 0; } }
+</style>
+</head>
+<body>
+<div class="topbar no-print">
+  <div><strong>HISTOLISH</strong> · 모두의 창업 2기 도전신청서 v5.1 (지역 예선 대응)</div>
+  <div class="actions"><a href="javascript:window.print()">인쇄 / PDF</a></div>
+</div>
+<div class="wrap">
+  <div class="cover">
+    <div class="topline">「모두의 창업 프로젝트」 통합 모집공고 (2차) · 일반/기술트랙 도전신청서</div>
+    <div class="brand">히스토리시 (Histolish)</div>
+    <div class="tagline">Read the World · Think in English</div>
+    <div class="hero">
+      외신 Close Reading × 다관점 역사 × AI 첨삭의 교육 플랫폼<br>
+      <span style="font-size:15px; color:var(--gray); font-weight:600;">한국 학생이 영어로 세상을 읽고, 영어로 생각하기 시작합니다.</span>
+    </div>
+    <div class="headline-table">
+      <div class="headline-cell"><div class="label"><mark class="v51">Core 교재 완비</mark></div><div class="value"><mark class="v51">25회차</mark></div></div>
+      <div class="headline-cell"><div class="label">현장 검증</div><div class="value">3년 운영</div></div>
+      <div class="headline-cell"><div class="label">SOM (3년차)</div><div class="value">약 200억</div></div>
+      <div class="headline-cell green"><div class="label">3년차 매출(기본)</div><div class="value">25억 원</div></div>
+      <div class="headline-cell"><div class="label">이해도 향상</div><div class="value">50→70%+</div></div>
+    </div>
+    <div class="meta">
+      신청자: 강해광 (예비창업자) | 공동창업자: 이지선<br>
+      지역: 충청권 (충남 천안) | 트랙: 일반/기술트랙 | 작성일: <mark class="v51">2026년 10월</mark><br>
+      버전: <mark class="v51">v5.1 — 1R 통과 후 지역 예선(서면평가) 대응 · 커리큘럼 재정비(2026-10-02) 숫자 정합</mark><br>v5.0 — 2차 공고(중기부 공고 제2026-208호, 2026.8.20) 대응 전면 개편
+    </div>
+  </div>
+
+<div class="deadline-box">
+  <strong>지역 예선 대응 (내부 관리용 — 제출본에서는 이 박스와 노란 표시를 지우세요)</strong><br>
+  현재: 1R(아이디어 심사) 통과 → 지역 예선 = 책임멘토 <strong>관찰식 평가</strong> + 사업계획서·창업활동·멘토링 보고서 <strong>서면평가</strong> → 통과 시 2R 시제품 제작비 최대 2,000만원<br>
+  제출 전 할 일: ① 멘토기관 중점 평가지표·일정·양식 확인 ② 체험단 설문 실측치 → §3.2 기입 ③ MVP 스크린샷 4종 → §2.3·부록 A ④ <strong>노란 표시 문장은 두 분 말로 다시 쓰기</strong> (서면평가 AI 생성률·표절률 검사) ⑤ 이 박스 삭제 후 PDF 출력
+</div>
+
+<div class="callout gold">
+  <div class="title">[v5.1 핵심 변경] 커리큘럼 재정비(2026-10-02)에 맞춰 숫자를 하나로</div>
+  <ol>
+    <li><strong>숫자 정합</strong> — "150회차 완성"을 <strong>Core 25회차(교재 완비) · 정규 186회차(설계 완료)</strong> 두 숫자로 교체. '완성'은 워크시트+교사가이드로 바로 수업 가능한 것에만 씀</li>
+    <li><strong>3층 구조</strong> — Core(외신으로 다시 읽는 한국 근현대사 25) · 정규 확장(161) · 파트너 과정(다크투어·서경덕 트랙, 정규 회차 수 미포함)</li>
+    <li><strong>트랙명 정리</strong> — 과학 → 과학사, 미술 → 미술사 (내용 동일). 모든 트랙이 "외신으로 읽는 ○○의 역사"로 묶임</li>
+    <li><strong>레벨 표기</strong> — 초·중·고 3수준 → Listener·Reader·Investigator·Historian 4레벨(초1~고3). 주력 대상은 초4~고1(Reader·Investigator)</li>
+    <li><strong>2R 시제품 범위 신설(§2.5)</strong> — Core 25 × Reader·Investigator 웹 워크북 + AI 첨삭, 제1권(01–08)은 4레벨 전부 · 워크시트 66종</li>
+  </ol>
+</div>
+
+<h1>00. 재도전자입니다 — 1기 피드백을 이렇게 반영했습니다</h1>
+
+<div class="callout blue">
+  <div class="title">1기 → 2기: 미선발이 만든 더 단단한 계획</div>
+  <p>히스토리시는 <strong>1기(1차 모집)에 지원했으나 선발되지 못했습니다.</strong> 그러나 그 과정에서 받은 심사 피드백(김제곤 멘토)을 흘려보내지 않았습니다. 아래는 피드백별 반영 결과입니다.</p>
+</div>
+
+<table>
+  <thead><tr><th>1기 심사 피드백</th><th>2기 신청서 반영 결과</th></tr></thead>
+  <tbody>
+    <tr><td>"역사투어 중심 사업으로 보인다" (본질 오독)</td><td>Hero Message를 "외신 Close Reading × 다관점 역사 × AI 첨삭"으로 재정의. 역사투어는 파트너 위탁 옵션으로 격하. <mark class="v51">커리큘럼에서도 다크투어 32회차를 정규에서 빼 파트너 과정으로 분리(2026-10)</mark></td></tr>
+    <tr><td>"지역별 품질 균질성 유지가 어렵다"</td><td>5단 표준화 아키텍처 수립 — 본질이 디지털 콘텐츠 + AI라 지역·강사 무관 동일 품질 (부록 B)</td></tr>
+    <tr><td>경력 기재 오류</td><td>커리큘럼 72→150회차<mark class="v51">(1R 기간에 Core 25 · 정규 186회차로 재정비)</mark>, 대표 경력 전면 사실 정정 (부록 C 변경 추적표)</td></tr>
+    <tr><td>수요·시장 근거 부족 (내부 재검토 지적 포함)</td><td>체험단 수업 설문조사로 정량 수요 실측(§3.2), SOM을 채널 단가 기반 상향식 재계산(600억→약 200억), 타겟 페르소나 확정</td></tr>
+  </tbody>
+</table>
+
+<p class="persona-note">※ 미선발 이후 1년간 멈추지 않았습니다: <mark class="v51">Core 25회차 워크시트·교사가이드 전 회차 완비, 정규 186회차 4레벨 설계, 출처 링크 전수 실접속 검증</mark>, AI 채점 도구 고도화 — 아래 본문의 모든 실적이 그 증거입니다.</p>
+
+<h1>01. 팀 역량 — 왜 우리 팀인가 <span class="tag score">배점 40%</span></h1>
+<p><em>공고 6대 항목 ⑥ 팀 역량 | 가장 높은 배점이므로 가장 먼저, 가장 깊게 씁니다.</em></p>
+
+<h2>1.1 이 팀은 "하겠다"가 아니라 "이미 했다"로 말합니다</h2>
+
+<table>
+  <thead><tr><th>주장</th><th>증거 (완료된 실적)</th></tr></thead>
+  <tbody>
+    <tr><td>커리큘럼을 만들 수 있다</td><td><strong><mark class="v51">이미 Core 25회차 교재 완비 · 정규 186회차 설계 완료</mark></strong> — <mark class="v51">7트랙 × 4레벨(초1~고3)</mark>, 1,200시간 투입, 외주 환산 1억 원+ (실물: 부록 A 스크린샷)</td></tr>
+    <tr><td>AI 도구를 만들 수 있다</td><td><strong>이미 6종 운용 중</strong> — Anthropic API 기반 AI 채점·피드백, 음성인식 단어시험 앱(2,779어휘 DB), 학원관리 도구 4종. 웨이메이커360 현장에서 실사용</td></tr>
+    <tr><td>수업이 효과 있다</td><td><strong>이미 3년 검증</strong> — 천안·양산 2개 캠퍼스 외신 수업 운영, 외신 이해도 50%→70%+ (6회차 기준)</td></tr>
+    <tr><td>네트워크가 있다</td><td><strong>이미 가동 중</strong> — 서경덕 교수(성신여대) 역사투어 모임 회장직, 투리스타 협약 추진, 대안학교(금산간디학교) 현장 인맥</td></tr>
+  </tbody>
+</table>
+
+<h2>1.2 역할 분리 — 솔루션 핵심 + 성장 핵심</h2>
+
+<table>
+  <thead><tr><th>구성원</th><th>역할 / 핵심 역량</th></tr></thead>
+  <tbody>
+    <tr>
+      <td style="width:30%;"><strong style="color:var(--navy);">이지선 공동창업자</strong><br><span style="color:var(--gold); font-weight:700;">솔루션 핵심</span></td>
+      <td>
+        <strong>영어 교육 25년 + 외신 Close Reading 3년 + 에듀테크 개발</strong>
+        <ul>
+          <li>초·중·고 영어 교육 25년 (입시·내신 포함) — "학생이 어디서 막히는지 아는 감각"</li>
+          <li>외신 기반 Close Reading 교수법 3년 운영 · 50→70%+ 이해도 향상 검증</li>
+          <li><mark class="v51">정규 186회차 커리큘럼 직접 설계 (7트랙 × 4레벨) · Core 25회차 교재 완비</mark> + 워크시트 v9 체계 설계</li>
+          <li>Anthropic API 기반 AI 채점·피드백 시스템 독자 개발·운용 — <strong>기술트랙 적합성의 실체</strong></li>
+          <li>HTML/JS 학원 관리 도구 4종 직접 개발 · 웨이메이커360 2개 캠퍼스 운영</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--navy);">강해광 대표 (신청자)</strong><br><span style="color:var(--gold); font-weight:700;">성장·파트너십 핵심</span></td>
+      <td>
+        <strong>수학교육학사 + 대안교육 경험 + 서경덕 교수 네트워크 + 사업 전략·BD</strong>
+        <ul>
+          <li>수학교육학사 — 교육 설계 기초 역량</li>
+          <li>금산간디학교 교사 1년 — 대안교육 현장 경험, 전국 대안학교 네트워크 교두보</li>
+          <li>서경덕 교수 "대한민국 역사투어" 모임 회장 — 매년 4회 투어 전체 참석, 역사 현장(군함도·사적지·DMZ) 직접 경험 기반 교사 노트 집필</li>
+          <li>사업 전략·대외 영업·B2B·파트너십·투자 유치 담당</li>
+          <li><strong>예비창업자 자격 충족</strong> — 공고일(2026.8.20) 기준 본인 명의 사업자등록 없음</li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td><strong style="color:var(--gold);">외부 자문 · 파트너십</strong></td>
+      <td>서경덕 교수 (성신여대) — 콘텐츠 자문 / 투리스타 — 역사투어 운영 파트너 (MOU 협의) / 변호사 — NDA·B2B 계약·저작권 자문</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout green">
+  <div class="title">왜 이 조합은 복제가 어려운가</div>
+  <p><strong>이지선의 콘텐츠+기술</strong>이 솔루션을 만들고, <strong>강해광의 현장 경험+네트워크</strong>가 확산시킵니다. 경쟁자가 AI에 "역사+영어 워크시트 만들어줘"를 입력해도, 25년 현장 감각으로 설계된 질문 구조와 역사 현장을 직접 걸어본 교사 노트는 나오지 않습니다. 콘텐츠·기술·운영·확산이 2인 팀 안에서 완결되는 구조입니다.</p>
+</div>
+
+<h2>1.3 실행력 증명 — 미선발 이후 1년의 궤적</h2>
+<ul>
+  <li>2025~2026: 근현대사 25회차 워크시트·교사가이드 전 회차 완성 (<mark class="v51">Reader·Investigator·Historian 3레벨</mark> × DOCX/HTML)</li>
+  <li>2026 상반기: 워크시트 v9 체계 업그레이드, 서경덕 시리즈(독도) v2/v3 완성, 충남 로컬라이징 마스터플랜 수립</li>
+  <li>2026 하반기: <mark class="v51">Listener(초1~3) 단계 신설로 4레벨 체계 완성, 정규 커리큘럼 출처 링크 전수 실접속 검증, 한국 근현대 인물 41회차 설계</mark>, 파일럿 수업 준비</li>
+  <li><mark class="v51">2026-10 (1R 통과 후): 커리큘럼을 Core 25 · 정규 186 · 파트너 과정 3층으로 재정비 — 과학사·미술사 개명, 다크투어 32회차는 파트너 과정으로 분리</mark></li>
+</ul>
+
+<h1>02. 아이템 가치 — 무엇을, 어떻게 <span class="tag score">배점 30%</span></h1>
+<p><em>공고 6대 항목 ① 문제 정의 · ② 솔루션 · ⑤ 차별점 · MVP 보유 여부</em></p>
+
+<h2>2.1 문제 정의 — 두 가지 결핍이 동시에 진행 중</h2>
+
+<table>
+  <thead><tr><th>문제</th><th>구체적 근거 (수치·출처)</th></tr></thead>
+  <tbody>
+    <tr><td><strong>❶ 영어와 사고력의 분리</strong><br>토익 900점도 NYT 사설을 못 읽는다</td><td>사실·의견을 구분하는 한국 15세 학생 <strong>25%</strong> — OECD 평균(47%)의 절반 (OECD Education Policy Outlook in Korea, 2025.12, PISA 기반). 읽기 점수는 515점으로 상위권이나 비판적 판별 역량은 최하위권. 비판적 사고 과제를 자주 내는 교사 40.4% vs OECD 평균 61.2% (TALIS 2024)</td></tr>
+    <tr><td><strong>❷ 일방향 역사 교육</strong><br>정답 찾기가 증거 추론을 밀어냈다</td><td>2022 개정 교육과정은 "증거 기반 추론·다관점 이해"를 명시했으나, 이를 구현하는 민간 콘텐츠 부재. 수능·내신 구조가 역사를 "외울 사실"로 고정 — 1차 자료·상반된 기록을 비교하는 훈련이 사실상 없음</td></tr>
+  </tbody>
+</table>
+
+<h2>2.2 솔루션 — 외신으로 역사를 다관점에서 읽고, AI 첨삭이 즉시 따라온다</h2>
+
+<ul>
+  <li><strong>① Close Reading</strong> — TIME·BBC·The Economist·NYT 외신 기사를 1차 텍스트로 정밀 독해</li>
+  <li><strong>② Synthesis</strong> — 국내 자료와 외신을 나란히 놓고 "왜 이 기록들이 다른가" 분석 (예: 을사늑약 국내 교과서 vs NYT 1905년 보도)</li>
+  <li><strong>③ Evidence-Based Writing</strong> — 텍스트 근거 기반 에세이 작성 → Anthropic API 기반 Histolish 루브릭 AI 첨삭 (<mark class="v51">Reader 레벨부터 적용 — 초등은 쉬운 말 피드백, 중등은 4기준 루브릭</mark>)</li>
+</ul>
+
+<div class="callout blue">
+  <p>"AI는 강사를 대체하지 않습니다. AI는 실력 있는 강사를 10배 강사로 만드는 도구입니다." — AI가 채점·퀴즈·리포트를 처리하면 강사는 토론·멘토링에 집중합니다. 학생 1명당 AI 비용 월 약 800원으로 사업화 가능한 구조입니다.</p>
+</div>
+
+<h2>2.3 이미 만들어진 것 (MVP) — 실물 증빙</h2>
+
+<ul>
+  <li><strong>✅ <mark class="v51">Core 25회차 교재 완비 + 정규 186회차 설계 완료</mark></strong> — <mark class="v51">7트랙 × 4레벨</mark>. 외주 환산 1억 원+ 가치</li>
+  <li><strong>✅ AI 채점 도구 실전 운용</strong> — Anthropic API 기반, 웨이메이커360에서 가동 중</li>
+  <li><strong>✅ 외신 수업 3년 성과</strong> — 이해도 50→70%+ 검증 (천안·양산)</li>
+  <li><strong>✅ 워크시트 + 교사가이드 전 회차</strong> — <mark class="v51">Core 25회차 Reader·Investigator·Historian 3레벨 완비 (01·02·08회차는 Listener까지 4레벨)</mark></li>
+</ul>
+
+<div class="evidence-grid">
+  <div class="evidence-frame">
+    <div class="icon">🖼</div>
+    <div class="label">워크시트 v9 실제 화면</div>
+    <div class="hint">확보 완료 — 파일 전달 시 삽입</div>
+  </div>
+  <div class="evidence-frame">
+    <div class="icon">🖼</div>
+    <div class="label">AI 채점·피드백 화면</div>
+    <div class="hint">확보 완료 — 파일 전달 시 삽입</div>
+  </div>
+  <div class="evidence-frame">
+    <div class="icon">🖼</div>
+    <div class="label">학원관리 시스템 화면</div>
+    <div class="hint">확보 완료 — 파일 전달 시 삽입</div>
+  </div>
+  <div class="evidence-frame">
+    <div class="icon">🖼</div>
+    <div class="label">수업 현장 사진</div>
+    <div class="hint">확보 완료 — 파일 전달 시 삽입</div>
+  </div>
+</div>
+
+<h2>2.4 차별점 — 5중 해자 요약</h2>
+
+<table>
+  <thead><tr><th>해자</th><th>핵심</th><th>복제 난이도</th></tr></thead>
+  <tbody>
+    <tr><td>① 콘텐츠</td><td><mark class="v51">Core 25 교재 + 정규 186회차 설계</mark> + 5-Source 검증 프로토콜 + [Histolish Pedagogical Reconstruction] 저작권 방어선</td><td>최소 2~3년 소요</td></tr>
+    <tr><td>② 브랜드</td><td>서경덕 교수 역사투어 자문 네트워크 (모임 회장직)</td><td>단기 복제 불가</td></tr>
+    <tr><td>③ 기술+현장</td><td>역사 현장 직접 경험 교사 노트 + 25년 질문 설계 감각 + AI 보조 시스템</td><td>데이터로 학습 불가</td></tr>
+    <tr><td>④ IP</td><td>프롬프트 시스템·어휘 뱅크·루브릭 영업비밀화 (3단계 저장소 분리 + NDA)</td><td>외부 접근 차단</td></tr>
+    <tr><td>⑤ 서비스 잠금</td><td>SaaS LMS — 콘텐츠+첨삭+진도 데이터를 하나로 묶는 Lock-in Layer</td><td>PDF 카피로 무력화 불가</td></tr>
+  </tbody>
+</table>
+
+<p class="persona-note">※ 경쟁사 상세 비교(소크라AI·밀당PT·클래스팅·Newsela·EF Tours 6×7 매트릭스)는 부록 B 참조.</p>
+
+
+<h2><mark class="v51">2.5 2라운드 시제품 — 커리큘럼에서 잘라낸 범위</mark></h2>
+<div class="callout green">
+  <div class="title">시제품 = Core 25회차 × Reader · Investigator 웹 워크북 + AI 첨삭 · 제1권(01–08)은 4레벨 전부</div>
+  <p style="margin:0">이미 설계한 「AI 워크북 라이트」(모바일웹, 로그인 없음, Claude API 첨삭, 구글시트 기록)에 콘텐츠 범위만 고정합니다. 엔진은 하나이고 레벨은 콘텐츠와 첨삭 프롬프트만 다릅니다.</p>
+</div>
+<table>
+  <thead><tr><th>권</th><th>회차</th><th>범위</th><th>탑재 레벨</th></tr></thead>
+  <tbody>
+    <tr><td><strong>제1권</strong> 열강 앞의 조선과 저항</td><td>01–08</td><td>1876 개항 → 3·1운동 · 독립운동가 열전</td><td><strong>Listener · Reader · Investigator · Historian</strong></td></tr>
+    <tr><td>제2권 식민지에서 개발독재까지</td><td>09–16</td><td>문화통치 → 해방·분단·전쟁 → 유신</td><td>Reader · Investigator</td></tr>
+    <tr><td>제3권 민주화와 세계 속의 한국</td><td>17–25</td><td>5·18 → 6월 항쟁 → 현재 · 한류</td><td>Reader · Investigator</td></tr>
+  </tbody>
+</table>
+<table>
+  <thead><tr><th>탑재 분량</th><th>수량</th><th>상태</th></tr></thead>
+  <tbody>
+    <tr><td>Reader · Investigator 01–25</td><td>50</td><td>인쇄 교재 완비 → 웹 변환</td></tr>
+    <tr><td>Historian 01–08</td><td>8</td><td>인쇄 교재 완비 → 웹 변환</td></tr>
+    <tr><td>Listener 01–08</td><td>8</td><td>01·02·08 완비 / 03–07 제작 중 → 웹 변환</td></tr>
+    <tr><td><strong>합계</strong></td><td><strong>66종</strong></td><td>만들지 않는 것: 확장 161회차 탑재 · 제2·3권 Listener·Historian · 회원/결제 · 앱 · 투어 기능</td></tr>
+  </tbody>
+</table>
+<p class="persona-note">공개 IR 시연 회차: 근현대사 08 「독립운동가 열전」 — 같은 사람을 신한민보는 <em>soldier</em>, NYT는 <em>the assassin</em>이라 불렀습니다. 같은 회차를 Listener 화면 → Investigator 논증 → AI 피드백 순서로 보여 줍니다.</p>
+
+<h1>03. 시장 기회 — 누구에게, 얼마나 <span class="tag score">배점 30%</span></h1>
+<p><em>공고 6대 항목 ③ 타겟 고객 · ④ 시장 기회</em></p>
+
+<h2>3.1 타겟 고객 — 명확한 페르소나</h2>
+
+<div class="persona-card">
+<table style="margin:0">
+<thead><tr><th>구분</th><th>대상</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td><strong>핵심 타겟 <mark class="v51">① Investigator</mark></strong></td><td><strong>중2~고1 (13~16세)</strong>, 수능형 성적은 상위권이나 배경지식·비판적 사고에 갈증을 느끼는 학생 + 특목고·자사고·국제학교 지망 또는 자기주도 학습을 중시하는 학부모 (월 8~12만 원대 프리미엄 지불층)</td><td><mark class="v51">시제품 레벨 · 지원서 핵심 타깃</mark></td></tr>
+<tr><td><strong><mark class="v51">핵심 타겟 ② Reader</mark></strong></td><td><mark class="v51"><strong>초등 고학년(4~6)</strong> — 1차 사료를 직접 읽고 "왜 다른가"를 2~3문장 근거로 쓰는 학생과, 영어를 교과 밖 교양으로 키우려는 학부모</mark></td><td><mark class="v51">시제품 레벨 · 정규반 수요가 가장 두터운 구간</mark></td></tr>
+<tr><td>확장 ①</td><td>고2~고3 — <mark class="v51">Historian 레벨,</mark> 5단락 에세이 모듈은 <strong>희망자 옵션</strong></td><td>논술 학원이 아님 — 독해력의 심화 출력 단계</td></tr>
+<tr><td><mark class="v51">확장 ②</mark></td><td><mark class="v51">초등 저학년(1~3) — Listener 레벨, 교사 낭독 + 두 기록의 다른 한 줄 찾기</mark></td><td><mark class="v51">오프라인 반·체험수업 중심</mark></td></tr>
+<tr><td>B2B</td><td>대안학교(전국 300여 곳)·방과후 위탁기관·지역 학원</td><td>전학년 패키지</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>3.2 수요 검증 — 실제 목소리</h2>
+
+<div class="quote-card">
+<p>"영어 성적보다 아이가 스스로 기사를 찾아 읽기 시작한 게 더 놀라웠어요. 학원을 여러 번 옮겨봤지만 '왜'를 생각하게 만드는 수업은 처음입니다."</p>
+<div class="who">— 웨이메이커360 수강생 학부모 (천안 불당동 캠퍼스, 중3 자녀)</div>
+</div>
+<div class="callout green">
+  <div class="title">체험단 수업 설문조사 — 정량 수요 검증 (2026.8~9 진행 중)</div>
+  <p>히스토리시는 접수 기간 중 실제 체험단 수업을 운영하며 수요를 <strong>정량 실측</strong>하고 있습니다. 설문 결과 수집 즉시 아래 표를 실측치로 교체합니다.</p>
+  <table style="margin:8px 0 0">
+    <thead><tr><th>설문 항목</th><th>결과 (수집 후 기입)</th></tr></thead>
+    <tbody>
+      <tr><td>체험단 규모 / 응답자 수</td><td>[ N명 / N명 ]</td></tr>
+      <tr><td>수업 만족도 (5점 척도)</td><td>[ 평균 O.O점 ]</td></tr>
+      <tr><td>정식 개설 시 수강(구매) 의향</td><td>[ OO% ]</td></tr>
+      <tr><td>지인 추천 의향 (NPS)</td><td>[ +OO ]</td></tr>
+      <tr><td>"가장 좋았던 점" 주관식 대표 응답</td><td>[ 인용 1~2건 ]</td></tr>
+    </tbody>
+  </table>
+  <p style="margin:8px 0 0" class="persona-note">※ 익명 처리된 학생·학부모 주관식 응답 1~2건을 위 인용 카드 형식으로 추가하면 정량+정성 근거가 완성됩니다.</p>
+</div>
+
+<h2>3.3 시장 규모 — 모든 숫자는 검증 가능</h2>
+
+<table>
+  <thead><tr><th>구분</th><th>규모</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr><td>TAM</td><td>27조 원</td><td>국내 사교육 시장 전체 (통계청 2024 사교육비 조사 추정)</td></tr>
+    <tr><td>SAM</td><td>1.2조 원</td><td>프리미엄 영어 독해·논술 시장 — 월 30만 원 이상 지불 학부모층</td></tr>
+    <tr><td>SOM (1년차)</td><td>6억 원</td><td>천안·아산 파일럿 — 500명 × 월 10만 원 × 12개월</td></tr>
+    <tr><td>SOM (2년차)</td><td>60억 원</td><td>충청권 온라인 확장 — 5,000명 × 월 10만 원</td></tr>
+    <tr><td><strong>SOM (3년차)</strong></td><td><strong>약 200억 원</strong></td><td>AI 구독 50,000명 × 월 3만 원(180억) + B2B 학교 200곳 × 연 1,400만 원(28억) = 약 208억 — <strong>실제 채널 단가 기반 상향식 계산</strong></td></tr>
+  </tbody>
+</table>
+
+<div class="callout blue">
+  <div class="title">SOM(이론적 상한)과 매출 목표(달성 목표)는 다릅니다</div>
+  <p style="margin:0">3년차 매출 목표 25억 원(기본 시나리오)은 SOM 약 200억의 <strong>약 12% 침투율</strong>을 적용한 현실적 목표입니다. 보수 18억 / 기본 25억 / 공격 32억의 3시나리오로 관리하며, 심사위원이 직접 역산해도 문서 전체에서 같은 단가·같은 숫자가 나옵니다.</p>
+</div>
+
+<h2>3.4 비즈니스 모델 · 단위경제 요약</h2>
+
+<table>
+  <thead><tr><th>매출 라인</th><th>BM</th><th>3년차 비중</th></tr></thead>
+  <tbody>
+    <tr><td><strong>AI 워크북 구독</strong></td><td>월 30,000원 (핵심 엔진)</td><td style="color:var(--green);font-weight:700;">62%</td></tr>
+    <tr><td><strong>B2B 학교 라이선스</strong></td><td>학교당 연 1,400만 원</td><td>18%</td></tr>
+    <tr><td>오프라인 강의</td><td>월 150,000원</td><td>10%</td></tr>
+    <tr><td>교재·VOD·오디오북</td><td>권당 8,000~15,000원 외</td><td>8%</td></tr>
+    <tr><td>역사투어 송객 수수료</td><td>투리스타·지역 학원 송객 10~15% (파트너 운영)</td><td>2%</td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead><tr><th>지표</th><th>수치</th><th>근거</th></tr></thead>
+  <tbody>
+    <tr><td>LTV / CAC</td><td style="color:var(--green);font-weight:700;"><strong>60배</strong></td><td>LTV 180만 원(18개월 × 10만 원) ÷ CAC 3만 원 — 사교육 평균 3~5배 대비 우수</td></tr>
+    <tr><td>BEP 도달</td><td>2년차</td><td>웨이메이커360 흑자 베이스 위에 히스토리시 매출 누적</td></tr>
+    <tr><td>AI 원가</td><td>학생 1명 월 약 800원</td><td>회당 1,500토큰, 캐싱 30% 절감 — 구독가 3만 원 대비 원가율 2.7%</td></tr>
+  </tbody>
+</table>
+
+<h2>3.5 Why Now — 왜 지금인가</h2>
+<ul>
+  <li><strong>정책</strong> — OECD 보고서(2025.12)가 비판적 독해 격차를 공식 지적 + 2022 개정 교육과정 본격 시행 + AI 디지털 교과서 정책 혼선으로 민간 프리미엄 콘텐츠 수요 공백</li>
+  <li><strong>기술</strong> — Claude API 가격 안정화로 학생 1명당 월 800원 AI 첨삭 사업화 가능</li>
+  <li><strong>팀</strong> — <mark class="v51">Core 25 교재 + 정규 186회차 설계</mark> + 3년 현장 검증 + AI 시스템 운용 + 서경덕 교수 네트워크가 2026년에 정렬 완료</li>
+</ul>
+
+<h1>04. 100일 · 1년 · 3년 실행 계획</h1>
+
+<table>
+  <thead><tr><th>기간</th><th>마일스톤</th><th>정량 KPI</th></tr></thead>
+  <tbody>
+    <tr><td>100일 (선정 후)</td><td>MVP 검증 + 파일럿 완료</td><td>천안·아산 30명 / NPS 50+ / 교재 7종 디자인 시안 / <mark class="v51">2R 시제품 웹 워크북 66종 탑재</mark></td></tr>
+    <tr><td>1년</td><td>교재 출판 + 온라인 플랫폼 런칭</td><td>충청권 누적 수강생 500명 / 연 매출 6억 원</td></tr>
+    <tr><td>3년</td><td>AI 구독 + 전국 확장 + B2B</td><td>AI 워크북 30,000명 / B2B 학교 50곳 / 매출 18~32억 원</td></tr>
+  </tbody>
+</table>
+
+<h2>Closing</h2>
+
+<div class="callout gold">
+  <div class="title">히스토리시의 약속</div>
+  <p>히스토리시는 <strong>"한국 학생이 외신으로 역사를 다관점에서 읽고, 영어로 사고하는 훈련을 받는 첫 번째 플랫폼"</strong>입니다.</p>
+  <p style="margin:0">1기 미선발의 피드백을 전부 반영해 돌아왔고, <mark class="v51">1R을 통과한 뒤에는 커리큘럼을 Core 25 · 정규 186회차로 재정비했습니다. 핵심 상품의 교재는 이미 완비되어 있고,</mark> 수업은 이미 검증되었으며, 기술은 이미 운용 중입니다. 모두의 창업 2기는 이것을 전국으로 확장하는 출발점입니다.</p>
+</div>
+
+<p style="text-align: center; margin: 30px 0; font-size: 24px; font-style:italic; color: var(--gold); font-weight: 800;">Read the World · Think in English</p>
+
+<h1>부록 A — MVP 실물 증빙 (스크린샷 원본)</h1>
+<p class="persona-note">§2.3의 4개 슬롯에 들어갈 실제 화면 캡처 원본을 이 부록에 크게 배치합니다. (확보 완료 — 파일 전달 시 삽입)</p>
+
+<h1>부록 B — 상세 근거 자료</h1>
+
+<h2>B-1. 경쟁사 매트릭스 — 6×7 비교</h2>
+<table>
+  <thead><tr><th>역량 영역</th><th>히스토리시</th><th>소크라AI</th><th>밀당PT</th><th>클래스팅</th><th>역사학원</th><th>Newsela</th><th>EF Tours</th></tr></thead>
+  <tbody>
+    <tr><td>영어 독해·비판적 사고</td><td style="text-align:center;color:var(--green);font-weight:700;">★</td><td style="text-align:center;">△</td><td style="text-align:center;">△</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td><td style="text-align:center;">○</td><td style="text-align:center;">✗</td></tr>
+    <tr><td>다관점 역사·인문</td><td style="text-align:center;color:var(--green);font-weight:700;">★</td><td style="text-align:center;">✗</td><td style="text-align:center;">✗</td><td style="text-align:center;">✗</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">△</td></tr>
+    <tr><td>AI 에세이 첨삭</td><td style="text-align:center;color:var(--green);font-weight:700;">★</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td></tr>
+    <tr><td>AI 퀴즈 자동 생성</td><td style="text-align:center;color:var(--green);font-weight:700;">★</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">○</td><td style="text-align:center;">✗</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td></tr>
+    <tr><td>공교육 연계</td><td style="text-align:center;color:var(--green);font-weight:700;">★</td><td style="text-align:center;">△</td><td style="text-align:center;">○</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td><td style="text-align:center;">✗</td></tr>
+    <tr><td>역사투어 옵션 연계</td><td style="text-align:center;">○</td><td style="text-align:center;">✗</td><td style="text-align:center;">✗</td><td style="text-align:center;">✗</td><td style="text-align:center;">△</td><td style="text-align:center;">✗</td><td style="text-align:center;">○</td></tr>
+    <tr><td>B2B 학교 납품</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">△</td><td style="text-align:center;">○</td><td style="text-align:center;">△</td><td style="text-align:center;">○</td><td style="text-align:center;">✗</td></tr>
+  </tbody>
+</table>
+<p><em>범례: ★ 시장 선도 / ○ 강점 / △ 보통 / ✗ 미보유</em></p>
+
+<h2>B-2. 5단 표준화 아키텍처 (1기 멘토 우려 대응)</h2>
+<table>
+  <thead><tr><th>레이어</th><th>표준화 자산</th><th>지역별 적용</th></tr></thead>
+  <tbody>
+    <tr><td>1. 콘텐츠</td><td><mark class="v51">Core 25 + 정규 186회차 (외신 기반, 7트랙 × 4레벨)</mark></td><td>전국 동일 — 외신은 어디서나 같다</td></tr>
+    <tr><td>2. 교수법</td><td>Close Reading 3단계 매뉴얼 + 강사 양성 프로토콜</td><td>강사 자격 표준 인증제</td></tr>
+    <tr><td>3. AI 첨삭</td><td>Anthropic API 기반 루브릭 시스템</td><td>지역·강사 무관 동일 품질</td></tr>
+    <tr><td>4. 평가·리포트</td><td>학습 데이터 대시보드 + 학부모 자동 리포트</td><td>표준 양식 자동 송출</td></tr>
+    <tr><td>5. 옵션 — 역사투어</td><td>투어 가이드북·코스 매뉴얼</td><td>지역 학원·학교 + 투리스타가 매뉴얼대로 운영</td></tr>
+  </tbody>
+</table>
+
+<h2>B-3. 파트너십 3주체 구조</h2>
+<table>
+  <thead><tr><th>주체</th><th>역할</th><th>매출 모델</th></tr></thead>
+  <tbody>
+    <tr><td><strong>히스토리시 (본사)</strong></td><td>커리큘럼·AI 첨삭 시스템·투어 콘텐츠 가이드 제공</td><td>구독료, 교재, B2B 라이선스, 송객 수수료</td></tr>
+    <tr><td><strong>지역 학습 단위</strong></td><td>소규모 역사투어 직접 진행 (예: 천안 독립기념관 1일 투어)</td><td>현지 학원 추가 매출 / 라이선스 수익</td></tr>
+    <tr><td><strong>투리스타</strong></td><td>대규모·해외 역사투어 운영 (예: 대마도 T4)</td><td>투어 매출 + 송객 수수료 10~15%</td></tr>
+  </tbody>
+</table>
+
+<h2>B-4. 리스크와 완화 전략</h2>
+<table>
+  <thead><tr><th>리스크</th><th>확률</th><th>영향</th><th>완화 전략</th></tr></thead>
+  <tbody>
+    <tr><td>콘텐츠 복제</td><td>중</td><td>고</td><td>선정 즉시 상표·저작권 출원 / AI 첨삭 컨텍스트로 보호 / [Histolish Pedagogical Reconstruction] 표기</td></tr>
+    <tr><td>강사 의존</td><td>중</td><td>중</td><td>AI 도구로 생산성 강화 + 강사 양성 표준 인증제</td></tr>
+    <tr><td>대형 에듀테크 진입</td><td>저</td><td>고</td><td>5중 해자 선점</td></tr>
+    <tr><td>AI API 비용 상승</td><td>중</td><td>저</td><td>학생 1명당 월 800원 / 캐싱 30% 절감</td></tr>
+    <tr><td>지역 운영 균질성</td><td>중</td><td>중</td><td>5단 표준화 아키텍처 / 역사투어 파트너 위탁</td></tr>
+    <tr><td>부부 공동창업</td><td>저</td><td>저</td><td>역할 분담 명확 / 외부 자문단 운영</td></tr>
+  </tbody>
+</table>
+
+<h1>부록 C — 버전 변경 추적</h1>
+
+<h2>v5.0 → v5.1 (지역 예선 대응 · 커리큘럼 재정비 숫자 정합)</h2>
+<p class="persona-note">노란 표시된 곳이 바뀐 문장입니다. 서면평가에 AI 생성률 검사가 있으므로, 제출 전 이 문장들을 두 분의 말로 다시 쓰세요. 숫자(25 · 186 · 66 · 4레벨 · 초4~고1)는 그대로 두세요.</p>
+<table>
+  <thead><tr><th>위치</th><th>v5.0</th><th>v5.1</th></tr></thead>
+  <tbody>
+    <tr><td>표지 헤드라인 칸</td><td>완성 커리큘럼 150회차</td><td>Core 교재 완비 25회차</td></tr>
+    <tr><td>§00 1기 피드백 ① 역사투어</td><td>역사투어는 파트너 위탁 옵션으로 격하</td><td>+ 다크투어 32회차를 파트너 과정으로 분리(2026-10)</td></tr>
+    <tr><td>§00 1기 피드백 ③ 경력 기재</td><td>커리큘럼 72→150회차</td><td>+ (1R 기간에 Core 25 · 정규 186회차로 재정비)</td></tr>
+    <tr><td>§00 주석 (1년간 한 일)</td><td>워크시트 v9 업그레이드(150회차), 교사가이드 전 회차 완성, 대마도 투어 프로그램 설계</td><td>Core 25회차 워크시트·교사가이드 전 회차 완비, 정규 186회차 4레벨 설계, 출처 링크 전수 실접속 검증</td></tr>
+    <tr><td>§1.1 커리큘럼을 만들 수 있다</td><td>이미 150회차 완성 — 7섹터 × 초·중·고 수준별</td><td>이미 Core 25회차 교재 완비 · 정규 186회차 설계 완료 — 7트랙 × 4레벨(초1~고3)</td></tr>
+    <tr><td>§1.2 이지선 역량</td><td>150회차 커리큘럼 직접 개발 (7섹터 × 수준별 분화)</td><td>정규 186회차 커리큘럼 직접 설계 (7트랙 × 4레벨) · Core 25회차 교재 완비</td></tr>
+    <tr><td>§1.3 2025~2026 궤적</td><td>초·중·고 3수준</td><td>Reader·Investigator·Historian 3레벨</td></tr>
+    <tr><td>§1.3 2026 하반기 궤적</td><td>대마도 역사투어(T4) 프로그램 설계, 다크투어 32회차 커리큘럼 v7 완성</td><td>Listener 신설·출처 전수 검증·한국 근현대 인물 41회차 설계 + 2026-10 3층 재정비 한 줄 추가</td></tr>
+    <tr><td>§2.2 ③ Evidence-Based Writing</td><td>(고학년 옵션 모듈)</td><td>(Reader 레벨부터 적용 — 초등은 쉬운 말, 중등은 4기준 루브릭)</td></tr>
+    <tr><td>§2.3 MVP ①</td><td>150회차 완성 커리큘럼 — 7섹터 × 초·중·고 수준별</td><td>Core 25회차 교재 완비 + 정규 186회차 설계 완료 — 7트랙 × 4레벨</td></tr>
+    <tr><td>§2.3 MVP ④</td><td>워크시트 v9 + 교사가이드 전 회차 — 근현대사 25회차 초·중·고 3수준 완성</td><td>워크시트 + 교사가이드 전 회차 — Core 25회차 R·I·H 3레벨 완비 (01·02·08은 4레벨)</td></tr>
+    <tr><td>§2.4 해자 ① 콘텐츠</td><td>150회차 완성 커리큘럼</td><td>Core 25 교재 + 정규 186회차 설계</td></tr>
+    <tr><td>§2.5 (신설)</td><td>—</td><td>2R 시제품 범위: Core 25 × R·I + 제1권 4레벨, 66종, 만들지 않는 것, IR 시연 회차</td></tr>
+    <tr><td>§3.1 핵심 타겟</td><td>핵심 타겟 (중2~고1 하나)</td><td>핵심 타겟 ① Investigator(중2~고1) + ② Reader(초4~6)</td></tr>
+    <tr><td>§3.1 확장 타겟</td><td>확장 ① 초등 고학년 / 확장 ② 고2~3</td><td>초등 고학년 → 핵심 ② Reader로 승격 / 확장 ① 고2~3 Historian / 확장 ② 초1~3 Listener 신설</td></tr>
+    <tr><td>§3.5 Why Now 팀</td><td>150회차 커리큘럼</td><td>Core 25 교재 + 정규 186회차 설계</td></tr>
+    <tr><td>§04 100일 KPI</td><td>천안·아산 30명 / NPS 50+ / 교재 7종 디자인 시안</td><td>+ 2R 시제품 웹 워크북 66종 탑재</td></tr>
+    <tr><td>Closing</td><td>콘텐츠는 이미 완성되어 있고</td><td>1R 통과 후 재정비 + 핵심 상품의 교재는 이미 완비되어 있고</td></tr>
+    <tr><td>부록 B-2 콘텐츠 레이어</td><td>150회차 커리큘럼 (외신 기반, 7섹터 × 수준별)</td><td>Core 25 + 정규 186회차 (외신 기반, 7트랙 × 4레벨)</td></tr>
+  </tbody>
+</table>
+
+<h2>v4.3 → v5.0 (2차 공고 대응)</h2>
+<table>
+  <thead><tr><th>항목</th><th>v4.3</th><th>v5.0</th><th>변경 사유</th></tr></thead>
+  <tbody>
+    <tr><td>문서 구조</td><td>문제→솔루션→팀→재무 (8장 + 부록)</td><td><strong>팀(40%)→아이템(30%)→시장(30%)</strong> 배점순 4장 + 부록</td><td>공식 평가배점 정렬 — 팀이 최대 배점인데 3순위였음</td></tr>
+    <tr><td>분량 철학</td><td>상세 서술 중심</td><td>본문 간결화, 상세 근거는 부록 이동</td><td>공고 철학 "복잡한 사업계획서는 필요 없다"</td></tr>
+    <tr><td>재도전 이력</td><td>"1차 심사의견 반영" 표기만</td><td>§00 신설 — 1기 미선발 → 피드백 반영 매핑표</td><td>2기 재도전자 평가 우대 대응</td></tr>
+    <tr><td>자격요건</td><td>미표기</td><td>신청자 예비창업자 자격(8.20 기준) 명시</td><td>2차 공고 자격 기준 반영</td></tr>
+    <tr><td>실행력 증거</td><td>미선발 이후 활동 미기재</td><td>워크시트 v9·교사가이드 완성·대마도 T4 등 1년 궤적 추가</td><td>팀 역량(실행력) 40% 배점 보강</td></tr>
+  </tbody>
+</table>
+
+<h2>이전 이력 (요약)</h2>
+<ul>
+  <li><strong>v4.3</strong> — 내부 재검토 5대 지적 반영: 수요검증 인터뷰 / MVP 스크린샷 슬롯 / SOM 600억→약 200억 재계산 / 타겟 페르소나 명확화 / 헤드라인 정합성</li>
+  <li><strong>v4.0~4.2</strong> — 1기 심사의견(김제곤 멘토) 반영: 본질 재정의(외신×역사×AI), 역사투어 파트너 모델 전환, 5단 표준화 아키텍처, 사실 정정(72→150회차, 대표 경력), OECD 출처 정정</li>
+</ul>
+
+<div class="callout gold" style="margin-top: 30px;">
+  <p style="font-size:18px; font-weight:700; text-align:center; line-height: 1.6;">
+    v5.1의 약속:<br>
+    "팀은 이미 증명했고, 아이템은 이미 만들어졌고, 시장은 이미 검증했으며, 모든 숫자는 계산 가능합니다."
+  </p>
+</div>
+
+</div>
+</body>
+</html>
