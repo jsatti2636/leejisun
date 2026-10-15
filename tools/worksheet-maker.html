@@ -399,8 +399,8 @@ async function parseDocx(bytes){
     return {b:onOff(kid(rPr,'b')),i:onOff(kid(rPr,'i')),u:!!u&&attr(u,'val')!=='none',s:onOff(kid(rPr,'strike'))||onOff(kid(rPr,'dstrike')),sup:va==='superscript',sub:va==='subscript'};
   }
   function drawing(el,out){
-    const tx=el.getElementsByTagNameNS('*','txbxContent')[0];
-    if(tx){out.push({box:walk(tx)});return}
+    const txs=[...el.getElementsByTagNameNS('*','txbxContent')].filter(t=>!t.parentElement.closest('txbxContent'));
+    if(txs.length){for(const tx of txs)out.push({box:walk(tx)});return}
     for(const bl of el.getElementsByTagNameNS('*','blip')){const id=bl.getAttribute('r:embed')||bl.getAttribute('r:link');if(media[id])out.push({img:media[id]})}
     for(const im of el.getElementsByTagNameNS('*','imagedata')){const id=im.getAttribute('r:id');if(media[id])out.push({img:media[id]})}
   }
@@ -517,10 +517,19 @@ const RE_SEC=/^\s*([A-J])\s*[.)．]\s*(?=.*[가-힣])/;
 const RE_ANSHEAD=/^\s*[<\[【]?\s*(정답(\s*및\s*해설)?|해설|answers?)\s*[>\]】]?\s*$/i;
 
 // 시험지 전체가 2단 표 안에 들어 있는 양식 대비: 문항 번호가 든 표는 칸 순서대로 펼친다
+// 시험지가 표나 글상자 안에 들어 있는 양식 대비: 문항 번호가 든 표·글상자는 읽는 순서대로 펼친다
+function hasQ(blocks){
+  return blocks.some(b=>b.type==='p'?RE_Q.test(blockText(b).replace(/^\s+/,''))&&!b.segs.every(s=>s.box)||b.segs.some(s=>s.box&&hasQ(s.box)):b.rows.some(r=>r.some(c=>hasQ(c.blocks))));
+}
 function flattenTables(blocks){
   const out=[];
   for(const b of blocks){
-    if(b.type==='tbl'&&b.rows.flat().some(c=>c.blocks.some(x=>x.type==='p'&&RE_Q.test(blockText(x)))))for(const r of b.rows)for(const c of r)out.push(...flattenTables(c.blocks));
+    if(b.type==='tbl'&&hasQ(b.rows.flat().flatMap(c=>c.blocks)))for(const r of b.rows)for(const c of r)out.push(...flattenTables(c.blocks));
+    else if(b.type==='p'&&b.segs.some(s=>s.box&&hasQ(s.box))){
+      const rest={...b,segs:b.segs.filter(s=>!(s.box&&hasQ(s.box)))};
+      if(hasContent(rest))out.push(rest);
+      for(const s of b.segs)if(s.box&&hasQ(s.box))out.push(...flattenTables(s.box));
+    }
     else out.push(b);
   }
   return out;
@@ -700,6 +709,10 @@ async function collectFiles(fileList){
   }
   return docs;
 }
+function friendlyErr(e){
+  if(e&&(e.name==='NotReadableError'||e.name==='NotFoundError'))return '파일을 열 수 없음 — 구글 드라이브 파일이면 폴더를 오른쪽 클릭해 [오프라인 사용]을 켜거나 바탕화면에 복사한 뒤 다시 올려 주세요';
+  return e?.message||String(e);
+}
 async function importFiles(fileList){
   $('impProg').textContent='파일을 읽는 중…';
   const docs=await collectFiles(fileList);
@@ -714,18 +727,19 @@ async function importFiles(fileList){
     try{
       const blocks=await parseDocx(await g.q.read());
       const{questions,meta,answerBlocks}=splitQuestions(blocks);
-      if(!questions.length){SKIPPED.push(baseName(g.q.name)+' (문항 번호를 찾지 못함)');continue}
+      if(!questions.length){const t=blocksText(blocks).replace(/\uFFFC/g,'').replace(/\s+/g,' ').trim();SKIPPED.push(baseName(g.q.name)+` (문항 번호를 찾지 못함 — 읽은 글: "${t.slice(0,80)||'없음'}")`);continue}
       let ar={found:0,total:0},ansSrc='';
       if(g.a){try{ar=parseAnswers(await parseDocx(await g.a.read()),questions);ansSrc=baseName(g.a.name)}catch(e){SKIPPED.push(baseName(g.a.name)+' (정답 파일 오류)')}}
       else if(answerBlocks){ar=parseAnswers(answerBlocks,questions);ansSrc='(문제 파일 안의 정답)'}
       const ansFound=ar.found,ansTotal=ar.total;
       const info=guessInfo(g.q.name,meta);
       PENDING.push({id:uid(),...info,questions,source:{q:baseName(g.q.name),a:ansSrc},ansFound,ansTotal,on:true,createdAt:today()});
-    }catch(e){SKIPPED.push(baseName(g.q.name)+' ('+e.message+')')}
+    }catch(e){SKIPPED.push(baseName(g.q.name)+' ('+friendlyErr(e)+')')}
   }
   PENDING.sort((a,b)=>a.book.localeCompare(b.book,'ko')||a.kind.localeCompare(b.kind,'ko')||cmpUnit(a.unit,b.unit));
-  $('impProg').textContent=`${PENDING.length}개 자료를 읽었어요. 아래에서 확인한 뒤 저장하세요.`;
   renderPending();
+  if(PENDING.length)$('impProg').textContent=`${PENDING.length}개 자료를 읽었어요. 아래에서 확인한 뒤 저장하세요.`;
+  else $('impProg').innerHTML=`<div class="notice" style="margin:0">워드 파일 ${groups.size}개를 찾았지만 읽지 못했어요. 이 화면을 캡처해서 보내 주시면 고쳐 드릴게요.<br>${SKIPPED.slice(0,15).map(x=>'• '+esc(x)).join('<br>')}${SKIPPED.length>15?'<br>…':''}</div>`;
 }
 function statusPill(s){
   const n=s.questions.length,a=s.ansFound;
