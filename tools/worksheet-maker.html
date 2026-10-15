@@ -211,9 +211,10 @@ table.list{border-collapse:collapse;width:100%}
           <b>여기에 파일이나 폴더를 끌어다 놓으세요</b><br>
           워드(.docx) 파일, 또는 워드 파일이 들어 있는 ZIP 파일 · 문제 파일과 <b>_정답</b> 파일을 함께 넣어 주세요<br>
           <div class="tools" style="justify-content:center;margin-top:12px">
-            <button class="btn primary" id="pickFiles">파일 선택</button>
-            <button class="btn" id="pickDir">폴더 통째로 선택</button>
+            <button class="btn primary" id="pickDir">폴더 선택</button>
+            <button class="btn" id="pickFiles">파일 선택 (워드·ZIP)</button>
           </div>
+          <div class="muted" style="font-size:13px;margin-top:10px;line-height:1.7"><b>폴더 선택</b>: 폴더를 <b>한 번만 클릭</b>(더블클릭 X) → [업로드] → "업로드할까요?" 창에서 [업로드] (인터넷에 올라가지 않아요)<br><b>파일 선택</b>: 폴더 안으로 들어가서 <b>Ctrl + A</b>로 전부 고른 뒤 [열기] · ZIP 파일은 그대로 고르면 돼요</div>
           <input type="file" id="fileIn" multiple accept=".docx,.zip" hidden>
           <input type="file" id="dirIn" webkitdirectory multiple hidden>
         </div>
