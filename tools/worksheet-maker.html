@@ -104,6 +104,8 @@ table.list{border-collapse:collapse;width:100%}
 .sheet .q .qi{font-weight:600}
 .sheet .p{margin:0 0 1mm;min-height:1em}
 .sheet .tb,.qedit .tb{display:inline-block;width:2.2em}
+.sheet .cells,.qedit .cells{display:flex;flex-wrap:wrap;gap:1mm 5mm;align-items:baseline}
+.sheet .cells>div,.qedit .cells>div{min-width:0}
 .sheet .box,.qedit .box{border:1px solid #555;padding:2mm 3mm;margin:1mm 0 2mm}
 .sheet table.dt,.qedit table.dt{border-collapse:collapse;margin:1mm 0 2mm;max-width:100%}
 .sheet table.dt td,.qedit table.dt td{border:1px solid #555;padding:1.5mm 2.5mm;vertical-align:top}
@@ -396,7 +398,9 @@ async function parseDocx(bytes){
   function fmtOf(rPr){
     if(!rPr)return {};
     const u=kid(rPr,'u'),va=attr(kid(rPr,'vertAlign'),'val');
-    return {b:onOff(kid(rPr,'b')),i:onOff(kid(rPr,'i')),u:!!u&&attr(u,'val')!=='none',s:onOff(kid(rPr,'strike'))||onOff(kid(rPr,'dstrike')),sup:va==='superscript',sub:va==='subscript'};
+    const col=attr(kid(rPr,'color'),'val'),hl=attr(kid(rPr,'highlight'),'val'),shd=attr(kid(rPr,'shd'),'fill');
+    return {b:onOff(kid(rPr,'b')),i:onOff(kid(rPr,'i')),u:!!u&&attr(u,'val')!=='none',s:onOff(kid(rPr,'strike'))||onOff(kid(rPr,'dstrike')),sup:va==='superscript',sub:va==='subscript',
+      c:!!((col&&!/^(auto|0{6})$/i.test(col))||(hl&&hl!=='none')||(shd&&!/^(auto|f{6})$/i.test(shd)))};
   }
   function drawing(el,out){
     const txs=[...el.getElementsByTagNameNS('*','txbxContent')].filter(t=>!t.parentElement.closest('txbxContent'));
@@ -535,18 +539,55 @@ function flattenTables(blocks){
   return out;
 }
 function splitQuestions(blocks){
-  const r=splitOnce(blocks);
+  let r=splitOnce(blocks);
   if(r.questions.length)return r;
-  return splitOnce(flattenTables(blocks));
+  r=splitOnce(flattenTables(blocks));
+  if(r.questions.length)return r;
+  return splitOnce(blocks,true);
 }
-function splitOnce(blocks){
+// 느슨한 모드: 'STEP 1' 섹션, 점 없는 번호(1 small → ___), 표 안의 번호 칸(한 줄에 두 문항 등)
+const RE_STEP=/^\s*STEP\s*(\d{1,2})\s*[.:)]?\s*/i;
+const RE_QL=/^\s*(\d{1,2})(?:\s*[.)．]\s*|\s+|$)/;
+const cellNum=c=>{const t=blocksText(c.blocks).replace(/\uFFFC/g,'').trim();const m=t.match(/^(\d{1,2})(?:\s*[.)．])?(?:\s|$)/);return m?+m[1]:null};
+function tableItems(tb){
+  // 번호로 시작하는 칸이 있는 열을 찾아, 그 열부터 다음 번호 열 전까지를 한 문항으로 본다
+  const cnt={};let numbered=0;
+  for(const r of tb.rows){let any=false;r.forEach((c,i)=>{if(cellNum(c)!=null){cnt[i]=(cnt[i]||0)+1;any=true}});if(any)numbered++}
+  if(numbered<1)return null;
+  const starts=Object.keys(cnt).map(Number).filter(i=>cnt[i]>=Math.max(1,numbered/2)).sort((a,b)=>a-b);
+  if(!starts.length)return null;
+  const items=[];
+  for(const r of tb.rows){
+    starts.forEach((st,k)=>{
+      const c=r[st];if(!c)return;const n=cellNum(c);
+      const cells=r.slice(st,k+1<starts.length?starts[k+1]:r.length);
+      if(n==null){if(items.length&&k===0&&cells.some(x=>hasContent({type:'tbl',rows:[[x]]})))items[items.length-1].cells.push(...cells);return}
+      items.push({n,cells});
+    });
+  }
+  return items.sort((a,b)=>a.n-b.n);
+}
+function stripCellNum(cell){
+  const bs=cell.blocks.slice();const i=bs.findIndex(hasContent);
+  if(i>=0&&bs[i].type==='p'){const m=blockText(bs[i]).match(/^\s*\d{1,2}(?:\s*[.)．])?\s*/);if(m)bs[i]=stripPrefix(bs[i],m[0].length)}
+  return {...cell,blocks:bs};
+}
+function splitOnce(blocks,loose){
   const qs=[],meta={header:[],preamble:[]};
-  let expected=1,cur=null,group=null,sec=null,nextSec='A',answerBlocks=null,started=false;
+  let expected=1,cur=null,group=null,sec=null,nextSec='A',nextStep=1,answerBlocks=null,started=false;
   for(let i=0;i<blocks.length;i++){
     const b=blocks[i];
+    if(loose&&b.type==='tbl'&&started){
+      const items=tableItems(b);
+      if(items&&items.length&&items[0].n===expected){
+        for(const it of items){const cells=[stripCellNum(it.cells[0]),...it.cells.slice(1)];qs.push({n:it.n,sec:sec?.label||'',cells,stem:null,parts:[],group:null,secObj:sec});expected=it.n+1}
+        cur=null;continue;
+      }
+    }
     if(b.type==='p'){
       const t=blockText(b).replace(/￼/g,'');
       if(started&&qs.length&&RE_ANSHEAD.test(t)){answerBlocks=blocks.slice(i+1);break}
+      if(loose){const sm=t.match(RE_STEP);if(sm&&+sm[1]===nextStep){sec={label:'STEP '+sm[1],blocks:[stripPrefix(b,sm[0].length)]};nextStep++;expected=1;cur=null;group=null;started=true;continue}}
       let m=t.match(RE_SEC);
       if(m&&m[1]===nextSec&&!RE_Q.test(t)){
         sec={label:m[1],blocks:[stripPrefix(b,m[0].length)]};
@@ -554,8 +595,8 @@ function splitOnce(blocks){
       }
       m=t.match(RE_GROUP);
       if(m&&+m[1]===expected){group={from:+m[1],to:+m[2],blocks:[stripPrefix(b,m[0].length)]};cur=null;started=true;continue}
-      m=t.match(RE_Q);
-      if(m&&+m[1]===expected){
+      m=t.match(loose?RE_QL:RE_Q);
+      if(m&&+m[1]===expected&&(!loose||started)){
         if(group&&expected>group.to)group=null;
         cur={n:expected,sec:sec?.label||'',stem:stripPrefix(b,m[0].length),parts:[],group,secObj:sec};
         qs.push(cur);expected++;started=true;continue;
@@ -570,14 +611,51 @@ function splitOnce(blocks){
     const ins=[];
     if(q.secObj){const h=blocksHtml(q.secObj.blocks);if(h)ins.push(h)}
     if(q.group){const h=blocksHtml(q.group.blocks);if(h)ins.push(h)}
-    return {n:q.n,sec:q.sec,instr:ins.join(''),html:blocksHtml([q.stem,...q.parts]),answer:''};
+    const html=q.cells?`<div class="cells">${q.cells.filter((c,i)=>i>0||c.blocks.some(hasContent)).map(c=>`<div>${blocksHtml(c.blocks)||'&nbsp;'}</div>`).join('')}</div>`+blocksHtml(q.parts):blocksHtml([q.stem,...q.parts]);
+    const raw=q.cells?q.cells.map(c=>c.blocks):[[q.stem,...q.parts]];
+    return {n:q.n,sec:q.sec,instr:ins.join(''),html,answer:'',_raw:raw};
   });
-  return {questions:out,meta,answerBlocks};
+  return {questions:out,meta,answerBlocks,loose:!!loose};
 }
 
 /* =====================================================================
    정답 파일 → 번호별 정답
    ===================================================================== */
+const rawText=q=>q._raw.map(bs=>blocksText(bs).replace(/\uFFFC/g,'')).join(' | ').replace(/\s+/g,' ').trim();
+function rawSegs(q){const out=[];const walkB=bs=>{for(const b of bs){if(b.type==='p'){for(const s of b.segs){if(s.box)walkB(s.box);else out.push(s)}}else for(const r of b.rows)for(const c of r)walkB(c.blocks)}};q._raw.forEach(walkB);return out}
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function diffAnswer(q,a){
+  const pt=rawText(q),at=rawText(a);
+  if(!at||pt===at&&!rawSegs(a).some(s=>s.t&&s.t.trim()&&(s.b||s.c)))return '';
+  // ① 빈칸(____)을 채운 경우
+  if(/_{2,}/.test(pt)){
+    const parts=pt.split(/\s*_{2,}\s*/);
+    try{const m=at.match(new RegExp('^'+parts.map(x=>reEsc(x).replace(/ /g,'\\s*')).join('\\s*(.+?)\\s*')+'$'));
+      if(m){const f=m.slice(1).map(x=>x.trim()).filter(Boolean);if(f.length)return f.join(' / ')}}catch{}
+  }
+  // ② 정답지에서만 굵게·색으로 표시한 말
+  const emph=ss=>{const o=[];let cur='';for(const s of ss){if(s.t!=null&&(s.b||s.c||s.u)){cur+=s.t}else{if(cur.trim())o.push(cur.trim());cur=''}}if(cur.trim())o.push(cur.trim());return o};
+  const pe=emph(rawSegs(q)),ae=emph(rawSegs(a));
+  const left=[...pe];const extra=ae.filter(x=>{const i=left.indexOf(x);if(i>=0){left.splice(i,1);return false}return true});
+  if(extra.length)return extra.join(' / ');
+  // ③ 글자가 달라진 부분 (단어 단위 비교)
+  const A=pt.split(' '),B=at.split(' ');
+  const L=Array.from({length:A.length+1},()=>new Array(B.length+1).fill(0));
+  for(let i=A.length-1;i>=0;i--)for(let j=B.length-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const ins=[];let i=0,j=0,run=[];
+  while(j<B.length){if(i<A.length&&A[i]===B[j]){if(run.length){ins.push(run.join(' '));run=[]}i++;j++}else if(i<A.length&&L[i+1][j]>=L[i][j+1])i++;else{run.push(B[j]);j++}}
+  if(run.length)ins.push(run.join(' '));
+  return ins.join(' / ');
+}
+function mirrorAnswers(questions,answerQs){
+  const map=new Map(answerQs.map(a=>[a.sec+'|'+a.n,a]));let found=0;
+  for(const q of questions){const a=map.get(q.sec+'|'+q.n);if(!a)continue;const v=diffAnswer(q,a);if(v){q.answer=v;found++}}
+  return {found,total:answerQs.length};
+}
+function answersFrom(blocks,questions,loose){
+  if(loose)return mirrorAnswers(questions,splitOnce(blocks,true).questions);
+  return parseAnswers(blocks,questions);
+}
 function cleanAns(s){return s.replace(/￼/g,'').replace(/[ \t]+/g,' ').replace(/\s*\n\s*/g,'\n').trim()}
 function seqParse(text,count){
   const res=[];let pos=0;const hits=[];
@@ -726,11 +804,12 @@ async function importFiles(fileList){
     if(!g.q){SKIPPED.push(baseName(g.a.name)+' (짝이 되는 문제 파일 없음)');continue}
     try{
       const blocks=await parseDocx(await g.q.read());
-      const{questions,meta,answerBlocks}=splitQuestions(blocks);
+      const{questions,meta,answerBlocks,loose}=splitQuestions(blocks);
       if(!questions.length){const t=blocksText(blocks).replace(/\uFFFC/g,'').replace(/\s+/g,' ').trim();SKIPPED.push(baseName(g.q.name)+` (문항 번호를 찾지 못함 — 읽은 글: "${t.slice(0,80)||'없음'}")`);continue}
       let ar={found:0,total:0},ansSrc='';
-      if(g.a){try{ar=parseAnswers(await parseDocx(await g.a.read()),questions);ansSrc=baseName(g.a.name)}catch(e){SKIPPED.push(baseName(g.a.name)+' (정답 파일 오류)')}}
-      else if(answerBlocks){ar=parseAnswers(answerBlocks,questions);ansSrc='(문제 파일 안의 정답)'}
+      if(g.a){try{ar=answersFrom(await parseDocx(await g.a.read()),questions,loose);ansSrc=baseName(g.a.name)}catch(e){SKIPPED.push(baseName(g.a.name)+' (정답 파일 오류: '+friendlyErr(e)+')')}}
+      else if(answerBlocks){ar=answersFrom(answerBlocks,questions,loose);ansSrc='(문제 파일 안의 정답)'}
+      for(const q of questions)delete q._raw;
       const ansFound=ar.found,ansTotal=ar.total;
       const info=guessInfo(g.q.name,meta);
       PENDING.push({id:uid(),...info,questions,source:{q:baseName(g.q.name),a:ansSrc},ansFound,ansTotal,on:true,createdAt:today()});
