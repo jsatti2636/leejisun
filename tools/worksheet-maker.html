@@ -897,7 +897,10 @@ function renderBuild(){
   $('bBook').innerHTML=bs.map(b=>`<option ${b===book?'selected':''}>${esc(b)}</option>`).join('');
   const sets=SETS.filter(s=>s.book===book);
   const kinds=[...new Set(sets.map(s=>s.kind))];
-  $('bSets').innerHTML=kinds.map(k=>`<div class="kind">${esc(k)}</div><div class="setlist">${sets.filter(s=>s.kind===k).map(s=>`<label class="chk"><input type="checkbox" class="bSet" value="${s.id}" ${sel.has(s.id)?'checked':''}> ${esc(s.unit)} <small>${s.questions.length}문항</small></label>`).join('')}</div>`).join('');
+  $('bSets').innerHTML=kinds.map((k,ki)=>`<div class="kind">${esc(k)} <button class="btn small danger" data-delkind="${ki}" style="margin-left:8px;padding:2px 8px;font-size:12px">이 묶음 삭제</button></div><div class="setlist">${sets.filter(s=>s.kind===k).map(s=>`<label class="chk"><input type="checkbox" class="bSet" value="${s.id}" ${sel.has(s.id)?'checked':''}> ${esc(s.unit)} <small>${s.questions.length}문항</small></label>`).join('')}</div>`).join('');
+  $('bSets').querySelectorAll('[data-delkind]').forEach(btn=>btn.onclick=async e=>{e.preventDefault();const k=kinds[+btn.dataset.delkind],list=sets.filter(x=>x.kind===k);
+    if(!confirm(`${book} · '${k}' 묶음의 자료 ${list.length}개(${list.reduce((a,x)=>a+x.questions.length,0)}문항)를 문제은행에서 삭제할까요?\n삭제하면 되돌릴 수 없어요. 필요하면 먼저 [백업]을 받아 두세요.`))return;
+    await dbDel(list.map(x=>x.id));list.forEach(x=>sel.delete(x.id));await reload()});
   updateSelInfo();
 }
 function chosenSets(){return SETS.filter(s=>s.book===curBook()&&sel.has(s.id))}
