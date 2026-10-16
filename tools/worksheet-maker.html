@@ -79,6 +79,8 @@ table.list{border-collapse:collapse;width:100%}
 .qedit .ans input{flex:1;border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 .qedit .instr{font-size:13px;color:var(--teal);margin-bottom:4px}
 .tree{display:grid;gap:4px}
+.banklist{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+@media(max-width:900px){.banklist{position:static;max-height:none}}
 .tree .bk{font-weight:700;margin-top:10px}
 .tree button.set{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;text-align:left;display:flex;justify-content:space-between;gap:8px}
 .tree button.set.active{border-color:var(--teal);background:var(--teal-soft)}
@@ -241,7 +243,14 @@ table.list{border-collapse:collapse;width:100%}
       <p class="sub">저장된 자료를 확인하고, 잘못 읽힌 문항이나 정답을 고칠 수 있어요. 문제 내용도 클릭해서 바로 고칠 수 있어요.</p>
       <div id="bankEmpty" class="empty" hidden>아직 저장된 자료가 없어요. [자료 올리기]에서 먼저 올려 주세요.</div>
       <div class="grid2" id="bankMain">
-        <div class="card" style="padding:14px"><div class="tree" id="bankTree"></div></div>
+        <div class="card banklist" style="padding:14px">
+          <div class="field"><label>교재 (레벨)</label><select id="bkBookSel"></select></div>
+          <div class="row" style="margin-top:8px"><select id="bkKindSel" style="flex:1;border:1px solid var(--line);border-radius:8px;padding:7px"></select><button class="btn small" id="bkRename">교재 이름 바꾸기</button></div>
+          <input id="bkSearch" placeholder="단원 검색 (예: CH03, 관사)" style="width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:8px">
+          <label class="chk" style="font-size:13px"><input type="checkbox" id="bkMiss"> 정답이 빈 자료만 보기</label>
+          <div class="muted" id="bkCount" style="font-size:12px;margin:2px 0 6px"></div>
+          <div class="tree" id="bankTree"></div>
+        </div>
         <div id="bankDetail"></div>
       </div>
     </section>
@@ -989,25 +998,42 @@ let bankSel=null;
 function renderBank(){
   $('bankEmpty').hidden=!!SETS.length;$('bankMain').hidden=!SETS.length;
   if(!SETS.length)return;
-  if(!SETS.find(s=>s.id===bankSel))bankSel=SETS[0].id;
+  const bs=books();if(!bs.includes(prefs.bankBook))prefs.bankBook=bs[0];
+  const list=bankList();
+  if(!list.find(s=>s.id===bankSel))bankSel=list[0]?.id||null;
   renderTree();renderBankDetail();
 }
-function renderTree(){
-  $('bankTree').innerHTML=books().map(b=>`<div class="bk">${esc(b)} <button class="btn small" data-rename="${esc(b)}">이름 바꾸기</button></div>${SETS.filter(s=>s.book===b).map(s=>{const miss=s.questions.filter(q=>!q.answer).length;return `<button class="set ${s.id===bankSel?'active':''}" data-id="${s.id}"><span>${esc(s.unit)}<br><small class="muted">${esc(s.kind)}</small></span><span>${miss?`<span class="pill warn">정답 ${miss}</span>`:''} <small class="muted">${s.questions.length}</small></span></button>`}).join('')}`).join('');
+// 고른 교재·자료 종류·검색어에 맞는 자료만
+function bankList(){
+  const kind=prefs.bankKind||'',q=($('bkSearch').value||'').trim().toLowerCase().replace(/\s+/g,''),miss=$('bkMiss').checked;
+  return SETS.filter(s=>s.book===prefs.bankBook&&(!kind||s.kind===kind)&&(!q||(s.unit+s.kind).toLowerCase().replace(/\s+/g,'').includes(q))&&(!miss||s.questions.some(x=>!x.answer)));
 }
+function renderTree(){
+  const bs=books();
+  $('bkBookSel').innerHTML=bs.map(b=>`<option value="${esc(b)}" ${b===prefs.bankBook?'selected':''}>${esc(b)} (${SETS.filter(s=>s.book===b).length})</option>`).join('');
+  const kinds=[...new Set(SETS.filter(s=>s.book===prefs.bankBook).map(s=>s.kind))];
+  if(prefs.bankKind&&!kinds.includes(prefs.bankKind))prefs.bankKind='';
+  $('bkKindSel').innerHTML=`<option value="">자료 종류 전체</option>`+kinds.map(k=>`<option ${k===prefs.bankKind?'selected':''}>${esc(k)}</option>`).join('');
+  const list=bankList();
+  $('bkCount').textContent=`자료 ${list.length}개 · ${list.reduce((a,s)=>a+s.questions.length,0)}문항`;
+  $('bankTree').innerHTML=list.length?list.map(s=>{const miss=s.questions.filter(q=>!q.answer).length;return `<button class="set ${s.id===bankSel?'active':''}" data-id="${s.id}"><span>${esc(s.unit)}<br><small class="muted">${esc(s.kind)}</small></span><span>${miss?`<span class="pill warn">정답 ${miss}</span>`:''} <small class="muted">${s.questions.length}</small></span></button>`}).join(''):'<div class="muted" style="padding:10px 0">조건에 맞는 자료가 없어요.</div>';
+}
+$('bkBookSel').onchange=e=>{prefs.bankBook=e.target.value;prefs.bankKind='';savePrefs();bankSel=null;renderBank()};
+$('bkKindSel').onchange=e=>{prefs.bankKind=e.target.value;savePrefs();bankSel=null;renderBank()};
+$('bkSearch').oninput=()=>{bankSel=null;renderBank()};
+$('bkMiss').onchange=()=>{bankSel=null;renderBank()};
+$('bkRename').onclick=async()=>{const old=prefs.bankBook;if(!old)return;const nv=prompt('새 교재 이름',old);if(!nv||nv.trim()===old)return;const list=SETS.filter(s=>s.book===old);list.forEach(s=>s.book=nv.trim());await dbPut(list);if(prefs.book===old)prefs.book=nv.trim();prefs.bankBook=nv.trim();savePrefs();await reload()};
 function renderBankDetail(){
   const s=SETS.find(x=>x.id===bankSel);if(!s){$('bankDetail').innerHTML='';return}
   $('bankDetail').innerHTML=`<div class="card"><h3>${esc(s.unit)} <small class="muted">${esc(s.book)} · ${esc(s.kind)}</small></h3>
     <div class="muted" style="font-size:13px;line-height:1.6">문제 파일: ${esc(s.source?.q||'')}<br>정답 파일: ${esc(s.source?.a||'없음')}</div>
     <div class="form" style="margin-top:12px"><div class="field"><label>교재 (레벨)</label><input id="bkBook" value="${esc(s.book)}"></div><div class="field"><label>자료 종류</label><input id="bkKind" value="${esc(s.kind)}"></div><div class="field"><label>단원</label><input id="bkUnit" value="${esc(s.unit)}"></div><div class="field"><label>&nbsp;</label><div class="tools"><button class="btn primary" id="bkSaveInfo">저장</button><button class="btn danger" id="bkDelSet">자료 삭제</button></div></div></div></div>
     ${s.questions.map((q,i)=>`<div class="qedit" data-i="${i}"><div class="head"><b>${q.sec?q.sec+'-':''}${q.n}번 ${isMC(q)?'<span class="pill gray">객관식</span>':'<span class="pill gray">주관식</span>'}</b><button class="btn small danger" data-delq="${i}">문항 삭제</button></div>${q.instr?`<div class="instr">${esc(htmlToText(q.instr))}</div>`:''}<div class="body" contenteditable="true" data-body="${i}">${q.html}</div><div class="ans"><b>정답</b><input data-ans="${i}" value="${esc(q.answer)}" placeholder="정답을 입력하세요"></div></div>`).join('')}`;
-  $('bkSaveInfo').onclick=async()=>{s.book=$('bkBook').value.trim()||s.book;s.kind=$('bkKind').value.trim()||s.kind;s.unit=$('bkUnit').value.trim()||s.unit;await dbPut([s]);await reload()};
+  $('bkSaveInfo').onclick=async()=>{s.book=$('bkBook').value.trim()||s.book;s.kind=$('bkKind').value.trim()||s.kind;s.unit=$('bkUnit').value.trim()||s.unit;prefs.bankBook=s.book;savePrefs();await dbPut([s]);await reload()};
   $('bkDelSet').onclick=async()=>{if(!confirm(`'${s.unit}' 자료를 삭제할까요?`))return;await dbDel([s.id]);sel.delete(s.id);await reload()};
 }
 $('bankTree').onclick=async e=>{
-  const r=e.target.closest('[data-rename]');
-  if(r){const old=r.dataset.rename,nv=prompt('새 교재 이름',old);if(!nv||nv.trim()===old)return;const list=SETS.filter(s=>s.book===old);list.forEach(s=>s.book=nv.trim());await dbPut(list);if(prefs.book===old){prefs.book=nv.trim();savePrefs()}await reload();return}
-  const b=e.target.closest('button.set');if(b){bankSel=b.dataset.id;renderBank()}
+  const b=e.target.closest('button.set');if(b){bankSel=b.dataset.id;renderTree();renderBankDetail();window.scrollTo({top:0})}
 };
 $('bankDetail').addEventListener('change',async e=>{
   const s=SETS.find(x=>x.id===bankSel);if(!s)return;
