@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>웨이메이커360 보충문제 시험지</title>
+<style>
+:root{--navy:#14243f;--teal:#0f766e;--teal-soft:#e6f4f2;--ink:#1e293b;--muted:#64748b;--line:#dbe3ee;--bg:#f4f6fa;--ok:#15803d;--warn:#b45309;--warn-soft:#fff7e6;--bad:#b91c1c;--bad-soft:#fef2f2}
+*{box-sizing:border-box}
+body{margin:0;font-family:Pretendard,"Noto Sans KR","Malgun Gothic",system-ui,sans-serif;color:var(--ink);background:var(--bg);font-size:15px}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.side{background:var(--navy);color:#fff;padding:24px 16px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand b{font-size:20px;display:block}
+.brand small{color:#a9b8d0}
+.nav{display:grid;gap:4px;margin-top:22px}
+.nav button{border:0;background:none;color:#c8d4e6;text-align:left;padding:11px 12px;border-radius:9px}
+.nav button.active,.nav button:hover{background:#ffffff18;color:#fff}
+.nav .badge{float:right;background:#ffffff22;color:#fff;border-radius:10px;padding:0 7px;font-size:12px}
+.side .foot{margin-top:24px;color:#a9b8d0;font-size:12px;line-height:1.6}
+main{padding:28px 32px 60px;min-width:0}
+.page{display:none}.page.active{display:block}
+h2{margin:0 0 4px;font-size:25px}
+.sub{margin:0 0 20px;color:var(--muted)}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:16px}
+.card h3{margin:0 0 12px;font-size:17px}
+.form{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.field{display:grid;gap:5px;align-content:start}
+.field label{font-size:13px;color:#475569}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px;background:#fff}
+.wide{grid-column:span 2}.full{grid-column:1/-1}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:9px 13px;color:var(--ink)}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn.teal{background:var(--teal);border-color:var(--teal);color:#fff}
+.btn.small{padding:4px 8px;font-size:12px}
+.btn.danger{color:var(--bad)}
+.btn:disabled{opacity:.5;cursor:default}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:12px;background:#fff}
+table.list{border-collapse:collapse;width:100%}
+.list th,.list td{padding:9px 11px;border-bottom:1px solid #edf1f6;text-align:left;font-size:14px;vertical-align:top}
+.list th{background:#f1f5f9;color:#475569;font-size:13px;white-space:nowrap}
+.list td.num,.list th.num{text-align:right;white-space:nowrap}
+.list input[type=text]{width:100%;min-width:140px;border:1px solid var(--line);border-radius:6px;padding:5px 7px}
+.pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:12px;background:var(--teal-soft);color:var(--teal);white-space:nowrap}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}.pill.gray{background:#eef2f7;color:#64748b}
+.notice{background:var(--warn-soft);border:1px solid #f3d9a4;border-radius:10px;padding:12px 14px;color:#7c4a03;margin-bottom:14px;line-height:1.6}
+.info{background:var(--teal-soft);border:1px solid #b9e0da;border-radius:10px;padding:12px 14px;color:#134e4a;margin-bottom:14px;line-height:1.6}
+.empty{text-align:center;color:var(--muted);padding:30px;border:1px dashed var(--line);border-radius:10px}
+.steps{margin:0;padding-left:20px;line-height:1.9}
+.drop{border:2px dashed #b6c3d6;border-radius:14px;padding:30px 16px;text-align:center;background:#f8fafc;color:#475569;line-height:1.7}
+.drop.over{border-color:var(--teal);background:var(--teal-soft)}
+.drop b{font-size:17px;color:var(--ink)}
+.chk{display:flex;gap:8px;align-items:center;padding:4px 0}
+.chk input{width:16px;height:16px}
+.setlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:4px 16px;margin-top:6px}
+.setlist .chk small{color:var(--muted)}
+.kind{margin-top:12px;font-weight:600;font-size:14px;color:#334155}
+.radios{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+.radios label{display:flex;gap:6px;align-items:center}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--muted)}
+.pick{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px;margin-top:10px}
+.pick label{display:grid;grid-template-columns:22px 64px 1fr;gap:8px;padding:8px 10px;border-bottom:1px solid #edf1f6;align-items:start;font-size:14px}
+.pick label:last-child{border-bottom:0}
+.pick .src{color:var(--muted);font-size:12px}
+.pick .txt{overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 14px}
+.tabs button.active{background:var(--navy);border-color:var(--navy);color:#fff}
+.paperwrap{background:#e2e8f0;border-radius:12px;padding:16px;overflow:auto}
+.qedit{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:#fff}
+.qedit .head{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap}
+.qedit .body{border:1px dashed transparent;border-radius:6px;padding:4px}
+.qedit .body:focus{outline:none;border-color:var(--teal)}
+.qedit .ans{display:flex;gap:8px;align-items:center;margin-top:8px}
+.qedit .ans input{flex:1;border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+.qedit .instr{font-size:13px;color:var(--teal);margin-bottom:4px}
+.tree{display:grid;gap:4px}
+.banklist{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto}
+@media(max-width:900px){.banklist{position:static;max-height:none}}
+.tree .bk{font-weight:700;margin-top:10px}
+.tree button.set{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;text-align:left;display:flex;justify-content:space-between;gap:8px}
+.tree button.set.active{border-color:var(--teal);background:var(--teal-soft)}
+.grid2{display:grid;grid-template-columns:300px minmax(0,1fr);gap:16px;align-items:start}
+.progress{margin-top:12px;font-size:14px;color:#475569}
+
+/* ---------- 시험지 (화면 미리보기 + 인쇄 공통) ---------- */
+.sheet{background:#fff;color:#111;width:210mm;min-height:297mm;margin:0 auto 16px;padding:13mm 13mm 15mm;box-shadow:0 2px 10px #0f172a22;font-size:var(--fs,10.5pt);line-height:1.55;font-family:"Malgun Gothic","Noto Sans KR",Pretendard,sans-serif}
+.sheet .top{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:end;border-bottom:2.5px solid #111;padding-bottom:6px;margin-bottom:5mm}
+.sheet .top .ac{font-size:9pt;color:#444}
+.sheet .top h1{font-size:17pt;margin:2px 0 0;letter-spacing:-.3px}
+.sheet .top .meta{font-size:9.5pt;color:#333;margin-top:2px}
+.sheet .stu{display:flex;border:1px solid #333;font-size:9.5pt}
+.sheet .stu div{border-left:1px solid #333;padding:4px 8px;min-width:22mm;white-space:nowrap}
+.sheet .stu div:first-child{border-left:0}
+.sheet .stu div.score{min-width:16mm}
+.sheet .qs.two{column-count:2;column-gap:8mm;column-rule:1px solid #bbb}
+.sheet .grp{font-weight:700;margin:0 0 2.5mm;break-inside:avoid;break-after:avoid}
+.sheet .grp .gx{font-weight:400}
+.sheet .q{break-inside:avoid;margin:0 0 5mm;display:grid;grid-template-columns:auto 1fr;gap:0 5px}
+.sheet .q .n{font-weight:700}
+.sheet .q>div{min-width:0;overflow-wrap:anywhere}
+.sheet .q .qi{font-weight:600}
+.sheet .p{margin:0 0 1mm;min-height:1em}
+.sheet .tb,.qedit .tb{display:inline-block;width:2.2em}
+.sheet .cells,.qedit .cells{display:flex;flex-wrap:wrap;gap:1mm 5mm;align-items:baseline}
+.sheet .cells>div,.qedit .cells>div{min-width:0}
+.sheet .box,.qedit .box{border:1px solid #555;padding:2mm 3mm;margin:1mm 0 2mm}
+.sheet table.dt,.qedit table.dt{border-collapse:collapse;margin:1mm 0 2mm;max-width:100%}
+.sheet table.dt td,.qedit table.dt td{border:1px solid #555;padding:1.5mm 2.5mm;vertical-align:top}
+.sheet img,.qedit img{max-width:100%;height:auto}
+.sheet .keyt{width:100%;border-collapse:collapse;font-size:10pt}
+.sheet .keyt td{border:1px solid #888;padding:2mm 2.5mm;vertical-align:top}
+.sheet .keyt td.kn{width:10mm;text-align:center;font-weight:700;background:#f3f4f6}
+.sheet .keyt .ks{display:block;color:#666;font-size:8pt}
+.sheet .foot{margin-top:6mm;font-size:8pt;color:#777;text-align:center}
+#printArea{display:none}
+
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  .app{display:none!important}
+  #printArea{display:block}
+  .sheet{box-shadow:none;margin:0;padding:0;width:auto;break-after:page;min-height:auto}
+  .sheet:last-child{break-after:auto}
+}
+.nav button .badge{margin-left:6px}
+@media(max-width:900px){.nav .badge{float:none}.app{display:block}.side{position:static;height:auto;padding:16px}.nav{display:flex;overflow:auto;margin-top:12px}.nav button{white-space:nowrap}.side .foot{display:none}main{padding:20px 16px}.form{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:560px){.form{grid-template-columns:1fr}.wide{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><b>웨이메이커360</b><small>보충문제 시험지 만들기</small></div>
+    <nav class="nav" id="nav">
+      <button data-page="build" class="active">시험지 만들기</button>
+      <button data-page="import">자료 올리기</button>
+      <button data-page="bank">문제은행 <span class="badge" id="navCount" hidden></span></button>
+      <button data-page="backup">백업·설정</button>
+    </nav>
+    <div class="foot">자료는 이 컴퓨터의 브라우저 안에만 저장됩니다. 인터넷에 올라가지 않아요.<br>출판사 자료는 학원 수업용으로만 쓰고 외부에 게시하지 마세요.</div>
+  </aside>
+  <main>
+    <!-- ================= 시험지 만들기 ================= -->
+    <section class="page active" id="page-build">
+      <h2>시험지 만들기</h2>
+      <p class="sub">교재(레벨)와 단원을 고르면 문제지와 답안지를 따로 인쇄할 수 있어요.</p>
+      <div id="buildEmpty" class="card" hidden>
+        <h3>처음 사용하시나요?</h3>
+        <ol class="steps">
+          <li><b>자료 올리기</b> 메뉴에서 출판사 보충자료의 <b>워드(.docx) 파일이나 ZIP 파일</b>을 선택합니다. 폴더째로 골라도 돼요.</li>
+          <li>문제 파일과 <b>_정답</b> 파일이 자동으로 짝지어져 문항별로 정리됩니다.</li>
+          <li>여기서 교재·단원을 고르고 <b>[시험지 만들기]</b> → <b>[문제지 인쇄]</b>, <b>[답안지 인쇄]</b>를 누르면 끝!</li>
+        </ol>
+        <div class="tools" style="margin-top:12px"><button class="btn teal" onclick="go('import')">자료 올리러 가기</button></div>
+      </div>
+      <div id="buildMain">
+        <div class="card">
+          <h3>① 교재·단원 고르기</h3>
+          <div class="form">
+            <div class="field wide"><label>교재 (레벨)</label><select id="bBook"></select></div>
+            <div class="field wide"><label>&nbsp;</label><div class="tools"><button class="btn small" id="bAll">전체 선택</button><button class="btn small" id="bNone">전체 해제</button><span class="muted" id="bSelInfo"></span></div></div>
+          </div>
+          <div id="bSets"></div>
+        </div>
+        <div class="card">
+          <h3>② 출제 방식</h3>
+          <div class="radios">
+            <label><input type="radio" name="bMode" value="all" checked> 고른 단원의 문항 전부</label>
+            <label><input type="radio" name="bMode" value="random"> 무작위로 <input type="number" id="bCount" value="20" min="1" style="width:64px;border:1px solid var(--line);border-radius:6px;padding:3px 6px"> 문항</label>
+            <label><input type="radio" name="bMode" value="pick"> 직접 고르기</label>
+          </div>
+          <div class="row">
+            <label class="chk"><input type="checkbox" id="bShuffle"> 문항 순서 섞기</label>
+            <span class="muted">·</span>
+            <label class="row">문항 유형 <select id="bType" style="border:1px solid var(--line);border-radius:6px;padding:4px"><option value="">전체</option><option value="mc">객관식만</option><option value="sa">서술형·주관식만</option></select></label>
+          </div>
+          <div id="bPick" hidden></div>
+          <div class="tools" style="margin-top:14px"><button class="btn primary" id="bMake">시험지 만들기</button><span class="muted" id="bMakeInfo"></span></div>
+        </div>
+        <div class="card" id="bOut" hidden>
+          <h3>③ 시험지 꾸미기 · 인쇄</h3>
+          <div class="form">
+            <div class="field"><label>학원 이름</label><input id="oAcademy" placeholder="예: 웨이메이커360 영어"></div>
+            <div class="field wide"><label>시험지 제목</label><input id="oTitle"></div>
+            <div class="field"><label>날짜</label><input id="oDate" type="date"></div>
+            <div class="field"><label>글자 크기</label><select id="oFs"><option value="9.5pt">작게</option><option value="10.5pt" selected>보통</option><option value="11.5pt">크게</option></select></div>
+            <div class="field"><label>편집</label><select id="oCols"><option value="2">2단 (시험지형)</option><option value="1">1단</option></select></div>
+            <div class="field wide"><label>학생 정보 칸</label><div class="row"><label class="chk"><input type="checkbox" id="oCls" checked> 반</label><label class="chk"><input type="checkbox" id="oName" checked> 이름</label><label class="chk"><input type="checkbox" id="oScore" checked> 점수</label><label class="chk"><input type="checkbox" id="oSrc" checked> 답안지에 원본 출처 표시</label></div></div>
+          </div>
+          <div class="tools" style="margin:14px 0">
+            <div class="tabs" id="oTabs" style="margin:0"><button data-v="q" class="active">문제지 미리보기</button><button data-v="a">답안지 미리보기</button></div>
+            <span style="flex:1"></span>
+            <button class="btn" id="oReshuffle" hidden>다시 섞기</button>
+            <button class="btn teal" data-print="q">문제지 인쇄</button>
+            <button class="btn teal" data-print="a">답안지 인쇄</button>
+            <button class="btn primary" data-print="qa">둘 다 인쇄</button>
+          </div>
+          <div class="info" style="margin-bottom:12px">인쇄 창의 <b>설정 더보기</b>에서 <b>머리글과 바닥글</b>을 끄면 주소·날짜 없이 깔끔하게 나와요. PDF로 저장하려면 대상(프린터)을 <b>PDF로 저장</b>으로 바꾸세요.</div>
+          <div class="paperwrap"><div id="oPreview"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 자료 올리기 ================= -->
+    <section class="page" id="page-import">
+      <h2>자료 올리기</h2>
+      <p class="sub">출판사에서 받은 보충자료(워드 파일)를 문제은행에 넣습니다.</p>
+      <div class="card">
+        <div class="drop" id="drop">
+          <b>여기에 파일이나 폴더를 끌어다 놓으세요</b><br>
+          워드(.docx) 파일, 또는 워드 파일이 들어 있는 ZIP 파일 · 문제 파일과 <b>_정답</b> 파일을 함께 넣어 주세요<br>
+          <div class="tools" style="justify-content:center;margin-top:12px">
+            <button class="btn primary" id="pickDir">폴더 선택</button>
+            <button class="btn" id="pickFiles">파일 선택 (워드·ZIP)</button>
+          </div>
+          <div class="muted" style="font-size:13px;margin-top:10px;line-height:1.7"><b>폴더 선택</b>: 폴더를 <b>한 번만 클릭</b>(더블클릭 X) → [업로드] → "업로드할까요?" 창에서 [업로드] (인터넷에 올라가지 않아요)<br><b>파일 선택</b>: 폴더 안으로 들어가서 <b>Ctrl + A</b>로 전부 고른 뒤 [열기] · ZIP 파일은 그대로 고르면 돼요</div>
+          <input type="file" id="fileIn" multiple accept=".docx,.zip" hidden>
+          <input type="file" id="dirIn" webkitdirectory multiple hidden>
+        </div>
+        <div class="progress" id="impProg"></div>
+        <div class="notice" style="margin:14px 0 0">한글(.hwp)·PDF 파일은 읽을 수 없어요. 출판사 자료실에서 같은 자료의 <b>(워드)</b> 버전을 받아 주세요. 예) <i>26_그래머 인사이드_Level2_챕터별 추가문제 (워드).zip</i></div>
+      </div>
+      <div class="card" id="impResult" hidden>
+        <h3>읽어 온 자료 확인</h3>
+        <div class="form" style="margin-bottom:6px">
+          <div class="field wide"><label>교재 이름 한꺼번에 바꾸기 (레벨별로 나뉘는 기준이에요)</label><input id="impBulkBook" placeholder="예: Grammar Inside Level 2"></div>
+          <div class="field"><label>&nbsp;</label><button class="btn" id="impBulkApply">모든 줄에 적용</button></div>
+        </div>
+        <div class="tablewrap"><table class="list"><thead><tr><th><input type="checkbox" id="impAll" checked></th><th>교재 (레벨)</th><th>자료 종류</th><th>단원</th><th class="num">문항</th><th class="num">정답</th><th>상태</th></tr></thead><tbody id="impRows"></tbody></table></div>
+        <div id="impSkipped" class="muted" style="margin-top:10px;font-size:13px"></div>
+        <div class="tools" style="margin-top:14px;justify-content:flex-end"><button class="btn" id="impCancel">취소</button><button class="btn primary" id="impSave">문제은행에 저장</button></div>
+      </div>
+    </section>
+
+    <!-- ================= 문제은행 ================= -->
+    <section class="page" id="page-bank">
+      <h2>문제은행</h2>
+      <p class="sub">저장된 자료를 확인하고, 잘못 읽힌 문항이나 정답을 고칠 수 있어요. 문제 내용도 클릭해서 바로 고칠 수 있어요.</p>
+      <div id="bankEmpty" class="empty" hidden>아직 저장된 자료가 없어요. [자료 올리기]에서 먼저 올려 주세요.</div>
+      <div class="grid2" id="bankMain">
+        <div class="card banklist" style="padding:14px">
+          <div class="field"><label>교재 (레벨)</label><select id="bkBookSel"></select></div>
+          <div class="row" style="margin-top:8px"><select id="bkKindSel" style="flex:1;border:1px solid var(--line);border-radius:8px;padding:7px"></select><button class="btn small" id="bkRename">교재 이름 바꾸기</button></div>
+          <input id="bkSearch" placeholder="단원 검색 (예: CH03, 관사)" style="width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:8px">
+          <label class="chk" style="font-size:13px"><input type="checkbox" id="bkMiss"> 정답이 빈 자료만 보기</label>
+          <div class="row" style="justify-content:space-between;align-items:center;margin:2px 0 6px"><span class="muted" id="bkCount" style="font-size:12px"></span><button class="btn small danger" id="bkDelShown">보이는 자료 모두 삭제</button></div>
+          <div class="tree" id="bankTree"></div>
+        </div>
+        <div id="bankDetail"></div>
+      </div>
+    </section>
+
+    <!-- ================= 백업 ================= -->
+    <section class="page" id="page-backup">
+      <h2>백업 · 설정</h2>
+      <p class="sub">브라우저 기록을 지우면 문제은행도 지워질 수 있어요. 가끔 백업 파일을 받아 두세요.</p>
+      <div class="card">
+        <h3>백업</h3>
+        <p class="muted" id="bkInfo"></p>
+        <div class="tools"><button class="btn primary" id="bkExport">백업 파일 받기</button><button class="btn" id="bkImportBtn">백업 파일 불러오기</button><input type="file" id="bkImport" accept=".json" hidden></div>
+      </div>
+      <div class="card">
+        <h3>다른 컴퓨터에서 쓰려면</h3>
+        <p class="muted" style="line-height:1.7;margin:0">이 파일(worksheet-maker.html)과 백업 파일을 함께 옮긴 뒤, 새 컴퓨터에서 [백업 파일 불러오기]를 누르세요. 선생님들끼리 같은 문제은행을 쓰고 싶을 때도 같은 방법으로 나눠 쓸 수 있어요.</p>
+      </div>
+      <div class="card">
+        <h3>전체 삭제</h3>
+        <div class="tools"><button class="btn danger" id="bkWipe">문제은행 모두 지우기</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div id="printArea"></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=()=>crypto.randomUUID?crypto.randomUUID():'id-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const PREF_KEY='waymaker360Worksheet_prefs';
+const prefs=(()=>{try{return JSON.parse(localStorage.getItem(PREF_KEY)||'{}')||{}}catch{return {}}})();
+const savePrefs=()=>{try{localStorage.setItem(PREF_KEY,JSON.stringify(prefs))}catch{}};
+
+/* =====================================================================
+   ZIP 읽기 (브라우저 내장 압축 해제 사용 — 인터넷 없이 동작)
+   ===================================================================== */
+function decodeName(bytes,utf8){
+  if(!utf8){try{return new TextDecoder('utf-8',{fatal:true}).decode(bytes)}catch{try{return new TextDecoder('euc-kr').decode(bytes)}catch{}}}
+  return new TextDecoder().decode(bytes);
+}
+async function inflateRaw(data){
+  if(typeof DecompressionStream==='undefined')throw new Error('이 브라우저는 압축 해제를 지원하지 않아요. 최신 크롬이나 엣지에서 열어 주세요.');
+  const s=new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  return new Uint8Array(await new Response(s).arrayBuffer());
+}
+function readZip(buf){
+  const u8=buf instanceof Uint8Array?buf:new Uint8Array(buf);
+  const dv=new DataView(u8.buffer,u8.byteOffset,u8.byteLength);
+  let e=-1;
+  for(let i=u8.length-22;i>=Math.max(0,u8.length-65557);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break}}
+  if(e<0)throw new Error('압축(ZIP/DOCX) 형식이 아닌 파일이에요.');
+  const count=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);
+  const map=new Map();
+  for(let k=0;k<count&&p+46<=u8.length;k++){
+    if(dv.getUint32(p,true)!==0x02014b50)break;
+    const flag=dv.getUint16(p+8,true),method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),
+      nl=dv.getUint16(p+28,true),xl=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),off=dv.getUint32(p+42,true);
+    const name=decodeName(u8.subarray(p+46,p+46+nl),flag&0x800);
+    p+=46+nl+xl+cl;
+    if(name.endsWith('/'))continue;
+    map.set(name,{name,encrypted:!!(flag&1),read:async()=>{
+      if(flag&1)throw new Error('암호가 걸린 압축 파일이에요.');
+      const n2=dv.getUint16(off+26,true),x2=dv.getUint16(off+28,true),st=off+30+n2+x2,data=u8.subarray(st,st+csize);
+      if(method===0)return data.slice();
+      if(method===8)return inflateRaw(data);
+      throw new Error('지원하지 않는 압축 방식이에요.');
+    }});
+  }
+  return map;
+}
+
+/* =====================================================================
+   DOCX → 문단/표 블록
+   seg: {t,b,i,u,s,sup,sub} | {tab} | {br} | {img} | {box:[blocks]}
+   ===================================================================== */
+const kids=(el,name)=>el?[...el.children].filter(c=>c.localName===name):[];
+const kid=(el,name)=>el?[...el.children].find(c=>c.localName===name):null;
+const attr=(el,name)=>el?(el.getAttribute('w:'+name)??el.getAttribute(name)):null;
+const onOff=el=>!!el&&!['0','false','none','off'].includes(String(attr(el,'val')??'').toLowerCase());
+const xmlDoc=s=>new DOMParser().parseFromString(s,'application/xml');
+const MIME={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',bmp:'image/bmp',svg:'image/svg+xml',webp:'image/webp'};
+
+function toCircled(n){return n>=1&&n<=20?String.fromCharCode(0x2460+n-1):`(${n})`}
+function toRoman(n){const r=[[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']];let s='';for(const[v,c]of r)while(n>=v){s+=c;n-=v}return s}
+function fmtNum(n,f){
+  switch(f){
+    case 'decimalEnclosedCircle':case 'decimalEnclosedCircleChinese':return toCircled(n);
+    case 'upperLetter':return String.fromCharCode(64+((n-1)%26)+1);
+    case 'lowerLetter':return String.fromCharCode(96+((n-1)%26)+1);
+    case 'upperRoman':return toRoman(n);
+    case 'lowerRoman':return toRoman(n).toLowerCase();
+    case 'ganada':return '가나다라마바사아자차카타파하'[(n-1)%14];
+    case 'chosung':return 'ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ'[(n-1)%14];
+    case 'bullet':return '•';
+    case 'none':return '';
+    default:return String(n);
+  }
+}
+
+async function parseDocx(bytes){
+  const zip=readZip(bytes);
+  const text=async n=>{const e=zip.get(n);return e?new TextDecoder().decode(await e.read()):null};
+  const docXml=await text('word/document.xml');
+  if(!docXml)throw new Error('워드 문서 내용을 찾지 못했어요.');
+  const doc=xmlDoc(docXml);
+  // 그림
+  const rels={},media={};
+  const relXml=await text('word/_rels/document.xml.rels');
+  if(relXml)for(const r of xmlDoc(relXml).getElementsByTagName('Relationship'))rels[r.getAttribute('Id')]=r.getAttribute('Target');
+  for(const[id,target]of Object.entries(rels)){
+    const path=target.startsWith('/')?target.slice(1):'word/'+target.replace(/^\.\//,'');
+    const ext=(path.split('.').pop()||'').toLowerCase();
+    if(!MIME[ext]||!zip.get(path))continue;
+    try{const b=await zip.get(path).read();let s='';for(let i=0;i<b.length;i+=0x8000)s+=String.fromCharCode.apply(null,b.subarray(i,i+0x8000));media[id]=`data:${MIME[ext]};base64,${btoa(s)}`}catch{}
+  }
+  // 자동 번호
+  const abs={},nums={},styleNum={},counters={};
+  const numXml=await text('word/numbering.xml');
+  if(numXml){
+    const nd=xmlDoc(numXml);
+    for(const a of nd.getElementsByTagName('w:abstractNum')){
+      const lv={};for(const l of kids(a,'lvl'))lv[attr(l,'ilvl')]={start:+(attr(kid(l,'start'),'val')||1),fmt:attr(kid(l,'numFmt'),'val')||'decimal',txt:attr(kid(l,'lvlText'),'val')??''};
+      abs[attr(a,'abstractNumId')]=lv;
+    }
+    for(const n of nd.getElementsByTagName('w:num'))nums[attr(n,'numId')]=attr(kid(n,'abstractNumId'),'val');
+  }
+  const styXml=await text('word/styles.xml');
+  if(styXml){
+    const sd=xmlDoc(styXml),based={};
+    for(const s of sd.getElementsByTagName('w:style')){
+      const id=attr(s,'styleId'),np=kid(kid(s,'pPr'),'numPr');
+      based[id]=attr(kid(s,'basedOn'),'val');
+      if(np)styleNum[id]={numId:attr(kid(np,'numId'),'val'),ilvl:attr(kid(np,'ilvl'),'val')};
+    }
+    for(const id of Object.keys(based)){let cur=id,guard=0;while(!styleNum[id]&&based[cur]&&guard++<10){cur=based[cur];if(styleNum[cur])styleNum[id]=styleNum[cur]}}
+  }
+  function numLabel(pPr){
+    let np=kid(pPr,'numPr'),numId,ilvl;
+    if(np){numId=attr(kid(np,'numId'),'val');ilvl=attr(kid(np,'ilvl'),'val')}
+    const st=attr(kid(pPr,'pStyle'),'val');
+    if(!numId&&st&&styleNum[st]){numId=styleNum[st].numId;ilvl=ilvl??styleNum[st].ilvl}
+    if(!numId||numId==='0')return '';
+    ilvl=String(ilvl||0);
+    const lv=abs[nums[numId]];if(!lv||!lv[ilvl])return '';
+    const c=counters[numId]??={};
+    c[ilvl]=(c[ilvl]??(lv[ilvl].start-1))+1;
+    for(const k of Object.keys(c))if(+k>+ilvl)delete c[k];
+    const label=lv[ilvl].txt.replace(/%(\d)/g,(_,d)=>{const L=String(+d-1);const v=c[L]??lv[L]?.start??1;return fmtNum(v,lv[L]?.fmt||'decimal')});
+    return label;
+  }
+  function fmtOf(rPr){
+    if(!rPr)return {};
+    const u=kid(rPr,'u'),va=attr(kid(rPr,'vertAlign'),'val');
+    const col=attr(kid(rPr,'color'),'val'),hl=attr(kid(rPr,'highlight'),'val'),shd=attr(kid(rPr,'shd'),'fill');
+    return {b:onOff(kid(rPr,'b')),i:onOff(kid(rPr,'i')),u:!!u&&attr(u,'val')!=='none',s:onOff(kid(rPr,'strike'))||onOff(kid(rPr,'dstrike')),sup:va==='superscript',sub:va==='subscript',
+      c:!!((col&&!/^(auto|0{6})$/i.test(col))||(hl&&hl!=='none')||(shd&&!/^(auto|f{6})$/i.test(shd)))};
+  }
+  function drawing(el,out){
+    const txs=[...el.getElementsByTagNameNS('*','txbxContent')].filter(t=>!t.parentElement.closest('txbxContent'));
+    if(txs.length){for(const tx of txs)out.push({box:walk(tx)});return}
+    for(const bl of el.getElementsByTagNameNS('*','blip')){const id=bl.getAttribute('r:embed')||bl.getAttribute('r:link');if(media[id])out.push({img:media[id]})}
+    for(const im of el.getElementsByTagNameNS('*','imagedata')){const id=im.getAttribute('r:id');if(media[id])out.push({img:media[id]})}
+  }
+  function alt(el){const c=kid(el,'Choice');if(c&&c.children.length)return c;return kid(el,'Fallback')}
+  function runKids(r,f,out){
+    for(const c of r.children){
+      switch(c.localName){
+        case 't':case 'delText':if(c.localName==='t')out.push({t:c.textContent,...f});break;
+        case 'tab':case 'ptab':out.push({tab:1});break;
+        case 'br':case 'cr':if(attr(c,'type')!=='page'&&attr(c,'type')!=='column')out.push({br:1});break;
+        case 'noBreakHyphen':out.push({t:'-',...f});break;
+        case 'sym':{const ch=parseInt(attr(c,'char')||'',16);if(ch&&ch<0xF000)out.push({t:String.fromCharCode(ch),...f});break}
+        case 'drawing':case 'pict':case 'object':drawing(c,out);break;
+        case 'AlternateContent':{const a=alt(c);if(a)runKids(a,f,out);break}
+      }
+    }
+  }
+  function inline(node,out){
+    for(const c of node.children){
+      const n=c.localName;
+      if(n==='r')runKids(c,fmtOf(kid(c,'rPr')),out);
+      else if(n==='AlternateContent'){const a=alt(c);if(a)inline(a,out)}
+      else if(['hyperlink','smartTag','ins','fldSimple','customXml','moveTo','bdo','dir'].includes(n))inline(c,out);
+      else if(n==='sdt'){const sc=kid(c,'sdtContent');if(sc)inline(sc,out)}
+      else if(n==='oMath'||n==='oMathPara')out.push({t:c.textContent});
+    }
+  }
+  function para(p){
+    const pPr=kid(p,'pPr'),segs=[];
+    const label=numLabel(pPr);
+    if(label)segs.push({t:label+' '});
+    inline(p,segs);
+    const jc=attr(kid(pPr,'jc'),'val');
+    return {type:'p',segs,center:jc==='center',border:!!kid(pPr,'pBdr')&&[...kid(pPr,'pBdr').children].some(b=>attr(b,'val')&&attr(b,'val')!=='none'&&attr(b,'val')!=='nil')};
+  }
+  function table(tbl){
+    const rows=[];
+    for(const tr of kids(tbl,'tr')){
+      const cells=[];
+      for(const tc of kids(tr,'tc')){
+        const pr=kid(tc,'tcPr'),vm=kid(pr,'vMerge');
+        cells.push({blocks:walk(tc),span:+(attr(kid(pr,'gridSpan'),'val')||1),cont:!!vm&&attr(vm,'val')!=='restart'});
+      }
+      rows.push(cells);
+    }
+    return {type:'tbl',rows};
+  }
+  function walk(node){
+    const out=[];
+    for(const c of node.children){
+      if(c.localName==='p')out.push(para(c));
+      else if(c.localName==='tbl')out.push(table(c));
+      else if(c.localName==='sdt'){const sc=kid(c,'sdtContent');if(sc)out.push(...walk(sc))}
+      else if(c.localName==='AlternateContent'){const a=alt(c);if(a)out.push(...walk(a))}
+    }
+    return out;
+  }
+  const body=doc.getElementsByTagNameNS('*','body')[0];
+  return walk(body);
+}
+
+/* ---------- 블록 → 글자 / HTML ---------- */
+const segText=s=>s.t??(s.tab?'\t':s.br?'\n':s.box?' '+blocksText(s.box)+' ':s.img?'￼':'');
+const blockText=b=>b.type==='p'?b.segs.map(segText).join(''):b.rows.map(r=>r.map(c=>blocksText(c.blocks)).join(' | ')).join('\n');
+const blocksText=bs=>bs.map(blockText).join('\n');
+const sameFmt=(a,b)=>a.t!=null&&b.t!=null&&['b','i','u','s','sup','sub'].every(k=>!!a[k]===!!b[k]);
+function segsHtml(segs){
+  const m=[];for(const s of segs){const last=m[m.length-1];if(last&&sameFmt(last,s))last.t+=s.t;else m.push({...s})}
+  return m.map(s=>{
+    if(s.tab)return '<span class="tb"></span>';
+    if(s.br)return '<br>';
+    if(s.img)return `<img src="${s.img}" alt="">`;
+    if(s.box)return `<div class="box">${blocksHtml(s.box)}</div>`;
+    let h=esc(s.t).replace(/ {2,}/g,x=>'&nbsp;'.repeat(x.length));
+    if(s.u)h=`<u>${h}</u>`;if(s.b)h=`<b>${h}</b>`;if(s.i)h=`<i>${h}</i>`;if(s.s)h=`<s>${h}</s>`;if(s.sup)h=`<sup>${h}</sup>`;if(s.sub)h=`<sub>${h}</sub>`;
+    return h;
+  }).join('');
+}
+const hasContent=b=>b.type==='tbl'||b.segs.some(s=>s.img||s.box||(s.t&&s.t.trim()));
+function blockHtml(b){
+  if(b.type==='p')return `<div class="p"${b.center?' style="text-align:center"':''}>${segsHtml(b.segs)}</div>`;
+  const cols=Math.max(...b.rows.map(r=>r.reduce((a,c)=>a+c.span,0)));
+  if(b.rows.length===1&&cols===1)return `<div class="box">${blocksHtml(b.rows[0][0].blocks)}</div>`;
+  return `<table class="dt">${b.rows.map(r=>`<tr>${r.map(c=>`<td${c.span>1?` colspan="${c.span}"`:''}${c.cont?' style="border-top:0"':''}>${c.cont?'':blocksHtml(c.blocks)}</td>`).join('')}</tr>`).join('')}</table>`;
+}
+function blocksHtml(bs){
+  let h='',boxBuf=[];
+  const flush=()=>{if(boxBuf.length){h+=`<div class="box">${boxBuf.map(blockHtml).join('')}</div>`;boxBuf=[]}};
+  for(const b of bs){
+    if(!hasContent(b)){flush();continue}
+    if(b.type==='p'&&b.border){boxBuf.push(b);continue}
+    flush();h+=blockHtml(b);
+  }
+  flush();return h;
+}
+function stripPrefix(block,len){
+  const segs=[];let left=len;
+  for(const s of block.segs){
+    if(left<=0){segs.push(s);continue}
+    const L=segText(s).length;
+    if(s.t!=null&&L>left){segs.push({...s,t:s.t.slice(left)});left=0}
+    else left-=L;
+  }
+  if(segs[0]?.t)segs[0]={...segs[0],t:segs[0].t.replace(/^\s+/,'')};
+  return {...block,segs};
+}
+
+/* =====================================================================
+   문제지 → 문항 나누기
+   ===================================================================== */
+const RE_GROUP=/^\s*[\[［]\s*(\d{1,3})\s*[-~–∼]\s*(\d{1,3})\s*[\]］]\s*/;
+const RE_Q=/^\s*(\d{1,3})\s*[.)．]\s*/;
+const RE_SEC=/^\s*([A-J])\s*[.)．]\s*(?=.*[가-힣])/;
+const RE_ANSHEAD=/^\s*[<\[【]?\s*(정답(\s*및\s*해설)?|해설|answers?)\s*[>\]】]?\s*$/i;
+
+// 시험지 전체가 2단 표 안에 들어 있는 양식 대비: 문항 번호가 든 표는 칸 순서대로 펼친다
+// 시험지가 표나 글상자 안에 들어 있는 양식 대비: 문항 번호가 든 표·글상자는 읽는 순서대로 펼친다
+function hasQ(blocks){
+  return blocks.some(b=>b.type==='p'?RE_Q.test(blockText(b).replace(/^\s+/,''))&&!b.segs.every(s=>s.box)||b.segs.some(s=>s.box&&hasQ(s.box)):b.rows.some(r=>r.some(c=>hasQ(c.blocks))));
+}
+function flattenTables(blocks){
+  const out=[];
+  for(const b of blocks){
+    if(b.type==='tbl'&&hasQ(b.rows.flat().flatMap(c=>c.blocks)))for(const r of b.rows)for(const c of r)out.push(...flattenTables(c.blocks));
+    else if(b.type==='p'&&b.segs.some(s=>s.box&&hasQ(s.box))){
+      const rest={...b,segs:b.segs.filter(s=>!(s.box&&hasQ(s.box)))};
+      if(hasContent(rest))out.push(rest);
+      for(const s of b.segs)if(s.box&&hasQ(s.box))out.push(...flattenTables(s.box));
+    }
+    else out.push(b);
+  }
+  return out;
+}
+function splitQuestions(blocks){
+  let r=splitOnce(blocks);
+  if(r.questions.length)return r;
+  r=splitOnce(flattenTables(blocks));
+  if(r.questions.length)return r;
+  return splitOnce(blocks,true);
+}
+// 느슨한 모드: 'STEP 1' 섹션, 점 없는 번호(1 small → ___), 표 안의 번호 칸(한 줄에 두 문항 등)
+const RE_STEP=/^\s*STEP\s*(\d{1,2})\s*[.:)]?\s*/i;
+const RE_QL=/^\s*(\d{1,2})(?:\s*[.)．]\s*|\s+|$)/;
+const cellNum=c=>{const t=blocksText(c.blocks).replace(/\uFFFC/g,'').trim();const m=t.match(/^(\d{1,2})(?:\s*[.)．])?(?:\s|$)/);return m?+m[1]:null};
+function tableItems(tb){
+  // 번호로 시작하는 칸이 있는 열을 찾아, 그 열부터 다음 번호 열 전까지를 한 문항으로 본다
+  const cnt={};let numbered=0;
+  for(const r of tb.rows){let any=false;r.forEach((c,i)=>{if(cellNum(c)!=null){cnt[i]=(cnt[i]||0)+1;any=true}});if(any)numbered++}
+  if(numbered<1)return null;
+  const starts=Object.keys(cnt).map(Number).filter(i=>cnt[i]>=Math.max(1,numbered/2)).sort((a,b)=>a-b);
+  if(!starts.length)return null;
+  const items=[];
+  for(const r of tb.rows){
+    starts.forEach((st,k)=>{
+      const c=r[st];if(!c)return;const n=cellNum(c);
+      const cells=r.slice(st,k+1<starts.length?starts[k+1]:r.length);
+      if(n==null){if(items.length&&k===0&&cells.some(x=>hasContent({type:'tbl',rows:[[x]]})))items[items.length-1].cells.push(...cells);return}
+      items.push({n,cells});
+    });
+  }
+  return items.sort((a,b)=>a.n-b.n);
+}
+function stripCellNum(cell){
+  const bs=cell.blocks.slice();const i=bs.findIndex(hasContent);
+  if(i>=0&&bs[i].type==='p'){const m=blockText(bs[i]).match(/^\s*\d{1,2}(?:\s*[.)．])?\s*/);if(m)bs[i]=stripPrefix(bs[i],m[0].length)}
+  return {...cell,blocks:bs};
+}
+function splitOnce(blocks,loose){
+  const qs=[],meta={header:[],preamble:[]};
+  let expected=1,cur=null,group=null,sec=null,nextSec='A',nextStep=1,answerBlocks=null,started=false;
+  for(let i=0;i<blocks.length;i++){
+    const b=blocks[i];
+    if(loose&&b.type==='tbl'&&started){
+      const items=tableItems(b);
+      if(items&&items.length&&items[0].n===expected){
+        for(const it of items){const cells=[stripCellNum(it.cells[0]),...it.cells.slice(1)];qs.push({n:it.n,sec:sec?.label||'',cells,stem:null,parts:[],group:null,secObj:sec});expected=it.n+1}
+        cur=null;continue;
+      }
+    }
+    if(b.type==='p'){
+      const t=blockText(b).replace(/￼/g,'');
+      if(started&&qs.length&&RE_ANSHEAD.test(t)){answerBlocks=blocks.slice(i+1);break}
+      if(loose){const sm=t.match(RE_STEP);if(sm&&+sm[1]===nextStep){sec={label:'STEP '+sm[1],blocks:[stripPrefix(b,sm[0].length)]};nextStep++;expected=1;cur=null;group=null;started=true;continue}}
+      let m=t.match(RE_SEC);
+      if(m&&m[1]===nextSec&&!RE_Q.test(t)){
+        sec={label:m[1],blocks:[stripPrefix(b,m[0].length)]};
+        nextSec=String.fromCharCode(nextSec.charCodeAt(0)+1);expected=1;cur=null;group=null;started=true;continue;
+      }
+      m=t.match(RE_GROUP);
+      if(m&&+m[1]===expected){group={from:+m[1],to:+m[2],blocks:[stripPrefix(b,m[0].length)]};cur=null;started=true;continue}
+      m=t.match(loose?RE_QL:RE_Q);
+      if(m&&+m[1]===expected&&(!loose||started)){
+        if(group&&expected>group.to)group=null;
+        cur={n:expected,sec:sec?.label||'',stem:stripPrefix(b,m[0].length),parts:[],group,secObj:sec};
+        qs.push(cur);expected++;started=true;continue;
+      }
+    }
+    if(cur)cur.parts.push(b);
+    else if(group)group.blocks.push(b);
+    else if(sec)sec.blocks.push(b);
+    else if(!started){if(b.type==='tbl')meta.header.push(...b.rows.flat().map(c=>blocksText(c.blocks).trim()).filter(Boolean));else{const t=blockText(b).trim();if(t)meta.preamble.push(t)}}
+  }
+  const out=qs.map(q=>{
+    const ins=[];
+    if(q.secObj){const h=blocksHtml(q.secObj.blocks);if(h)ins.push(h)}
+    if(q.group){const h=blocksHtml(q.group.blocks);if(h)ins.push(h)}
+    const html=q.cells?`<div class="cells">${q.cells.filter((c,i)=>i>0||c.blocks.some(hasContent)).map(c=>`<div>${blocksHtml(c.blocks)||'&nbsp;'}</div>`).join('')}</div>`+blocksHtml(q.parts):blocksHtml([q.stem,...q.parts]);
+    const raw=q.cells?q.cells.map(c=>c.blocks):[[q.stem,...q.parts]];
+    return {n:q.n,sec:q.sec,instr:ins.join(''),html,answer:'',_raw:raw};
+  });
+  return {questions:out,meta,answerBlocks,loose:!!loose};
+}
+
+/* =====================================================================
+   정답 파일 → 번호별 정답
+   ===================================================================== */
+const rawText=q=>q._raw.map(bs=>blocksText(bs).replace(/\uFFFC/g,'')).join(' | ').replace(/\s+/g,' ').trim();
+function rawSegs(q){const out=[];const walkB=bs=>{for(const b of bs){if(b.type==='p'){for(const s of b.segs){if(s.box)walkB(s.box);else out.push(s)}}else for(const r of b.rows)for(const c of r)walkB(c.blocks)}};q._raw.forEach(walkB);return out}
+const reEsc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function diffAnswer(q,a){
+  const pt=rawText(q),at=rawText(a);
+  if(!at||pt===at&&!rawSegs(a).some(s=>s.t&&s.t.trim()&&(s.b||s.c)))return '';
+  // ① 빈칸(____)을 채운 경우
+  if(/_{2,}/.test(pt)){
+    const parts=pt.split(/\s*_{2,}\s*/);
+    try{const m=at.match(new RegExp('^'+parts.map(x=>reEsc(x).replace(/ /g,'\\s*')).join('\\s*(.+?)\\s*')+'$'));
+      if(m){const f=m.slice(1).map(x=>x.trim()).filter(Boolean);if(f.length)return f.join(' / ')}}catch{}
+  }
+  // ② 정답지에서만 굵게·색으로 표시한 말
+  const emph=ss=>{const o=[];let cur='';for(const s of ss){if(s.t!=null&&(s.b||s.c||s.u)){cur+=s.t}else{if(cur.trim())o.push(cur.trim());cur=''}}if(cur.trim())o.push(cur.trim());return o};
+  const pe=emph(rawSegs(q)),ae=emph(rawSegs(a));
+  const left=[...pe];const extra=ae.filter(x=>{const i=left.indexOf(x);if(i>=0){left.splice(i,1);return false}return true});
+  if(extra.length)return extra.join(' / ');
+  // ③ 글자가 달라진 부분 (단어 단위 비교)
+  const A=pt.split(' '),B=at.split(' ');
+  const L=Array.from({length:A.length+1},()=>new Array(B.length+1).fill(0));
+  for(let i=A.length-1;i>=0;i--)for(let j=B.length-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const ins=[];let i=0,j=0,run=[];
+  while(j<B.length){if(i<A.length&&A[i]===B[j]){if(run.length){ins.push(run.join(' '));run=[]}i++;j++}else if(i<A.length&&L[i+1][j]>=L[i][j+1])i++;else{run.push(B[j]);j++}}
+  if(run.length)ins.push(run.join(' '));
+  return ins.join(' / ');
+}
+function mirrorAnswers(questions,answerQs){
+  const map=new Map(answerQs.map(a=>[a.sec+'|'+a.n,a]));let found=0;
+  for(const q of questions){const a=map.get(q.sec+'|'+q.n);if(!a)continue;const v=diffAnswer(q,a);if(v){q.answer=v;found++}}
+  return {found,total:answerQs.length};
+}
+function answersFrom(blocks,questions,loose){
+  if(loose)return mirrorAnswers(questions,splitOnce(blocks,true).questions);
+  return parseAnswers(blocks,questions);
+}
+function cleanAns(s){return s.replace(/￼/g,'').replace(/[ \t]+/g,' ').replace(/\s*\n\s*/g,'\n').trim()}
+function seqParse(text,count){
+  const res=[];let pos=0;const hits=[];
+  for(let n=1;n<=count+1;n++){
+    const re=new RegExp(`(^|[\\s(\\[|/,])${n}\\s*[.)．](?!\\d)`,'g');re.lastIndex=pos;
+    const m=re.exec(text);if(!m)break;
+    hits.push({n,start:m.index+m[1].length,end:m.index+m[0].length});pos=m.index+m[0].length;
+  }
+  for(let k=0;k<hits.length;k++){const end=k+1<hits.length?hits[k+1].start:text.length;res[hits[k].n]=cleanAns(text.slice(hits[k].end,end))}
+  return res;
+}
+// 정답지의 섹션 표시: 'A.' 'A)' 처럼 문장부호가 붙었거나, 줄에 글자 하나만 있거나, 바로 뒤에 '1.'이 오는 경우만 인정 (A number of… 같은 답 오인 방지)
+const secRe=s=>new RegExp(`(?:^|\\s)${s}\\s*[.)．:]\\s|(?:^|\\n)[ \\t]*${s}[ \\t]*(?=\\n|\\s*1\\s*[.)．])`,'g');
+function parseAnswers(blocks,questions){
+  const ans={};let total=0;
+  const secs=[...new Set(questions.map(q=>q.sec))];
+  // 1) 표 형식(번호 칸 + 정답 칸)
+  const cells=[];
+  const collect=bs=>{for(const b of bs)if(b.type==='tbl')for(const r of b.rows)for(const c of r){if(c.blocks.some(x=>x.type==='tbl'))collect(c.blocks);else cells.push(blocksText(c.blocks).trim())}};
+  collect(blocks);
+  if(secs.length===1){
+    const t={};for(let i=0;i<cells.length-1;i++){const m=cells[i].match(/^(\d{1,3})\s*[.)]?$/);if(m&&cells[i+1]&&!/^\d{1,3}\s*[.)]?$/.test(cells[i+1])&&t[m[1]]==null)t[m[1]]=cleanAns(cells[i+1])}
+    if(Object.keys(t).length>=Math.min(questions.length,3)){for(const q of questions)if(t[q.n]!=null)ans['|'+q.n]=t[q.n]}
+  }
+  // 2) 글 형식(1. ④ 2. ⑤ …)
+  const full=blocks.map(b=>blockText(b)).join('\n');
+  if(secs.length>1||secs[0]){
+    let pos=0;
+    secs.forEach((s,k)=>{
+      const re=secRe(s);re.lastIndex=pos;const m=re.exec(full);if(!m)return;
+      const st=m.index+m[0].length;let en=full.length;
+      if(secs[k+1]){const re2=secRe(secs[k+1]);re2.lastIndex=st;const m2=re2.exec(full);if(m2)en=m2.index}
+      const cnt=questions.filter(q=>q.sec===s).length;const r=seqParse(full.slice(st,en),cnt);
+      for(const q of questions)if(q.sec===s&&r[q.n]!=null&&ans[s+'|'+q.n]==null)ans[s+'|'+q.n]=r[q.n];
+      pos=st;
+    });
+  }else{
+    const r=seqParse(full,questions.length);
+    for(const q of questions)if(r[q.n]!=null&&ans['|'+q.n]==null)ans['|'+q.n]=r[q.n];
+    total=Math.max(0,seqParse(full,questions.length+60).length-1);
+  }
+  let found=0;
+  for(const q of questions){const a=ans[q.sec+'|'+q.n];if(a!=null&&a!==''){q.answer=a;found++}}
+  return {found,total};
+}
+const isMC=q=>/[①②③④⑤]/.test(q.html)&&(!q.answer||/^[①②③④⑤\s,·및/]+$/.test(q.answer));
+
+/* =====================================================================
+   파일 이름 → 교재 / 자료 종류 / 단원
+   ===================================================================== */
+const RE_KIND=/(자체\s*보충\s*문제|챕터\s*별?\s*추가\s*문제|유닛\s*별?\s*추가\s*문제|추가\s*문제|추가\s*총괄\s*평가|총괄\s*평가|중간\s*고사|기말\s*고사|진단\s*평가|워크\s*시트|어휘\s*테스트|테스트|문제)/;
+function baseName(path){return path.split(/[\\/]/).pop().replace(/\.docx$/i,'')}
+function answerKey(name){
+  const b=name.replace(/[\s_\-]*[(\[]?\s*(정답(\s*및\s*해설)?|해설|답안|answer(s)?)\s*[)\]]?\s*$/i,'');
+  return {key:b.replace(/\s+/g,' ').trim().toLowerCase(),isAnswer:b!==name};
+}
+function normBook(s){
+  return s.replace(/^\d{2}\s*[_ ]\s*(?=\D)/,'').replace(/_/g,' ').replace(/그래머\s*인사이드/gi,'Grammar Inside').replace(/grammar\s*inside/gi,'Grammar Inside')
+    .replace(/\bStater\b/gi,'Starter').replace(/level\s*(\d)/gi,'Level $1').replace(/\(\s*\d{4}\s*개정\s*\)/,'').replace(/\s+/g,' ').trim();
+}
+function guessInfo(name,meta){
+  const n=baseName(name).replace(/\(\d+\)$/,'');
+  const km=n.match(RE_KIND);
+  let book='',kind='',unit='';
+  if(km){
+    book=n.slice(0,km.index);kind=km[1].replace(/\s+/g,'');unit=n.slice(km.index+km[0].length);
+  }else{
+    const um=n.match(/(CH|Ch|Chapter|CHAPTER|UNIT|Unit|unit|U)[\s_]*\d+/);
+    if(um){book=n.slice(0,um.index);unit=n.slice(um.index)}else book=n;
+    kind='보충자료';
+  }
+  kind=kind.replace(/^자체보충문제$/,'자체 보충문제').replace(/^챕터별?추가문제$/,'챕터 추가문제').replace(/^유닛별?추가문제$/,'유닛 추가문제').replace(/^추가문제$/,'추가문제');
+  unit=unit.replace(/^[\s_\-]+|[\s_\-]+$/g,'').replace(/_/g,' ').replace(/\s+/g,' ');
+  if(!unit&&meta?.header?.length>1)unit=meta.header[meta.header.length-1];
+  const metaBook=(meta?.preamble||[]).find(t=>/grammar|그래머|level|레벨/i.test(t));
+  book=normBook(book.replace(/[\s_\-]+$/,''))||normBook(metaBook||'')||'이름 없는 교재';
+  return {book,kind:kind||'보충자료',unit:unit||n};
+}
+const unitOrder=u=>{const m=String(u).match(/\d+/g);return m?m.map(Number):[9999]};
+const cmpUnit=(a,b)=>{const x=unitOrder(a),y=unitOrder(b);for(let i=0;i<Math.max(x.length,y.length);i++){const d=(x[i]??-1)-(y[i]??-1);if(d)return d}return String(a).localeCompare(String(b),'ko')};
+
+/* =====================================================================
+   저장소 (IndexedDB)
+   ===================================================================== */
+const DB_NAME='waymaker360Worksheet',STORE='sets';
+let dbp=null;
+function db(){return dbp??=new Promise((ok,fail)=>{const r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE,{keyPath:'id'});r.onsuccess=()=>ok(r.result);r.onerror=()=>fail(r.error)})}
+async function tx(mode,fn){const d=await db();return new Promise((ok,fail)=>{const t=d.transaction(STORE,mode),s=t.objectStore(STORE);const res=fn(s);t.oncomplete=()=>ok(res?.result??res);t.onerror=()=>fail(t.error)})}
+const dbAll=()=>tx('readonly',s=>s.getAll());
+const dbPut=list=>tx('readwrite',s=>{for(const x of list)s.put(x)});
+const dbDel=ids=>tx('readwrite',s=>{for(const id of ids)s.delete(id)});
+const dbClear=()=>tx('readwrite',s=>s.clear());
+let SETS=[];
+async function reload(){
+  try{SETS=await dbAll()}catch(e){SETS=[];alert('저장 공간을 열지 못했어요: '+e.message)}
+  SETS.sort((a,b)=>a.book.localeCompare(b.book,'ko')||a.kind.localeCompare(b.kind,'ko')||cmpUnit(a.unit,b.unit));
+  const n=SETS.reduce((a,s)=>a+s.questions.length,0);
+  $('navCount').hidden=!n;$('navCount').textContent=n;
+  renderBuild();renderBank();renderBackup();
+}
+const books=()=>[...new Set(SETS.map(s=>s.book))];
+
+/* =====================================================================
+   화면 이동
+   ===================================================================== */
+function go(page){
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+page));
+  window.scrollTo(0,0);
+}
+$('nav').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.page)};
+
+/* =====================================================================
+   자료 올리기
+   ===================================================================== */
+let PENDING=[],SKIPPED=[];
+async function collectFiles(fileList){
+  const docs=[];SKIPPED=[];
+  for(const f of fileList){
+    const name=f.webkitRelativePath||f._path||f.name;
+    if(/^~\$|\/~\$/.test(f.name))continue;
+    if(/검토용/.test(f.name)){SKIPPED.push(f.name+' (선생님 검토용 — 문제은행에 넣지 않음)');continue}
+    if(/\.docx$/i.test(f.name))docs.push({name,read:()=>f.arrayBuffer().then(b=>new Uint8Array(b))});
+    else if(/\.zip$/i.test(f.name)){
+      try{
+        const z=readZip(new Uint8Array(await f.arrayBuffer()));
+        for(const[n,e]of z){const bn=n.split('/').pop();if(bn.startsWith('~$')||n.startsWith('__MACOSX'))continue;if(/검토용/.test(bn)){SKIPPED.push(bn+' (선생님 검토용 — 문제은행에 넣지 않음)');continue}if(/\.docx$/i.test(n))docs.push({name:f.name.replace(/\.zip$/i,'')+'/'+n,read:e.read});else if(/\.(hwp|hwpx|pdf|doc)$/i.test(n))SKIPPED.push(bn)}
+      }catch(err){SKIPPED.push(f.name+' (열 수 없음)')}
+    }else if(/\.(hwp|hwpx|pdf|doc)$/i.test(f.name))SKIPPED.push(f.name);
+  }
+  return docs;
+}
+function friendlyErr(e){
+  if(e&&(e.name==='NotReadableError'||e.name==='NotFoundError'))return '파일을 열 수 없음 — 구글 드라이브 파일이면 폴더를 오른쪽 클릭해 [오프라인 사용]을 켜거나 바탕화면에 복사한 뒤 다시 올려 주세요';
+  return e?.message||String(e);
+}
+async function importFiles(fileList){
+  $('impProg').textContent='파일을 읽는 중…';
+  const docs=await collectFiles(fileList);
+  if(!docs.length){$('impProg').textContent=SKIPPED.length?`읽을 수 있는 워드 파일이 없어요. (건너뜀: ${SKIPPED.length}개 — 한글/PDF 파일)`:'워드(.docx) 파일을 찾지 못했어요.';return}
+  // 문제 파일 ↔ 정답 파일 짝짓기
+  const groups=new Map();
+  for(const d of docs){const{key,isAnswer}=answerKey(baseName(d.name));const g=groups.get(key)||{};if(isAnswer)g.a=d;else g.q=d;groups.set(key,g)}
+  PENDING=[];let i=0;
+  for(const[,g]of groups){
+    i++;$('impProg').textContent=`읽는 중… (${i}/${groups.size})`;
+    if(!g.q){SKIPPED.push(baseName(g.a.name)+' (짝이 되는 문제 파일 없음)');continue}
+    try{
+      const blocks=await parseDocx(await g.q.read());
+      const{questions,meta,answerBlocks,loose}=splitQuestions(blocks);
+      if(!questions.length){const t=blocksText(blocks).replace(/\uFFFC/g,'').replace(/\s+/g,' ').trim();SKIPPED.push(baseName(g.q.name)+` (문항 번호를 찾지 못함 — 읽은 글: "${t.slice(0,80)||'없음'}")`);continue}
+      let ar={found:0,total:0},ansSrc='';
+      if(g.a){try{ar=answersFrom(await parseDocx(await g.a.read()),questions,loose);ansSrc=baseName(g.a.name)}catch(e){SKIPPED.push(baseName(g.a.name)+' (정답 파일 오류: '+friendlyErr(e)+')')}}
+      else if(answerBlocks){ar=answersFrom(answerBlocks,questions,loose);ansSrc='(문제 파일 안의 정답)'}
+      for(const q of questions)delete q._raw;
+      const ansFound=ar.found,ansTotal=ar.total;
+      const info=guessInfo(g.q.name,meta);
+      PENDING.push({id:uid(),...info,questions,source:{q:baseName(g.q.name),a:ansSrc},ansFound,ansTotal,on:true,createdAt:today()});
+    }catch(e){SKIPPED.push(baseName(g.q.name)+' ('+friendlyErr(e)+')')}
+  }
+  PENDING.sort((a,b)=>a.book.localeCompare(b.book,'ko')||a.kind.localeCompare(b.kind,'ko')||cmpUnit(a.unit,b.unit));
+  renderPending();
+  if(PENDING.length)$('impProg').textContent=`${PENDING.length}개 자료를 읽었어요. 아래에서 확인한 뒤 저장하세요.`;
+  else $('impProg').innerHTML=`<div class="notice" style="margin:0">워드 파일 ${groups.size}개를 찾았지만 읽지 못했어요. 이 화면을 캡처해서 보내 주시면 고쳐 드릴게요.<br>${SKIPPED.slice(0,15).map(x=>'• '+esc(x)).join('<br>')}${SKIPPED.length>15?'<br>…':''}</div>`;
+}
+function statusPill(s){
+  const n=s.questions.length,a=s.ansFound;
+  if(!s.source.a&&!a)return '<span class="pill bad">정답 파일 없음</span>';
+  if(s.ansTotal>n)return `<span class="pill warn">정답은 ${s.ansTotal}개인데 문항은 ${n}개 — 문제은행에서 확인</span>`;
+  if(a===n)return '<span class="pill">정상</span>';
+  return `<span class="pill warn">정답 ${n-a}개 확인 필요</span>`;
+}
+function renderPending(){
+  $('impResult').hidden=!PENDING.length;
+  const dup=new Set(SETS.map(s=>s.book+'|'+s.kind+'|'+s.unit));
+  $('impRows').innerHTML=PENDING.map((s,i)=>`<tr>
+    <td><input type="checkbox" data-i="${i}" class="impOn" ${s.on?'checked':''}></td>
+    <td><input type="text" data-i="${i}" data-k="book" value="${esc(s.book)}"></td>
+    <td><input type="text" data-i="${i}" data-k="kind" value="${esc(s.kind)}" style="min-width:110px"></td>
+    <td><input type="text" data-i="${i}" data-k="unit" value="${esc(s.unit)}"><div class="muted" style="font-size:12px;margin-top:3px">${esc(s.source.q)}</div></td>
+    <td class="num">${s.questions.length}</td><td class="num">${s.ansFound}</td>
+    <td>${statusPill(s)}${dup.has(s.book+'|'+s.kind+'|'+s.unit)?' <span class="pill gray">기존 자료 교체</span>':''}</td></tr>`).join('');
+  $('impSkipped').innerHTML=SKIPPED.length?`<b>건너뛴 파일 ${SKIPPED.length}개</b>: ${SKIPPED.slice(0,30).map(esc).join(', ')}${SKIPPED.length>30?' …':''}`:'';
+}
+$('impRows').oninput=e=>{const t=e.target;if(t.dataset.k){PENDING[t.dataset.i][t.dataset.k]=t.value.trim()}};
+$('impRows').onchange=e=>{const t=e.target;if(t.classList.contains('impOn'))PENDING[t.dataset.i].on=t.checked;if(t.dataset.k)renderPending()};
+$('impAll').onchange=e=>{PENDING.forEach(s=>s.on=e.target.checked);renderPending()};
+$('impBulkApply').onclick=()=>{const v=$('impBulkBook').value.trim();if(!v)return;PENDING.forEach(s=>{if(s.on)s.book=v});renderPending()};
+$('impCancel').onclick=()=>{PENDING=[];SKIPPED=[];$('impProg').textContent='';renderPending()};
+$('impSave').onclick=async()=>{
+  const list=PENDING.filter(s=>s.on);if(!list.length)return alert('저장할 자료를 골라 주세요.');
+  const old=new Map(SETS.map(s=>[s.book+'|'+s.kind+'|'+s.unit,s.id]));
+  const save=list.map(({on,ansFound,ansTotal,...s})=>{const k=s.book+'|'+s.kind+'|'+s.unit;if(old.has(k))s.id=old.get(k);return s});
+  await dbPut(save);PENDING=PENDING.filter(s=>!s.on);await reload();renderPending();
+  $('impProg').textContent=`${save.length}개 자료(${save.reduce((a,s)=>a+s.questions.length,0)}문항)를 문제은행에 저장했어요.`;
+  if(!PENDING.length){prefs.book=save[0].book;savePrefs();renderBuild();setTimeout(()=>go('build'),600)}
+};
+$('pickFiles').onclick=()=>$('fileIn').click();
+$('pickDir').onclick=()=>$('dirIn').click();
+$('fileIn').onchange=e=>{importFiles([...e.target.files]);e.target.value=''};
+$('dirIn').onchange=e=>{importFiles([...e.target.files]);e.target.value=''};
+const drop=$('drop');
+drop.ondragover=e=>{e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=()=>drop.classList.remove('over');
+drop.ondrop=async e=>{
+  e.preventDefault();drop.classList.remove('over');
+  const items=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry?.()).filter(Boolean);
+  if(!items.length)return importFiles([...e.dataTransfer.files]);
+  const files=[];
+  const walkEntry=async(en,path)=>{
+    if(en.isFile){const f=await new Promise((ok,no)=>en.file(ok,no));f._path=path+f.name;files.push(f)}
+    else if(en.isDirectory){const r=en.createReader();let batch;do{batch=await new Promise((ok,no)=>r.readEntries(ok,no));for(const c of batch)await walkEntry(c,path+en.name+'/')}while(batch.length)}
+  };
+  for(const en of items)await walkEntry(en,'');
+  importFiles(files);
+};
+
+/* =====================================================================
+   시험지 만들기
+   ===================================================================== */
+let SHEET=null; // {items:[{set,q}], title}
+const sel=new Set(prefs.sel||[]);
+const pickSel=new Set();
+function curBook(){const bs=books();if(!bs.includes(prefs.book))prefs.book=bs[0]||'';return prefs.book}
+function renderBuild(){
+  const bs=books();
+  $('buildEmpty').hidden=!!bs.length;$('buildMain').hidden=!bs.length;
+  if(!bs.length)return;
+  const book=curBook();
+  $('bBook').innerHTML=bs.map(b=>`<option ${b===book?'selected':''}>${esc(b)}</option>`).join('');
+  const sets=SETS.filter(s=>s.book===book);
+  const kinds=[...new Set(sets.map(s=>s.kind))];
+  $('bSets').innerHTML=kinds.map((k,ki)=>`<div class="kind">${esc(k)} <button class="btn small danger" data-delkind="${ki}" style="margin-left:8px;padding:2px 8px;font-size:12px">이 묶음 삭제</button></div><div class="setlist">${sets.filter(s=>s.kind===k).map(s=>`<label class="chk"><input type="checkbox" class="bSet" value="${s.id}" ${sel.has(s.id)?'checked':''}> ${esc(s.unit)} <small>${s.questions.length}문항</small></label>`).join('')}</div>`).join('');
+  $('bSets').querySelectorAll('[data-delkind]').forEach(btn=>btn.onclick=async e=>{e.preventDefault();const k=kinds[+btn.dataset.delkind],list=sets.filter(x=>x.kind===k);
+    if(!confirm(`${book} · '${k}' 묶음의 자료 ${list.length}개(${list.reduce((a,x)=>a+x.questions.length,0)}문항)를 문제은행에서 삭제할까요?\n삭제하면 되돌릴 수 없어요. 필요하면 먼저 [백업]을 받아 두세요.`))return;
+    await dbDel(list.map(x=>x.id));list.forEach(x=>sel.delete(x.id));await reload()});
+  updateSelInfo();
+}
+function chosenSets(){return SETS.filter(s=>s.book===curBook()&&sel.has(s.id))}
+function pool(){
+  const type=$('bType').value;
+  const out=[];
+  for(const s of chosenSets())s.questions.forEach((q,i)=>{if(!type||(type==='mc')===isMC(q))out.push({set:s,q,key:s.id+'#'+i})});
+  return out;
+}
+function updateSelInfo(){
+  const p=pool();
+  $('bSelInfo').textContent=chosenSets().length?`${chosenSets().length}개 단원 · ${p.length}문항 선택됨`:'단원을 골라 주세요';
+  const mode=document.querySelector('[name=bMode]:checked').value;
+  $('bPick').hidden=mode!=='pick';
+  if(mode==='pick'){
+    const keys=new Set(p.map(x=>x.key));for(const k of [...pickSel])if(!keys.has(k))pickSel.delete(k);
+    $('bPick').innerHTML=p.length?`<div class="tools" style="margin-top:10px"><button class="btn small" id="pkAll">모두 고르기</button><button class="btn small" id="pkNone">모두 해제</button><span class="muted" id="pkInfo"></span></div><div class="pick">${p.map(x=>`<label><input type="checkbox" class="pk" value="${x.key}" ${pickSel.has(x.key)?'checked':''}><span class="src">${esc(x.set.unit)}<br>${x.q.sec?x.q.sec+'-':''}${x.q.n}번</span><span class="txt">${esc(htmlToText(x.q.html)).slice(0,160)}</span></label>`).join('')}</div>`:'<p class="muted">위에서 단원을 먼저 골라 주세요.</p>';
+    const info=()=>{const e=$('pkInfo');if(e)e.textContent=`${pickSel.size}문항 고름`};info();
+    $('bPick').onchange=e=>{if(e.target.classList.contains('pk')){e.target.checked?pickSel.add(e.target.value):pickSel.delete(e.target.value);info()}};
+    if($('pkAll')){$('pkAll').onclick=()=>{p.forEach(x=>pickSel.add(x.key));updateSelInfo()};$('pkNone').onclick=()=>{pickSel.clear();updateSelInfo()}}
+  }
+}
+const htmlToText=h=>{const d=document.createElement('div');d.innerHTML=h.replace(/<img[^>]*>/g,'[그림]');return d.textContent.replace(/\s+/g,' ').trim()};
+$('bBook').onchange=e=>{prefs.book=e.target.value;savePrefs();renderBuild()};
+$('bSets').onchange=e=>{if(e.target.classList.contains('bSet')){e.target.checked?sel.add(e.target.value):sel.delete(e.target.value);prefs.sel=[...sel];savePrefs();updateSelInfo()}};
+$('bAll').onclick=()=>{SETS.filter(s=>s.book===curBook()).forEach(s=>sel.add(s.id));prefs.sel=[...sel];savePrefs();renderBuild()};
+$('bNone').onclick=()=>{SETS.filter(s=>s.book===curBook()).forEach(s=>sel.delete(s.id));prefs.sel=[...sel];savePrefs();renderBuild()};
+document.querySelectorAll('[name=bMode]').forEach(r=>r.onchange=updateSelInfo);
+$('bType').onchange=updateSelInfo;
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function autoTitle(items){
+  const units=[...new Set(items.map(x=>x.set.unit))];
+  const kinds=[...new Set(items.map(x=>x.set.kind))];
+  const u=units.length===1?units[0]:units.length<=3?units.join(', '):`${units[0]} 외 ${units.length-1}개 단원`;
+  return `${u} ${kinds.length===1&&!/문제$/.test(kinds[0])?kinds[0]+' ':''}보충 문제`.replace(/\s+/g,' ');
+}
+function makeSheet(){
+  const p=pool();const mode=document.querySelector('[name=bMode]:checked').value;
+  if(!chosenSets().length)return alert('단원을 하나 이상 골라 주세요.');
+  if(!p.length)return alert('조건에 맞는 문항이 없어요.');
+  let items;
+  if(mode==='random'){const n=Math.max(1,+$('bCount').value||1);items=shuffle(p).slice(0,n);if(!$('bShuffle').checked)items.sort((a,b)=>p.indexOf(a)-p.indexOf(b))}
+  else if(mode==='pick'){items=p.filter(x=>pickSel.has(x.key));if(!items.length)return alert('문항을 직접 골라 주세요.');if($('bShuffle').checked)items=shuffle(items)}
+  else{items=$('bShuffle').checked?shuffle(p):p}
+  SHEET={items};
+  $('oTitle').value=autoTitle(items);
+  $('bMakeInfo').textContent=`${items.length}문항으로 만들었어요.`;
+  $('oReshuffle').hidden=!(mode==='random'||$('bShuffle').checked);
+  $('bOut').hidden=false;renderSheet();
+  $('bOut').scrollIntoView({behavior:'smooth',block:'start'});
+}
+$('bMake').onclick=makeSheet;
+$('oReshuffle').onclick=makeSheet;
+// 시험지 설정 기억
+const OPT_IDS=['oAcademy','oFs','oCols','oCls','oName','oScore','oSrc'];
+for(const id of OPT_IDS){const el=$(id);if(prefs[id]!=null){if(el.type==='checkbox')el.checked=prefs[id];else el.value=prefs[id]}el.addEventListener('input',()=>{prefs[id]=el.type==='checkbox'?el.checked:el.value;savePrefs();renderSheet()})}
+$('oTitle').oninput=renderSheet;$('oDate').oninput=renderSheet;$('oDate').value=today();
+let VIEW='q';
+$('oTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;VIEW=b.dataset.v;[...$('oTabs').children].forEach(x=>x.classList.toggle('active',x===b));renderSheet()};
+
+function sheetHeader(kind){
+  const ac=$('oAcademy').value.trim(),title=$('oTitle').value.trim()||'보충 문제',date=$('oDate').value;
+  const bk=SHEET.items[0]?.set.book||'';
+  const stu=kind==='a'?'':`<div class="stu">${$('oCls').checked?'<div>반</div>':''}${$('oName').checked?'<div>이름</div>':''}${$('oScore').checked?'<div class="score">점수 &nbsp; / '+SHEET.items.length+'</div>':''}</div>`;
+  const stuWrap=stu.replace('<div class="stu"></div>','');
+  return `<div class="top"><div>${ac?`<div class="ac">${esc(ac)}</div>`:''}<h1>${esc(title)}${kind==='a'?' — 정답':''}</h1><div class="meta">${esc(bk)} · 총 ${SHEET.items.length}문항${date?' · '+esc(date.replace(/-/g,'.')):''}</div></div>${stuWrap}</div>`;
+}
+function questionsHtml(){
+  const its=SHEET.items;let h='',i=0;
+  while(i<its.length){
+    const ins=its[i].q.instr;let j=i;
+    while(j+1<its.length&&ins&&its[j+1].q.instr===ins)j++;
+    if(ins){const lab=j>i?`[${i+1}-${j+1}]`:`[${i+1}]`;h+=`<div class="grp">${lab} <span class="gx">${ins.replace(/^<div class="p"[^>]*>|<\/div>$/g,'')}</span></div>`}
+    for(let k=i;k<=j;k++)h+=`<div class="q"><span class="n">${k+1}.</span><div>${its[k].q.html||'<div class="p"></div>'}</div></div>`;
+    i=j+1;
+  }
+  return h;
+}
+function sheetQ(){return `<div class="sheet" style="--fs:${$('oFs').value}">${sheetHeader('q')}<div class="qs ${$('oCols').value==='2'?'two':''}">${questionsHtml()}</div></div>`}
+function sheetA(){
+  const src=$('oSrc').checked,its=SHEET.items;
+  const cols=its.every(x=>(x.q.answer||'').length<=14)?4:2;
+  const rows=[];for(let i=0;i<its.length;i+=cols)rows.push(its.slice(i,i+cols).map((x,k)=>({x,n:i+k+1})));
+  const cell=c=>c?`<td class="kn">${c.n}</td><td>${esc(c.x.q.answer||'(정답 없음)').replace(/\n/g,'<br>')}${src?`<span class="ks">${esc(c.x.set.unit)} ${c.x.q.sec?c.x.q.sec+'-':''}${c.x.q.n}번</span>`:''}</td>`:'<td class="kn"></td><td></td>';
+  return `<div class="sheet" style="--fs:${$('oFs').value}">${sheetHeader('a')}<table class="keyt">${rows.map(r=>`<tr>${Array.from({length:cols},(_,k)=>cell(r[k])).join('')}</tr>`).join('')}</table><div class="foot">교사용 — 학생에게 나눠 주지 마세요</div></div>`;
+}
+function renderSheet(){if(!SHEET)return;$('oPreview').innerHTML=VIEW==='q'?sheetQ():sheetA()}
+document.querySelectorAll('[data-print]').forEach(b=>b.onclick=()=>{
+  if(!SHEET)return;const v=b.dataset.print;
+  $('printArea').innerHTML=(v.includes('q')?sheetQ():'')+(v.includes('a')?sheetA():'');
+  setTimeout(()=>window.print(),50);
+});
+window.addEventListener('afterprint',()=>{$('printArea').innerHTML=''});
+
+/* =====================================================================
+   문제은행
+   ===================================================================== */
+let bankSel=null;
+function renderBank(){
+  $('bankEmpty').hidden=!!SETS.length;$('bankMain').hidden=!SETS.length;
+  if(!SETS.length)return;
+  const bs=books();if(!bs.includes(prefs.bankBook))prefs.bankBook=bs[0];
+  const list=bankList();
+  if(!list.find(s=>s.id===bankSel))bankSel=list[0]?.id||null;
+  renderTree();renderBankDetail();
+}
+// 고른 교재·자료 종류·검색어에 맞는 자료만
+function bankList(){
+  const kind=prefs.bankKind||'',q=($('bkSearch').value||'').trim().toLowerCase().replace(/\s+/g,''),miss=$('bkMiss').checked;
+  return SETS.filter(s=>s.book===prefs.bankBook&&(!kind||s.kind===kind)&&(!q||(s.unit+s.kind).toLowerCase().replace(/\s+/g,'').includes(q))&&(!miss||s.questions.some(x=>!x.answer)));
+}
+function renderTree(){
+  const bs=books();
+  $('bkBookSel').innerHTML=bs.map(b=>`<option value="${esc(b)}" ${b===prefs.bankBook?'selected':''}>${esc(b)} (${SETS.filter(s=>s.book===b).length})</option>`).join('');
+  const kinds=[...new Set(SETS.filter(s=>s.book===prefs.bankBook).map(s=>s.kind))];
+  if(prefs.bankKind&&!kinds.includes(prefs.bankKind))prefs.bankKind='';
+  $('bkKindSel').innerHTML=`<option value="">자료 종류 전체</option>`+kinds.map(k=>`<option ${k===prefs.bankKind?'selected':''}>${esc(k)}</option>`).join('');
+  const list=bankList();
+  $('bkCount').textContent=`자료 ${list.length}개 · ${list.reduce((a,s)=>a+s.questions.length,0)}문항`;
+  $('bankTree').innerHTML=list.length?list.map(s=>{const miss=s.questions.filter(q=>!q.answer).length;return `<button class="set ${s.id===bankSel?'active':''}" data-id="${s.id}"><span>${esc(s.unit)}<br><small class="muted">${esc(s.kind)}</small></span><span>${miss?`<span class="pill warn">정답 ${miss}</span>`:''} <small class="muted">${s.questions.length}</small></span></button>`}).join(''):'<div class="muted" style="padding:10px 0">조건에 맞는 자료가 없어요.</div>';
+}
+$('bkBookSel').onchange=e=>{prefs.bankBook=e.target.value;prefs.bankKind='';savePrefs();bankSel=null;renderBank()};
+$('bkKindSel').onchange=e=>{prefs.bankKind=e.target.value;savePrefs();bankSel=null;renderBank()};
+$('bkSearch').oninput=()=>{bankSel=null;renderBank()};
+$('bkMiss').onchange=()=>{bankSel=null;renderBank()};
+$('bkDelShown').onclick=async()=>{const list=bankList();if(!list.length)return;const kind=prefs.bankKind||'모든 종류';if(!confirm(`${prefs.bankBook} · ${kind}\n지금 목록에 보이는 자료 ${list.length}개(${list.reduce((a,x)=>a+x.questions.length,0)}문항)를 삭제할까요?\n삭제하면 되돌릴 수 없어요. 필요하면 먼저 [백업]을 받아 두세요.`))return;await dbDel(list.map(x=>x.id));list.forEach(x=>sel.delete(x.id));bankSel=null;await reload()};
+$('bkRename').onclick=async()=>{const old=prefs.bankBook;if(!old)return;const nv=prompt('새 교재 이름',old);if(!nv||nv.trim()===old)return;const list=SETS.filter(s=>s.book===old);list.forEach(s=>s.book=nv.trim());await dbPut(list);if(prefs.book===old)prefs.book=nv.trim();prefs.bankBook=nv.trim();savePrefs();await reload()};
+function renderBankDetail(){
+  const s=SETS.find(x=>x.id===bankSel);if(!s){$('bankDetail').innerHTML='';return}
+  $('bankDetail').innerHTML=`<div class="card"><h3>${esc(s.unit)} <small class="muted">${esc(s.book)} · ${esc(s.kind)}</small></h3>
+    <div class="muted" style="font-size:13px;line-height:1.6">문제 파일: ${esc(s.source?.q||'')}<br>정답 파일: ${esc(s.source?.a||'없음')}</div>
+    <div class="form" style="margin-top:12px"><div class="field"><label>교재 (레벨)</label><input id="bkBook" value="${esc(s.book)}"></div><div class="field"><label>자료 종류</label><input id="bkKind" value="${esc(s.kind)}"></div><div class="field"><label>단원</label><input id="bkUnit" value="${esc(s.unit)}"></div><div class="field"><label>&nbsp;</label><div class="tools"><button class="btn primary" id="bkSaveInfo">저장</button><button class="btn danger" id="bkDelSet">자료 삭제</button></div></div></div></div>
+    ${s.questions.map((q,i)=>`<div class="qedit" data-i="${i}"><div class="head"><b>${q.sec?q.sec+'-':''}${q.n}번 ${isMC(q)?'<span class="pill gray">객관식</span>':'<span class="pill gray">주관식</span>'}</b><button class="btn small danger" data-delq="${i}">문항 삭제</button></div>${q.instr?`<div class="instr">${esc(htmlToText(q.instr))}</div>`:''}<div class="body" contenteditable="true" data-body="${i}">${q.html}</div><div class="ans"><b>정답</b><input data-ans="${i}" value="${esc(q.answer)}" placeholder="정답을 입력하세요"></div></div>`).join('')}`;
+  $('bkSaveInfo').onclick=async()=>{s.book=$('bkBook').value.trim()||s.book;s.kind=$('bkKind').value.trim()||s.kind;s.unit=$('bkUnit').value.trim()||s.unit;prefs.bankBook=s.book;savePrefs();await dbPut([s]);await reload()};
+  $('bkDelSet').onclick=async()=>{if(!confirm(`'${s.unit}' 자료를 삭제할까요?`))return;await dbDel([s.id]);sel.delete(s.id);await reload()};
+}
+$('bankTree').onclick=async e=>{
+  const b=e.target.closest('button.set');if(b){bankSel=b.dataset.id;renderTree();renderBankDetail();window.scrollTo({top:0})}
+};
+$('bankDetail').addEventListener('change',async e=>{
+  const s=SETS.find(x=>x.id===bankSel);if(!s)return;
+  if(e.target.dataset.ans!=null){s.questions[e.target.dataset.ans].answer=e.target.value.trim();await dbPut([s]);renderTree()}
+});
+$('bankDetail').addEventListener('focusout',async e=>{
+  const s=SETS.find(x=>x.id===bankSel);if(!s||e.target.dataset.body==null)return;
+  const q=s.questions[e.target.dataset.body];if(q.html!==e.target.innerHTML){q.html=e.target.innerHTML;await dbPut([s])}
+});
+$('bankDetail').addEventListener('click',async e=>{
+  const d=e.target.closest('[data-delq]');if(!d)return;
+  const s=SETS.find(x=>x.id===bankSel);if(!confirm('이 문항을 삭제할까요?'))return;
+  s.questions.splice(+d.dataset.delq,1);await dbPut([s]);await reload();
+});
+
+/* =====================================================================
+   백업
+   ===================================================================== */
+function renderBackup(){
+  const q=SETS.reduce((a,s)=>a+s.questions.length,0);
+  $('bkInfo').textContent=SETS.length?`교재 ${books().length}권 · 자료 ${SETS.length}개 · ${q}문항이 저장되어 있어요.${prefs.lastBackup?' 마지막 백업: '+prefs.lastBackup:''}`:'저장된 자료가 없어요.';
+}
+$('bkExport').onclick=()=>{
+  const blob=new Blob([JSON.stringify({app:'waymaker360Worksheet',version:1,exportedAt:new Date().toISOString(),sets:SETS})],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`보충문제_문제은행_백업_${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+  prefs.lastBackup=today();savePrefs();renderBackup();
+};
+$('bkImportBtn').onclick=()=>$('bkImport').click();
+$('bkImport').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(!Array.isArray(d.sets))throw new Error('백업 파일 형식이 아니에요.');
+    const ok=d.sets.filter(s=>s&&s.id&&s.book&&Array.isArray(s.questions));
+    if(!confirm(`${ok.length}개 자료를 불러올까요? 같은 자료는 백업 파일 내용으로 바뀝니다.`))return;
+    await dbPut(ok);await reload();alert('불러왔어요.');
+  }catch(err){alert('불러오지 못했어요: '+err.message)}
+};
+$('bkWipe').onclick=async()=>{if(!confirm('문제은행의 모든 자료를 지울까요? 되돌릴 수 없어요.'))return;await dbClear();sel.clear();prefs.sel=[];savePrefs();await reload()};
+
+reload();
+</script>
+</body>
+</html>
