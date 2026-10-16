@@ -248,7 +248,7 @@ table.list{border-collapse:collapse;width:100%}
           <div class="row" style="margin-top:8px"><select id="bkKindSel" style="flex:1;border:1px solid var(--line);border-radius:8px;padding:7px"></select><button class="btn small" id="bkRename">교재 이름 바꾸기</button></div>
           <input id="bkSearch" placeholder="단원 검색 (예: CH03, 관사)" style="width:100%;margin-top:8px;border:1px solid var(--line);border-radius:8px;padding:8px">
           <label class="chk" style="font-size:13px"><input type="checkbox" id="bkMiss"> 정답이 빈 자료만 보기</label>
-          <div class="muted" id="bkCount" style="font-size:12px;margin:2px 0 6px"></div>
+          <div class="row" style="justify-content:space-between;align-items:center;margin:2px 0 6px"><span class="muted" id="bkCount" style="font-size:12px"></span><button class="btn small danger" id="bkDelShown">보이는 자료 모두 삭제</button></div>
           <div class="tree" id="bankTree"></div>
         </div>
         <div id="bankDetail"></div>
@@ -1023,6 +1023,7 @@ $('bkBookSel').onchange=e=>{prefs.bankBook=e.target.value;prefs.bankKind='';save
 $('bkKindSel').onchange=e=>{prefs.bankKind=e.target.value;savePrefs();bankSel=null;renderBank()};
 $('bkSearch').oninput=()=>{bankSel=null;renderBank()};
 $('bkMiss').onchange=()=>{bankSel=null;renderBank()};
+$('bkDelShown').onclick=async()=>{const list=bankList();if(!list.length)return;const kind=prefs.bankKind||'모든 종류';if(!confirm(`${prefs.bankBook} · ${kind}\n지금 목록에 보이는 자료 ${list.length}개(${list.reduce((a,x)=>a+x.questions.length,0)}문항)를 삭제할까요?\n삭제하면 되돌릴 수 없어요. 필요하면 먼저 [백업]을 받아 두세요.`))return;await dbDel(list.map(x=>x.id));list.forEach(x=>sel.delete(x.id));bankSel=null;await reload()};
 $('bkRename').onclick=async()=>{const old=prefs.bankBook;if(!old)return;const nv=prompt('새 교재 이름',old);if(!nv||nv.trim()===old)return;const list=SETS.filter(s=>s.book===old);list.forEach(s=>s.book=nv.trim());await dbPut(list);if(prefs.book===old)prefs.book=nv.trim();prefs.bankBook=nv.trim();savePrefs();await reload()};
 function renderBankDetail(){
   const s=SETS.find(x=>x.id===bankSel);if(!s){$('bankDetail').innerHTML='';return}
