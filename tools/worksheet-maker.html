@@ -715,7 +715,7 @@ const isMC=q=>/[①②③④⑤]/.test(q.html)&&(!q.answer||/^[①②③④⑤\s
 /* =====================================================================
    파일 이름 → 교재 / 자료 종류 / 단원
    ===================================================================== */
-const RE_KIND=/(챕터\s*별?\s*추가\s*문제|유닛\s*별?\s*추가\s*문제|추가\s*문제|추가\s*총괄\s*평가|총괄\s*평가|중간\s*고사|기말\s*고사|진단\s*평가|워크\s*시트|어휘\s*테스트|테스트|문제)/;
+const RE_KIND=/(자체\s*보충\s*문제|챕터\s*별?\s*추가\s*문제|유닛\s*별?\s*추가\s*문제|추가\s*문제|추가\s*총괄\s*평가|총괄\s*평가|중간\s*고사|기말\s*고사|진단\s*평가|워크\s*시트|어휘\s*테스트|테스트|문제)/;
 function baseName(path){return path.split(/[\\/]/).pop().replace(/\.docx$/i,'')}
 function answerKey(name){
   const b=name.replace(/[\s_\-]*[(\[]?\s*(정답(\s*및\s*해설)?|해설|답안|answer(s)?)\s*[)\]]?\s*$/i,'');
@@ -736,7 +736,7 @@ function guessInfo(name,meta){
     if(um){book=n.slice(0,um.index);unit=n.slice(um.index)}else book=n;
     kind='보충자료';
   }
-  kind=kind.replace(/^챕터별?추가문제$/,'챕터 추가문제').replace(/^유닛별?추가문제$/,'유닛 추가문제').replace(/^추가문제$/,'추가문제');
+  kind=kind.replace(/^자체보충문제$/,'자체 보충문제').replace(/^챕터별?추가문제$/,'챕터 추가문제').replace(/^유닛별?추가문제$/,'유닛 추가문제').replace(/^추가문제$/,'추가문제');
   unit=unit.replace(/^[\s_\-]+|[\s_\-]+$/g,'').replace(/_/g,' ').replace(/\s+/g,' ');
   if(!unit&&meta?.header?.length>1)unit=meta.header[meta.header.length-1];
   const metaBook=(meta?.preamble||[]).find(t=>/grammar|그래머|level|레벨/i.test(t));
