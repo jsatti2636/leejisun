@@ -786,11 +786,12 @@ async function collectFiles(fileList){
   for(const f of fileList){
     const name=f.webkitRelativePath||f._path||f.name;
     if(/^~\$|\/~\$/.test(f.name))continue;
+    if(/검토용/.test(f.name)){SKIPPED.push(f.name+' (선생님 검토용 — 문제은행에 넣지 않음)');continue}
     if(/\.docx$/i.test(f.name))docs.push({name,read:()=>f.arrayBuffer().then(b=>new Uint8Array(b))});
     else if(/\.zip$/i.test(f.name)){
       try{
         const z=readZip(new Uint8Array(await f.arrayBuffer()));
-        for(const[n,e]of z){const bn=n.split('/').pop();if(bn.startsWith('~$')||n.startsWith('__MACOSX'))continue;if(/\.docx$/i.test(n))docs.push({name:f.name.replace(/\.zip$/i,'')+'/'+n,read:e.read});else if(/\.(hwp|hwpx|pdf|doc)$/i.test(n))SKIPPED.push(bn)}
+        for(const[n,e]of z){const bn=n.split('/').pop();if(bn.startsWith('~$')||n.startsWith('__MACOSX'))continue;if(/검토용/.test(bn)){SKIPPED.push(bn+' (선생님 검토용 — 문제은행에 넣지 않음)');continue}if(/\.docx$/i.test(n))docs.push({name:f.name.replace(/\.zip$/i,'')+'/'+n,read:e.read});else if(/\.(hwp|hwpx|pdf|doc)$/i.test(n))SKIPPED.push(bn)}
       }catch(err){SKIPPED.push(f.name+' (열 수 없음)')}
     }else if(/\.(hwp|hwpx|pdf|doc)$/i.test(f.name))SKIPPED.push(f.name);
   }
